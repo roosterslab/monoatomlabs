@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Briefcase, Building2, Phone, Mail, MapPin, Globe, Linkedin, Twitter, Github } from 'lucide-react';
+import { User, Briefcase, Building2, Phone, Mail, MapPin, Globe, Linkedin, Twitter, Github, Plus, X, CreditCard } from 'lucide-react';
 
 const CardForm = ({ data, onChange }) => {
   const handleChange = (e) => {
@@ -52,6 +52,47 @@ const CardForm = ({ data, onChange }) => {
         </div>
       </div>
 
+      {/* Card Style Options */}
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold text-gray-300 mb-4 flex items-center gap-2">
+          <CreditCard size={18} />
+          Card Style
+        </h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Border Style
+            </label>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => onChange({ ...data, borderStyle: 'rounded' })}
+                className={`flex-1 px-4 py-3 rounded-lg border-2 transition-all ${
+                  data.borderStyle === 'rounded'
+                    ? 'border-primary-500 bg-primary-500/10 text-white'
+                    : 'border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600'
+                }`}
+              >
+                <div className="text-sm font-medium">Rounded</div>
+                <div className="text-xs opacity-75 mt-1">Soft edges</div>
+              </button>
+              <button
+                type="button"
+                onClick={() => onChange({ ...data, borderStyle: 'sharp' })}
+                className={`flex-1 px-4 py-3 rounded-lg border-2 transition-all ${
+                  data.borderStyle === 'sharp'
+                    ? 'border-primary-500 bg-primary-500/10 text-white'
+                    : 'border-gray-700 bg-gray-800/50 text-gray-400 hover:border-gray-600'
+                }`}
+              >
+                <div className="text-sm font-medium">Sharp</div>
+                <div className="text-xs opacity-75 mt-1">Square corners</div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Company Information */}
       <div className="mb-8">
         <h3 className="text-lg font-semibold text-gray-300 mb-4 flex items-center gap-2">
@@ -61,29 +102,30 @@ const CardForm = ({ data, onChange }) => {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
-              Company Name *
+              Company Name - Part 1 *
             </label>
             <input
               type="text"
-              name="company"
-              value={data.company}
+              name="companyPart1"
+              value={data.companyPart1 || ''}
               onChange={handleChange}
-              placeholder="e.g., MonoAtoms"
+              placeholder="e.g., MONOATOM"
               className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
               required
             />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
-              Company Tagline
+              Company Name - Part 2 *
             </label>
             <input
               type="text"
-              name="tagline"
-              value={data.tagline || ''}
+              name="companyPart2"
+              value={data.companyPart2 || ''}
               onChange={handleChange}
-              placeholder="e.g., Advanced Nanomaterials"
+              placeholder="e.g., LABS"
               className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+              required
             />
           </div>
           <div>
@@ -240,47 +282,45 @@ const CardForm = ({ data, onChange }) => {
         {data.showRecognition && (
           <div className="space-y-4 ml-7">
             <p className="text-xs text-gray-500 mb-3">
-              Add up to 3 recognition badges (awards, certifications, achievements)
+              Add recognition badges (awards, certifications, achievements)
             </p>
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Recognition Badge 1
-              </label>
-              <input
-                type="text"
-                name="recognition1"
-                value={data.recognition1 || ''}
-                onChange={handleChange}
-                placeholder="e.g., 6× President Awardee"
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Recognition Badge 2
-              </label>
-              <input
-                type="text"
-                name="recognition2"
-                value={data.recognition2 || ''}
-                onChange={handleChange}
-                placeholder="e.g., MIT TR-35"
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
-                Recognition Badge 3 (Optional)
-              </label>
-              <input
-                type="text"
-                name="recognition3"
-                value={data.recognition3 || ''}
-                onChange={handleChange}
-                placeholder="e.g., TED Speaker"
-                className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
-              />
-            </div>
+            {(data.recognitions || []).map((recognition, index) => (
+              <div key={index} className="flex gap-2">
+                <input
+                  type="text"
+                  value={recognition}
+                  onChange={(e) => {
+                    const newRecognitions = [...(data.recognitions || [])];
+                    newRecognitions[index] = e.target.value;
+                    onChange({ ...data, recognitions: newRecognitions });
+                  }}
+                  placeholder="e.g., 6× President Awardee"
+                  className="flex-1 px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newRecognitions = (data.recognitions || []).filter((_, i) => i !== index);
+                    onChange({ ...data, recognitions: newRecognitions });
+                  }}
+                  className="px-3 py-3 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 rounded-lg text-red-400 transition-colors"
+                  title="Remove badge"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={() => {
+                const newRecognitions = [...(data.recognitions || []), ''];
+                onChange({ ...data, recognitions: newRecognitions });
+              }}
+              className="flex items-center gap-2 px-4 py-3 bg-primary-500/10 hover:bg-primary-500/20 border border-primary-500/30 rounded-lg text-primary-400 transition-colors w-full justify-center"
+            >
+              <Plus size={18} />
+              Add Recognition Badge
+            </button>
           </div>
         )}
       </div>

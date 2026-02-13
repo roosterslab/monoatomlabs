@@ -10,19 +10,21 @@ function App() {
   const [formData, setFormData] = useState({
     name: 'SUSHANTH PAATNAIK',
     title: 'CO-FOUNDER & CEO',
-    company: 'MONOATOM LABS',
-    tagline: 'Advanced Materials for 4th Industrial Revolution',
-    phone: '+91 8511976999',
+    companyPart1: 'MONOATOM',
+    companyPart2: 'LABS',
+    borderStyle: 'rounded',
+    phone: '+91 851 197 6999',
     email: 'ceo@monoatomlabs.com',
     website: 'www.monoatomlabs.com',
-    address: '3rd Floor, iHub, Ahmedabad, Gujarat',
+    address: '3rd Floor, iHub, Ahmedabad - 380015',
     linkedin: '',
     twitter: '',
     github: '',
     showRecognition: true,
-    recognition1: '6× President Awardee',
-    recognition2: 'MIT TR-35',
-    recognition3: '',
+    recognitions: [
+      '6× President Awardee',
+      'MIT TR-35'
+    ],
   });
 
   // Clear localStorage to always show Sushant's data on load

@@ -10,7 +10,7 @@ const ExportPanel = ({ data }) => {
   const handleExportPDF = async () => {
     setExportType('pdf');
     // Validate required fields
-    if (!data.name || !data.title || !data.company || !data.email || !data.phone) {
+    if (!data.name || !data.title || !data.companyPart1 || !data.companyPart2 || !data.email || !data.phone) {
       setExportStatus('error');
       setTimeout(() => setExportStatus(null), 3000);
       return;
@@ -61,7 +61,7 @@ const ExportPanel = ({ data }) => {
   };
 
   const handleExportImage = async (side) => {
-    if (!data.name || !data.title || !data.company || !data.email || !data.phone) {
+    if (!data.name || !data.title || !data.companyPart1 || !data.companyPart2 || !data.email || !data.phone) {
       setExportStatus('error');
       setTimeout(() => setExportStatus(null), 3000);
       return;
