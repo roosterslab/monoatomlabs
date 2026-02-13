@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #1a1a1a;
+  --secondary-color: #2d2d2d;
+  --accent-color: #4a90e2;
+  --gradient-start: #667eea;
+  --gradient-end: #764ba2;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  min-height: 100vh;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Print Styles */
+@media print {
+  @page {
+    size: 600px 340px;
+    margin: 0;
+  }
+
+  body {
+    background: white !important;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Hide everything except cards */
+  header,
+  .print\:hidden,
+  button,
+  form {
+    display: none !important;
+  }
+
+  /* Show only the card previews */
+  #card-front-preview,
+  #card-back-preview {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Each card on separate page */
+  .print\:break-after-page {
+    page-break-after: always;
+    break-after: page;
+  }
+
+  .print\:break-before-page {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Ensure cards are properly sized for print */
+  .card-front,
+  [style*="cardFront"],
+  [style*="cardBack"] {
+    width: 600px !important;
+    height: 340px !important;
+    box-shadow: none !important;
+  }
+}
