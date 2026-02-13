@@ -1,0 +1,22 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        # Initialize git submodules (nested)
+        - echo "Initializing git submodules..."
+        - git submodule update --init --recursive
+        # Navigate to app directory
+        - cd visiting-card-dev/maker
+        # Install dependencies
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: visiting-card-dev/maker/dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - visiting-card-dev/maker/node_modules/**/*
