@@ -1,0 +1,45 @@
+# AWS Configuration
+aws_region = "us-east-1"
+
+# Amplify App Configuration
+app_name       = "website-home-page-content-lab"
+repository_url = "https://github.com/your-org/website-home-page-content-lab"
+branch_name    = "main"
+
+# Framework Configuration
+framework        = "React"  # Change to your framework: React, Vue, Angular, Next.js, etc.
+build_output_dir = "build"  # Change to: dist, out, build, etc.
+
+# Deployment Stage
+stage = "PRODUCTION"  # Options: PRODUCTION, BETA, DEVELOPMENT, EXPERIMENTAL, PULL_REQUEST
+
+# Environment Variables (optional)
+environment_variables = {
+  # REACT_APP_API_URL = "https://api.example.com"
+  # NODE_ENV = "production"
+}
+
+# Auto Branch Settings
+enable_auto_branch_creation = false
+enable_branch_auto_build    = true
+enable_branch_auto_deletion = false
+
+# Custom Rules for SPA routing
+custom_rules = [
+  {
+    source = "/<*>"
+    target = "/index.html"
+    status = "404-200"
+  }
+]
+
+# IAM Role (set to true if you need backend features)
+create_amplify_role = false
+
+# Tags
+tags = {
+  Project     = "website-home-page-content-lab"
+  ManagedBy   = "Terraform"
+  Environment = "production"
+  Team        = "YourTeam"
+}

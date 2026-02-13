@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monoatom - Final Back Side</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 4rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .card {
+            width: 600px;
+            height: 340px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #e5e5e5;
+            display: flex;
+        }
+
+        /* 1. Hexagon Background (Subtle) */
+        .hex-bg {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='28' height='49' viewBox='0 0 28 49' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v13.2l11 6.35 11-6.35V17.9l-11-6.35L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L10.98 40v6.35L0 40v-6.5zM14.98 0v7.5l13 7.5-13-7.5zm13 26.5l-13 7.5V49l13-7.5V26.5z' fill='%23f1f5f9' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-size: 40px 70px;
+            z-index: 0;
+            opacity: 0.8;
+        }
+
+        /* 2. The Black Vertical Line (Left Edge) */
+        .side-bar {
+            width: 12px;
+            height: 100%;
+            background-color: #000;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 20;
+        }
+
+        .content-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            padding-left: 12px; /* Offset for side bar */
+        }
+
+        .left-section {
+            flex: 1.6;
+            padding: 2.5rem 1.5rem 2.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border-right: 1px dashed #e5e5e5;
+        }
+
+        .right-section {
+            flex: 0.9;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.5); /* Slight tint to separate */
+        }
+
+        /* Viewfinder Corners for QR */
+        .vf-corner {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-color: #000;
+            border-style: solid;
+        }
+        .vf-tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+        .vf-tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+        .vf-bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+        .vf-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Backgrounds -->
+        <div class="hex-bg"></div>
+        <div class="side-bar"></div>
+
+        <div class="content-container">
+            
+            <!-- LEFT SECTION: Info & Identity -->
+            <div class="left-section">
+                
+                <!-- Header with Divider Line -->
+                <div class="border-b-2 border-black pb-4 mb-2">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-bold tracking-widest text-black">MONOATOM LABS</h2>
+                        <span class="font-mono text-[9px] bg-black text-white px-2 py-1 rounded">ID: 884-TX</span>
+                    </div>
+                    <p class="text-[9px] font-bold text-gray-500 uppercase tracking-widest mt-1">Advanced Nanomaterials</p>
+                </div>
+
+                <!-- Contact Grid -->
+                <div class="space-y-4">
+                    <!-- Direct -->
+                    <div>
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Direct</p>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="phone" width="14" class="text-black"></i>
+                            <span class="text-xs font-bold text-black font-mono">+91 989 919 9809</span>
+                        </div>
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Email</p>
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="mail" width="14" class="text-black"></i>
+                            <span class="text-xs font-bold text-black font-mono">info@monoatomlabs.com</span>
+                        </div>
+                    </div>
+
+                    <!-- HQ -->
+                    <div>
+                        <p class="text-[8px] font-bold text-gray-400 uppercase tracking-wider mb-0.5">Headquarters</p>
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="map-pin" width="14" class="text-black mt-0.5"></i>
+                            <span class="text-xs font-bold text-black leading-tight">3rd Floor, iHub, Ahmedabad, Gujarat</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer / Awards -->
+                <div class="mt-auto pt-4">
+                    <p class="text-[8px] font-bold text-gray-400 uppercase mb-1">Recognition</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-[9px] font-semibold bg-gray-100 px-2 py-1 border border-gray-200 text-black">6× President Awardee</span>
+                        <span class="text-[9px] font-semibold bg-gray-100 px-2 py-1 border border-gray-200 text-black">MIT TR-35</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT SECTION: QR Code -->
+            <div class="right-section">
+                
+                <div class="relative p-4">
+                    <!-- Viewfinder Marks -->
+                    <div class="vf-corner vf-tl"></div>
+                    <div class="vf-corner vf-tr"></div>
+                    <div class="vf-corner vf-bl"></div>
+                    <div class="vf-corner vf-br"></div>
+
+                    <!-- QR Code (Placeholder) -->
+                    <div class="w-24 h-24 bg-white flex items-center justify-center m-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="85" height="85" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0" class="text-black">
+                            <path d="M3 3h6v6H3z" stroke-width="1.5"/>
+                            <path d="M15 3h6v6h-6z" stroke-width="1.5"/>
+                            <path d="M3 15h6v6H3z" stroke-width="1.5"/>
+                            <rect x="10" y="10" width="4" height="4" fill="currentColor" />
+                            <rect x="5" y="5" width="2" height="2" fill="currentColor" />
+                            <rect x="17" y="5" width="2" height="2" fill="currentColor" />
+                            <rect x="5" y="17" width="2" height="2" fill="currentColor" />
+                            <rect x="14" y="14" width="2" height="2" fill="currentColor" />
+                            <rect x="18" y="14" width="2" height="2" fill="currentColor" />
+                            <rect x="14" y="18" width="2" height="2" fill="currentColor" />
+                            <rect x="18" y="18" width="2" height="2" fill="currentColor" />
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="text-center mt-3 space-y-1">
+                    <p class="text-[8px] font-bold uppercase tracking-widest text-gray-400">Scan to Connect</p>
+                    <p class="text-[9px] font-bold text-black leading-tight max-w-[140px]">
+                        Unlocking Trillion Dollar Economy
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
