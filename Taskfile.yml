@@ -1,0 +1,282 @@
+version: '3'
+
+vars:
+  AMPLIFY_APP_ID: d1fp0qgpo4nzyp
+  AMPLIFY_BRANCH: master
+  AWS_REGION: us-east-1
+  TERRAFORM_DIR: terraform
+
+env:
+  TF_VAR_github_token:
+    sh: gh auth token
+
+tasks:
+  # Development tasks
+  dev:
+    desc: Start development server
+    cmds:
+      - npm run dev
+
+  build:
+    desc: Build the project for production
+    cmds:
+      - npm run build
+
+  preview:
+    desc: Preview production build locally
+    cmds:
+      - npm run preview
+
+  install:
+    desc: Install all dependencies
+    cmds:
+      - npm install
+
+  # Git operations
+  git:commit:
+    desc: Commit changes with message (usage: task git:commit -- "your message")
+    cmds:
+      - git add .
+      - git commit -m "{{.CLI_ARGS}}"
+
+  git:push:
+    desc: Push changes to GitHub (triggers auto-deploy)
+    cmds:
+      - gh auth setup-git
+      - git push
+
+  git:status:
+    desc: Show git status
+    cmds:
+      - git status
+
+  # Terraform operations
+  tf:init:
+    desc: Initialize Terraform
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform init
+
+  tf:validate:
+    desc: Validate and format Terraform configuration
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform validate
+      - terraform fmt
+
+  tf:plan:
+    desc: Plan Terraform changes
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform plan
+
+  tf:apply:
+    desc: Apply Terraform changes
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform apply
+
+  tf:apply:auto:
+    desc: Apply Terraform changes without confirmation
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform apply -auto-approve
+
+  tf:destroy:
+    desc: Destroy Terraform infrastructure
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform destroy
+
+  tf:output:
+    desc: Show Terraform outputs
+    dir: "{{.TERRAFORM_DIR}}"
+    cmds:
+      - terraform output
+
+  # AWS Amplify operations
+  amplify:status:
+    desc: Get Amplify app status
+    cmds:
+      - aws amplify get-app --app-id {{.AMPLIFY_APP_ID}} --region {{.AWS_REGION}} --query 'app.[name,defaultDomain,repository]' --output table
+
+  amplify:branch:
+    desc: Get branch details
+    cmds:
+      - aws amplify get-branch --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --region {{.AWS_REGION}} --query 'branch.[branchName,stage,displayName,enableAutoBuild]' --output table
+
+  amplify:jobs:
+    desc: List recent build jobs
+    cmds:
+      - aws amplify list-jobs --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --region {{.AWS_REGION}} --max-results 5 --query 'jobSummaries[*].[commitId,status,commitTime]' --output table
+
+  amplify:build:
+    desc: Trigger a new build
+    cmds:
+      - aws amplify start-job --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --job-type RELEASE --region {{.AWS_REGION}}
+
+  amplify:logs:
+    desc: Get logs for latest build job
+    cmds:
+      - |
+        JOB_ID=$(aws amplify list-jobs --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --region {{.AWS_REGION}} --max-results 1 --query 'jobSummaries[0].jobId' --output text)
+        aws amplify get-job --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --job-id $JOB_ID --region {{.AWS_REGION}} --query 'job.steps[*].[stepName,status,logUrl]' --output table
+
+  amplify:url:
+    desc: Get deployment URL
+    cmds:
+      - echo "https://{{.AMPLIFY_BRANCH}}.{{.AMPLIFY_APP_ID}}.amplifyapp.com"
+
+  amplify:open:
+    desc: Open deployment URL in browser
+    cmds:
+      - cmd: open "https://{{.AMPLIFY_BRANCH}}.{{.AMPLIFY_APP_ID}}.amplifyapp.com"
+        platforms: [darwin]
+      - cmd: start "https://{{.AMPLIFY_BRANCH}}.{{.AMPLIFY_APP_ID}}.amplifyapp.com"
+        platforms: [windows]
+      - cmd: xdg-open "https://{{.AMPLIFY_BRANCH}}.{{.AMPLIFY_APP_ID}}.amplifyapp.com"
+        platforms: [linux]
+
+  amplify:console:
+    desc: Open AWS Amplify Console
+    cmds:
+      - cmd: open "https://console.aws.amazon.com/amplify/home?region={{.AWS_REGION}}#/{{.AMPLIFY_APP_ID}}"
+        platforms: [darwin]
+      - cmd: start "https://console.aws.amazon.com/amplify/home?region={{.AWS_REGION}}#/{{.AMPLIFY_APP_ID}}"
+        platforms: [windows]
+      - cmd: xdg-open "https://console.aws.amazon.com/amplify/home?region={{.AWS_REGION}}#/{{.AMPLIFY_APP_ID}}"
+        platforms: [linux]
+
+  # Deployment workflows
+  deploy:
+    desc: Full deployment workflow (build, commit, push)
+    cmds:
+      - task: build
+      - task: git:commit -- "{{.CLI_ARGS | default "Deploy updates"}}"
+      - task: git:push
+      - echo "Deployment triggered! Check status with 'task amplify:jobs'"
+
+  deploy:quick:
+    desc: Quick deploy (commit and push without building)
+    cmds:
+      - task: git:commit -- "{{.CLI_ARGS | default "Quick update"}}"
+      - task: git:push
+
+  deploy:tf:
+    desc: Deploy infrastructure changes via Terraform
+    cmds:
+      - task: tf:validate
+      - task: tf:plan
+      - task: tf:apply
+
+  # Setup tasks
+  setup:
+    desc: Initial project setup
+    cmds:
+      - task: install
+      - task: tf:init
+      - echo "Setup complete! Run 'task dev' to start development server"
+
+  setup:gh:
+    desc: Setup GitHub CLI authentication
+    cmds:
+      - gh auth login
+      - gh auth setup-git
+
+  setup:aws:
+    desc: Check AWS credentials
+    cmds:
+      - aws sts get-caller-identity
+
+  # Monitoring tasks
+  monitor:
+    desc: Monitor build status (refresh every 10 seconds)
+    cmds:
+      - |
+        while true; do
+          clear
+          echo "=== Amplify Build Status ==="
+          task amplify:jobs
+          echo ""
+          echo "Press Ctrl+C to stop monitoring"
+          sleep 10
+        done
+
+  watch:build:
+    desc: Watch for latest build completion
+    cmds:
+      - |
+        echo "Watching for build completion..."
+        JOB_ID=$(aws amplify list-jobs --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --region {{.AWS_REGION}} --max-results 1 --query 'jobSummaries[0].jobId' --output text)
+        while true; do
+          STATUS=$(aws amplify get-job --app-id {{.AMPLIFY_APP_ID}} --branch-name {{.AMPLIFY_BRANCH}} --job-id $JOB_ID --region {{.AWS_REGION}} --query 'job.summary.status' --output text)
+          echo "Build status: $STATUS"
+          if [ "$STATUS" = "SUCCEED" ] || [ "$STATUS" = "FAILED" ]; then
+            echo "Build completed with status: $STATUS"
+            break
+          fi
+          sleep 5
+        done
+
+  # Utility tasks
+  clean:
+    desc: Clean build artifacts and dependencies
+    cmds:
+      - rm -rf dist
+      - rm -rf node_modules
+      - rm -rf .terraform
+
+  lint:
+    desc: Run linting (if configured)
+    cmds:
+      - npm run lint
+
+  test:
+    desc: Run tests (if configured)
+    cmds:
+      - npm test
+
+  # Information tasks
+  info:
+    desc: Show project information
+    cmds:
+      - echo "Project: Monoatom Labs Homepage Content Lab"
+      - echo "Repository: https://github.com/roosterslab/website-home-page-content-lab"
+      - echo "Amplify App ID: {{.AMPLIFY_APP_ID}}"
+      - echo "Branch: {{.AMPLIFY_BRANCH}}"
+      - echo "Region: {{.AWS_REGION}}"
+      - echo "Live URL: https://{{.AMPLIFY_BRANCH}}.{{.AMPLIFY_APP_ID}}.amplifyapp.com"
+
+  help:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  # Rollback task
+  rollback:
+    desc: Rollback to previous deployment (manual process)
+    cmds:
+      - echo "To rollback:"
+      - echo "1. Find previous commit: git log --oneline"
+      - echo "2. Checkout previous commit: git checkout <commit-hash>"
+      - echo "3. Force push: git push --force"
+      - echo "WARNING: This will overwrite current deployment!"
+
+  # Health check
+  health:
+    desc: Check health of all services
+    cmds:
+      - echo "=== Git Status ==="
+      - git status
+      - echo ""
+      - echo "=== AWS Credentials ==="
+      - aws sts get-caller-identity
+      - echo ""
+      - echo "=== GitHub Auth ==="
+      - gh auth status
+      - echo ""
+      - echo "=== Amplify Status ==="
+      - task: amplify:status
+      - echo ""
+      - echo "=== Latest Build ==="
+      - task: amplify:jobs
