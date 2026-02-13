@@ -89,6 +89,20 @@ const CardForm = ({ data, onChange }) => {
               />
             </div>
           </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Company Tagline
+            </label>
+            <input
+              type="text"
+              name="companyTagline"
+              value={data.companyTagline || ''}
+              onChange={handleChange}
+              placeholder="e.g., Advanced Nanomaterials"
+              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+            />
+            <p className="text-xs text-gray-500 mt-1">Appears under company name on back card</p>
+          </div>
         </div>
       </div>
 
@@ -149,6 +163,25 @@ const CardForm = ({ data, onChange }) => {
               />
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* QR Code Tagline */}
+      <div className="mb-8">
+        <h3 className="text-lg font-semibold text-gray-300 mb-4">QR Code Section</h3>
+        <div>
+          <label className="block text-sm font-medium text-gray-400 mb-2">
+            QR Code Tagline
+          </label>
+          <input
+            type="text"
+            name="qrTagline"
+            value={data.qrTagline || ''}
+            onChange={handleChange}
+            placeholder="e.g., Unlocking Trillion Dollar Economy"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+          />
+          <p className="text-xs text-gray-500 mt-1">Appears below QR code on back card</p>
         </div>
       </div>
 

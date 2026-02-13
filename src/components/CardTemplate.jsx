@@ -91,7 +91,7 @@ const CardTemplate = ({ data, side = 'front' }) => {
             {/* Header */}
             <div style={styles.backHeader}>
               <h2 style={styles.backCompanyName}>{data.company || 'MONOATOM LABS'}</h2>
-              <p style={styles.taglineBack}>Advanced Nanomaterials</p>
+              <p style={styles.taglineBack}>{data.companyTagline || 'Advanced Nanomaterials'}</p>
             </div>
 
             {/* Contact Grid */}
@@ -143,7 +143,7 @@ const CardTemplate = ({ data, side = 'front' }) => {
 
             <div style={styles.qrTextSection}>
               <p style={styles.scanText}>Scan to Connect</p>
-              <p style={styles.sloganText}>Unlocking Trillion Dollar Economy</p>
+              <p style={styles.sloganText}>{data.qrTagline || 'Unlocking Trillion Dollar Economy'}</p>
             </div>
           </div>
         </div>
