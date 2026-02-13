@@ -1,0 +1,124 @@
+name: Terraform - Infrastructure Management
+
+on:
+  push:
+    branches:
+      - monoatomlabs_dev_root
+    paths:
+      - 'infrastructure/maker-app/**'
+      - '.github/workflows/terraform-infrastructure.yml'
+  pull_request:
+    branches:
+      - monoatomlabs_dev_root
+    paths:
+      - 'infrastructure/maker-app/**'
+      - '.github/workflows/terraform-infrastructure.yml'
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Terraform action to perform'
+        required: true
+        type: choice
+        options:
+          - plan
+          - apply
+          - destroy
+        default: 'plan'
+
+jobs:
+  terraform:
+    name: Terraform ${{ github.event.inputs.action || 'plan' }}
+    runs-on: ubuntu-latest
+    environment: infrastructure
+
+    defaults:
+      run:
+        working-directory: infrastructure/maker-app
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        continue-on-error: true
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -no-color -out=tfplan \
+            -var="github_access_token=${{ secrets.GITHUB_TOKEN }}" \
+            -var="environment=${{ vars.ENVIRONMENT || 'dev' }}"
+        continue-on-error: true
+
+      - name: Save Plan Output
+        if: github.event_name == 'pull_request'
+        run: |
+          terraform show -no-color tfplan > plan_output.txt
+
+      - name: Comment PR with Plan
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const plan = fs.readFileSync('infrastructure/maker-app/plan_output.txt', 'utf8');
+            const output = `### Terraform Plan
+
+            <details>
+            <summary>Show Plan</summary>
+
+            \`\`\`terraform
+            ${plan}
+            \`\`\`
+
+            </details>`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+
+      - name: Terraform Apply
+        if: |
+          (github.event.inputs.action == 'apply' ||
+           (github.event_name == 'push' && github.ref == 'refs/heads/monoatomlabs_dev_root'))
+        run: terraform apply -auto-approve tfplan
+
+      - name: Terraform Destroy
+        if: github.event.inputs.action == 'destroy'
+        run: |
+          terraform destroy -auto-approve \
+            -var="github_access_token=${{ secrets.GITHUB_TOKEN }}" \
+            -var="environment=${{ vars.ENVIRONMENT || 'dev' }}"
+
+      - name: Terraform Output
+        if: github.event.inputs.action == 'apply' || github.event_name == 'push'
+        run: terraform output -json > outputs.json
+
+      - name: Upload Terraform Outputs
+        if: github.event.inputs.action == 'apply' || github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: terraform-outputs
+          path: infrastructure/maker-app/outputs.json

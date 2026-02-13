@@ -1,0 +1,77 @@
+name: Maker App - Deploy to Amplify
+
+on:
+  push:
+    branches:
+      - maker-app
+    paths:
+      - 'visiting-card-dev/maker/**'
+      - '.github/workflows/maker-app-deploy.yml'
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+        default: 'development'
+
+jobs:
+  deploy:
+    name: Deploy to AWS Amplify
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.event.inputs.environment || 'development' }}
+
+    defaults:
+      run:
+        working-directory: visiting-card-dev/maker
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: visiting-card-dev/maker/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_APP_NAME: 'Visiting Card Maker'
+          NODE_ENV: production
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION || 'us-east-1' }}
+
+      - name: Trigger Amplify deployment
+        run: |
+          echo "Triggering Amplify deployment via webhook..."
+          curl -X POST "${{ secrets.AMPLIFY_WEBHOOK_URL }}"
+
+      - name: Wait for deployment
+        run: |
+          echo "Deployment triggered. Check AWS Amplify Console for status."
+          echo "Console URL: https://console.aws.amazon.com/amplify/home?region=${{ secrets.AWS_REGION || 'us-east-1' }}"
+
+      - name: Deployment summary
+        run: |
+          echo "### Deployment Summary :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: ${{ github.event.inputs.environment || 'development' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY

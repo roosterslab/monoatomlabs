@@ -1,0 +1,64 @@
+name: Maker App - CI
+
+on:
+  pull_request:
+    branches:
+      - maker-app
+      - main
+    paths:
+      - 'visiting-card-dev/maker/**'
+      - '.github/workflows/maker-app-ci.yml'
+  push:
+    branches:
+      - maker-app
+    paths:
+      - 'visiting-card-dev/maker/**'
+      - '.github/workflows/maker-app-ci.yml'
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: visiting-card-dev/maker
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: visiting-card-dev/maker/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint --if-present
+
+      - name: Run tests
+        run: npm run test --if-present
+
+      - name: Build application
+        run: npm run build
+        env:
+          VITE_APP_NAME: 'Visiting Card Maker'
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: visiting-card-dev/maker/dist
+          retention-days: 7
+
+      - name: Check build size
+        run: |
+          echo "Build size:"
+          du -sh dist
+          echo "Detailed breakdown:"
+          du -h dist/* | sort -h

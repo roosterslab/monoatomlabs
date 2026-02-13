@@ -1,0 +1,17 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - cd visiting-card-dev/maker
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: visiting-card-dev/maker/dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - visiting-card-dev/maker/node_modules/**/*
