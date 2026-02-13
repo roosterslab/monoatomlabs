@@ -8,12 +8,12 @@ terraform {
     }
   }
 
-  backend "s3" {
-    # Configure with your state bucket
-    # bucket = "your-terraform-state-bucket"
-    # key    = "maker-app-amplify/terraform.tfstate"
-    # region = "us-east-1"
-  }
+  # backend "s3" {
+  #   # Configure with your state bucket
+  #   # bucket = "your-terraform-state-bucket"
+  #   # key    = "maker-app-amplify/terraform.tfstate"
+  #   # region = "us-east-1"
+  # }
 }
 
 provider "aws" {
