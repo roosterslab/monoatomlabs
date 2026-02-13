@@ -33,3 +33,14 @@ output "amplify_console_url" {
   description = "AWS Amplify Console URL"
   value       = "https://console.aws.amazon.com/amplify/home?region=${var.aws_region}#/${aws_amplify_app.maker_app.id}"
 }
+
+output "production_branch_url" {
+  description = "Production branch URL"
+  value       = var.create_production_branch ? "https://${aws_amplify_branch.production[0].branch_name}.${aws_amplify_app.maker_app.default_domain}" : "Not created"
+}
+
+output "production_webhook_url" {
+  description = "Webhook URL for production branch CI/CD triggers"
+  value       = var.create_production_branch ? aws_amplify_webhook.production[0].url : "Not created"
+  sensitive   = true
+}

@@ -12,6 +12,10 @@ main_branch_name     = "maker-app"
 
 # Branch Configuration
 create_develop_branch          = false
+create_production_branch       = true
+production_branch_name         = "visiting-card-maker-live"
+production_domain_prefix       = "app"  # Use "app" for app.yourdomain.com, or "" for root
+
 enable_auto_branch_creation    = true
 enable_branch_auto_build       = true
 enable_branch_auto_deletion    = true

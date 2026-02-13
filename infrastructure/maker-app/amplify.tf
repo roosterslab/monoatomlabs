@@ -119,6 +119,28 @@ resource "aws_amplify_branch" "develop" {
   }
 }
 
+# Amplify Branch for production (visiting-card-maker-live)
+resource "aws_amplify_branch" "production" {
+  count = var.create_production_branch ? 1 : 0
+
+  app_id      = aws_amplify_app.maker_app.id
+  branch_name = var.production_branch_name
+
+  enable_auto_build = true
+  stage             = "PRODUCTION"
+
+  framework = "React"
+
+  environment_variables = {
+    ENV = "production"
+  }
+
+  tags = {
+    Name        = "Production Branch"
+    Environment = "production"
+  }
+}
+
 # Amplify Domain Association (if custom domain provided)
 resource "aws_amplify_domain_association" "maker_app" {
   count = var.domain_name != "" ? 1 : 0
@@ -147,12 +169,30 @@ resource "aws_amplify_domain_association" "maker_app" {
     }
   }
 
+  # Production branch subdomain (if enabled)
+  dynamic "sub_domain" {
+    for_each = var.create_production_branch ? [1] : []
+    content {
+      branch_name = aws_amplify_branch.production[0].branch_name
+      prefix      = var.production_domain_prefix
+    }
+  }
+
   wait_for_verification = false
 }
 
-# Amplify Webhook for CI/CD
+# Amplify Webhook for CI/CD - Main
 resource "aws_amplify_webhook" "main" {
   app_id      = aws_amplify_app.maker_app.id
   branch_name = aws_amplify_branch.main.branch_name
   description = "Webhook for main branch deployments"
+}
+
+# Amplify Webhook for CI/CD - Production
+resource "aws_amplify_webhook" "production" {
+  count = var.create_production_branch ? 1 : 0
+
+  app_id      = aws_amplify_app.maker_app.id
+  branch_name = aws_amplify_branch.production[0].branch_name
+  description = "Webhook for production branch deployments"
 }

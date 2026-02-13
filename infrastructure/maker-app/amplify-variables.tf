@@ -40,6 +40,24 @@ variable "create_develop_branch" {
   default     = false
 }
 
+variable "create_production_branch" {
+  description = "Whether to create a production branch"
+  type        = bool
+  default     = true
+}
+
+variable "production_branch_name" {
+  description = "Production branch name to deploy"
+  type        = string
+  default     = "visiting-card-maker-live"
+}
+
+variable "production_domain_prefix" {
+  description = "Subdomain prefix for production branch (e.g., 'app', 'live', or empty for root)"
+  type        = string
+  default     = "app"
+}
+
 variable "enable_auto_branch_creation" {
   description = "Enable automatic branch creation for feature branches"
   type        = bool
