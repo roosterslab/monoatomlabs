@@ -75,6 +75,19 @@ const CardForm = ({ data, onChange }) => {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
+              Company Tagline
+            </label>
+            <input
+              type="text"
+              name="tagline"
+              value={data.tagline || ''}
+              onChange={handleChange}
+              placeholder="e.g., Advanced Nanomaterials"
+              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
               Website
             </label>
             <div className="relative">

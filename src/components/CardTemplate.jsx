@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Hexagon, Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
 import { generateQRCodeURL } from '../utils/qrGenerator';
 
 const CardTemplate = ({ data, side = 'front' }) => {
@@ -90,8 +90,8 @@ const CardTemplate = ({ data, side = 'front' }) => {
           <div style={styles.leftSection}>
             {/* Header */}
             <div style={styles.backHeader}>
-              <h2 style={styles.backCompanyName}>{data.company || 'MONOATOM LABS'}</h2>
-              <p style={styles.taglineBack}>Advanced Nanomaterials</p>
+              <h2 style={styles.backCompanyName}>{data.name || 'SUSHANTH PAATNAIK'}</h2>
+              <p style={styles.taglineBack}>{data.title || 'CO-FOUNDER & CEO'}</p>
             </div>
 
             {/* Contact Grid */}
@@ -162,13 +162,20 @@ const CardTemplate = ({ data, side = 'front' }) => {
 
       {/* Content Layer */}
       <div style={styles.contentLayer}>
+
+        {/* Monoatom Logo - Top Right Corner */}
+        <img
+          src="/logo.svg"
+          alt="Monoatom Logo"
+          style={styles.logoIcon}
+        />
+
         {/* Top Branding */}
-        <div style={styles.topBranding}>
+        <div>
           <div style={styles.brandingLeft}>
             <h2 style={styles.companyTitle}>{data.company || 'MONOATOM'}</h2>
             <p style={styles.labsText}>LABS</p>
           </div>
-          <Hexagon size={32} style={styles.hexIcon} strokeWidth={1.5} />
         </div>
 
         {/* Bottom Identity */}
@@ -191,7 +198,7 @@ const styles = {
     height: '340px',
     position: 'relative',
     overflow: 'hidden',
-    borderRadius: '24px',
+    borderRadius: '12px',
     boxShadow: '0 20px 40px -10px rgba(0, 0, 0, 0.2)',
     backgroundColor: '#050505',
     color: 'white',
@@ -221,10 +228,14 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  topBranding: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+  logoIcon: {
+    position: 'absolute',
+    top: '8px',
+    right: '8px',
+    width: '160px',
+    height: '160px',
+    opacity: 1,
+    filter: 'invert(1) brightness(0.6) saturate(0.5) hue-rotate(180deg)',
   },
   brandingLeft: {
     borderLeft: '4px solid #64748B',
@@ -239,16 +250,12 @@ const styles = {
     margin: 0,
   },
   labsText: {
-    color: '#9ca3af',
-    fontSize: '0.75rem',
+    color: 'white',
+    fontSize: '1rem',
     fontFamily: 'monospace',
     letterSpacing: '0.4em',
     textTransform: 'uppercase',
     marginTop: '0.5rem',
-  },
-  hexIcon: {
-    color: 'white',
-    opacity: 0.2,
   },
   bottomIdentity: {
     marginTop: 'auto',
@@ -273,9 +280,9 @@ const styles = {
     boxShadow: '0 0 10px rgba(100,116,139,0.8)',
   },
   titleText: {
-    color: '#64748B',
+    color: '#94A3B8',
     fontFamily: 'monospace',
-    fontSize: '0.75rem',
+    fontSize: '1rem',
     letterSpacing: '0.15em',
     textTransform: 'uppercase',
     fontWeight: '600',
