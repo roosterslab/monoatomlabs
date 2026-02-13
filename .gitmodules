@@ -1,0 +1,4 @@
+[submodule "maker"]
+	path = maker
+	url = https://github.com/roosterslab/monoatomlabs.git
+	branch = maker-app
