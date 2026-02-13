@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Experiment 2 - Monoatom Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Icons ---
+        const IconBase = ({ children, className, ...props }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>{children}</svg>
+        );
+        const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></IconBase>;
+        const Menu = (props) => <IconBase {...props}><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></IconBase>;
+        const X = (props) => <IconBase {...props}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></IconBase>;
+        const Hexagon = (props) => <IconBase {...props}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></IconBase>;
+        const Layers = (props) => <IconBase {...props}><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></IconBase>;
+        const Sun = (props) => <IconBase {...props}><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></IconBase>;
+        const Shield = (props) => <IconBase {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></IconBase>;
+        const Beaker = (props) => <IconBase {...props}><path d="M4.5 3h15" /><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3" /><path d="M6 14h12" /></IconBase>;
+        const BarChart3 = (props) => <IconBase {...props}><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></IconBase>;
+
+        // --- 3D Graphene Lattice Component ---
+        const GrapheneLattice = () => {
+            const canvasRef = useRef(null);
+            const mouseRef = useRef({ x: 0, y: 0 });
+
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                let width, height;
+                let nodes = [];
+                let connections = [];
+                let animationFrameId;
+
+                // 3D Projection Helpers
+                const focalLength = 800;
+
+                // Initialize Grid
+                const init = () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                    nodes = [];
+                    connections = [];
+
+                    // Config for Honeycomb (Hexagons)
+                    const hexRadius = 40;
+                    const xStep = hexRadius * Math.sqrt(3);
+                    const yStep = hexRadius * 1.5;
+                    const cols = Math.ceil(width / xStep) + 4;
+                    const rows = Math.ceil(height / yStep) + 4;
+
+                    const nodeMap = new Map(); // "x,y" -> index
+                    const edgeSet = new Set(); // "i,j" -> exists
+
+                    // Generate hexagons
+                    for (let i = -Math.floor(cols / 2); i < cols / 2; i++) {
+                        for (let j = -Math.floor(rows / 2); j < rows / 2; j++) {
+                            // Center of hexagon
+                            let cx = i * xStep;
+                            let cy = j * yStep;
+                            // Offset odd rows
+                            if (j % 2 !== 0) cx += xStep / 2;
+
+                            const polyIndices = [];
+
+                            // 6 vertices per hexagon
+                            for (let k = 0; k < 6; k++) {
+                                // 30 degrees offset for pointy-top orientation
+                                const angle = (Math.PI / 180) * (60 * k + 30);
+                                const vx = cx + hexRadius * Math.cos(angle);
+                                const vy = cy + hexRadius * Math.sin(angle);
+
+                                // Quantize to merge vertices at same location
+                                const key = `${Math.round(vx)},${Math.round(vy)}`;
+                                let idx;
+
+                                if (nodeMap.has(key)) {
+                                    idx = nodeMap.get(key);
+                                } else {
+                                    // Z calculation for wave effect (same look)
+                                    // Use normalized coords for smooth wave
+                                    const nx = vx * 0.003;
+                                    const ny = vy * 0.003;
+                                    const z = Math.sin(nx * 2) * 80 + Math.cos(ny * 2) * 80;
+
+                                    nodes.push({
+                                        x: vx, y: vy, z,
+                                        ox: vx, oy: vy, oz: z
+                                    });
+                                    idx = nodes.length - 1;
+                                    nodeMap.set(key, idx);
+                                }
+                                polyIndices.push(idx);
+                            }
+
+                            // Connect vertices to form hexagon edges
+                            for (let k = 0; k < 6; k++) {
+                                const n1 = polyIndices[k];
+                                const n2 = polyIndices[(k + 1) % 6];
+                                const edgeKey = n1 < n2 ? `${n1},${n2}` : `${n2},${n1}`;
+                                if (!edgeSet.has(edgeKey)) {
+                                    connections.push([n1, n2]);
+                                    edgeSet.add(edgeKey);
+                                }
+                            }
+                        }
+                    }
+                };
+
+                const animate = (time) => {
+                    ctx.fillStyle = '#000';
+                    ctx.fillRect(0, 0, width, height);
+
+                    // Rotation angles based on mouse and time
+                    const angleX = (mouseRef.current.y * 0.0005) + Math.sin(time * 0.0002) * 0.1;
+                    const angleY = (mouseRef.current.x * 0.0005) + time * 0.0001;
+
+                    // Project and Draw
+                    const projectedNodes = nodes.map(node => {
+                        // Rotation X
+                        let y1 = node.oy * Math.cos(angleX) - node.oz * Math.sin(angleX);
+                        let z1 = node.oy * Math.sin(angleX) + node.oz * Math.cos(angleX);
+
+                        // Rotation Y
+                        let x2 = node.ox * Math.cos(angleY) - z1 * Math.sin(angleY);
+                        let z2 = node.ox * Math.sin(angleY) + z1 * Math.cos(angleY);
+
+                        // Perspective Projection
+                        const scale = focalLength / (focalLength + z2 + 500); // +500 pushes it back
+                        const px = x2 * scale + width / 2;
+                        const py = y1 * scale + height / 2;
+
+                        return { x: px, y: py, scale, z: z2 };
+                    });
+
+                    // Draw Connections (Bonds)
+                    ctx.strokeStyle = '#333';
+                    ctx.lineWidth = 1;
+                    connections.forEach(([i, j]) => {
+                        const p1 = projectedNodes[i];
+                        const p2 = projectedNodes[j];
+
+                        // Depth culling
+                        if (p1.scale > 0 && p2.scale > 0) {
+                            // Fade distant lines
+                            const alpha = Math.min(p1.scale, p2.scale) * 0.5;
+                            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha * 0.3})`;
+                            ctx.beginPath();
+                            ctx.moveTo(p1.x, p1.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    });
+
+                    // Draw Nodes (Atoms)
+                    projectedNodes.forEach(p => {
+                        if (p.scale > 0) {
+                            const alpha = p.scale;
+                            const size = p.scale * 2;
+                            ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                            ctx.beginPath();
+                            ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    });
+
+                    animationFrameId = requestAnimationFrame(animate);
+                };
+
+                const handleMouseMove = (e) => {
+                    mouseRef.current = {
+                        x: e.clientX - window.innerWidth / 2,
+                        y: e.clientY - window.innerHeight / 2
+                    };
+                };
+
+                init();
+                window.addEventListener('resize', init);
+                window.addEventListener('mousemove', handleMouseMove);
+                animationFrameId = requestAnimationFrame(animate);
+
+                return () => {
+                    window.removeEventListener('resize', init);
+                    window.removeEventListener('mousemove', handleMouseMove);
+                    cancelAnimationFrame(animationFrameId);
+                };
+            }, []);
+
+            return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+        };
+
+        // --- Shared Components ---
+        const Button = ({ children, variant = 'primary', theme = 'light', className = '', icon: Icon, onClick }) => {
+            const baseStyle = "inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-all duration-300 rounded-sm group shadow-sm";
+            const getColors = () => {
+                if (variant === 'primary') {
+                    return "bg-white text-black hover:bg-neutral-200 border border-white";
+                } else if (variant === 'secondary') {
+                    return "bg-transparent text-white border border-neutral-700 hover:border-white hover:bg-neutral-900";
+                } else {
+                    return "text-neutral-400 hover:text-white px-0 py-2 shadow-none";
+                }
+            };
+            return (
+                <button onClick={onClick} className={`${baseStyle} ${getColors()} ${className}`}>
+                    {children}
+                    {Icon && <Icon className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />}
+                </button>
+            );
+        };
+
+        const SectionHeading = ({ number, title, subtitle, theme = 'light' }) => (
+            <div className="mb-12 md:mb-20">
+                <span className={`block font-mono text-xs mb-4 tracking-widest uppercase font-semibold ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>
+                    {number} — {title}
+                </span>
+                <h2 className={`text-3xl md:text-5xl font-light tracking-tight leading-tight max-w-2xl ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
+                    {subtitle}
+                </h2>
+            </div>
+        );
+
+        const StatCard = ({ value, label }) => (
+            <div className="border-l border-neutral-800 pl-6 py-2">
+                <div className="text-4xl font-light text-white mb-1">{value}</div>
+                <div className="text-xs text-neutral-400 uppercase tracking-wider font-medium">{label}</div>
+            </div>
+        );
+
+        const Navbar = ({ scrolled }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-black/80 backdrop-blur-md border-neutral-800 py-4' : 'bg-transparent border-transparent py-6'}`}>
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="flex items-center justify-between h-12">
+                            <div className="flex items-center gap-2">
+                                <Hexagon className="w-8 h-8 text-white fill-white/10" strokeWidth={1.5} />
+                                <span className="text-xl font-bold tracking-tight text-white">MONOATOM<span className="font-light text-neutral-400">LABS</span></span>
+                            </div>
+                            <div className="hidden md:flex items-center space-x-8">
+                                <Button variant="primary" theme="dark" className="h-9 px-4 text-xs shadow-none">Contact Us</Button>
+                            </div>
+                            <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+                                {isOpen ? <X /> : <Menu />}
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            );
+        };
+
+        function App() {
+            const [scrolled, setScrolled] = useState(false);
+            const [activeProduct, setActiveProduct] = useState(0);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const products = [
+                {
+                    id: 'graphacrete',
+                    title: 'Graphacrete',
+                    category: 'Construction',
+                    icon: Layers,
+                    description: 'High-performance graphene additives for stronger, longer-lasting construction materials.',
+                    features: ['+50% Compressive Strength', 'Reduces Carbon Footprint', 'Micro-crack Resistant'],
+                    detail: 'Graphacrete utilizes graphene nano-platelets dispersed within the cement matrix to block moisture ingress and create a nano-reinforced microstructure.'
+                },
+                {
+                    id: 'graffisol',
+                    title: 'Graffisol',
+                    category: 'Energy',
+                    icon: Sun,
+                    description: 'Next-generation nanocoating designed to enhance photon absorption and thermal management.',
+                    features: ['+17% Power Output', 'Anti-soiling Surface', 'Thermal Dissipation'],
+                    detail: 'Proven field trials show 7-8% immediate efficiency gain with payback typically within 18 months.'
+                },
+                {
+                    id: 'ceraphene',
+                    title: 'Ceraphene',
+                    category: 'Automotive',
+                    icon: Shield,
+                    description: 'Ultra-durable graphene-enhanced ceramic coating providing industry-leading protection.',
+                    features: ['9H+ Hardness', '3-5 Year Durability', 'Hydrophobic Barrier'],
+                    detail: 'Costs 60-70% less than premium competitors while offering superior durability against heat, UV, and oxidation.'
+                },
+                {
+                    id: 'hdgpe',
+                    title: 'HD-G-PE',
+                    category: 'Industrial',
+                    icon: Beaker,
+                    description: 'Graphene-reinforced polymer enhancer engineered for HDPE pipes and films.',
+                    features: ['+30% Tensile Strength', '20x Elongation Improvement', 'Superior UV Stability'],
+                    detail: 'Engineered for critical infrastructure requiring extended lifespan and reduced crack propagation.'
+                }
+            ];
+
+            return (
+                <div className="min-h-screen bg-black text-white font-sans selection:bg-white selection:text-black">
+                    <Navbar scrolled={scrolled} />
+
+                    {/* SECTION 1: HERO (EXPERIMENT 2 - GRAPHENE LATTICE) */}
+                    <section className="relative pt-32 pb-24 md:pt-52 md:pb-40 px-6 bg-black overflow-hidden border-b border-neutral-800">
+                        {/* 3D GRAPHENE LATTICE CANVAS */}
+                        <GrapheneLattice />
+
+                        {/* Heavy radial gradient to focus attention on center and text */}
+                        <div className="absolute inset-0 z-0 bg-radial-gradient from-transparent to-black pointer-events-none" style={{ background: 'radial-gradient(circle at center, transparent 0%, #000 90%)' }}></div>
+                        <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none"></div>
+
+                        <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left fade-in">
+                            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-neutral-700 bg-neutral-900/50 backdrop-blur mb-8 shadow-sm">
+                                <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
+                                <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">Engineering the Future</span>
+                            </div>
+
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
+                                Structured for <br />
+                                <span className="text-neutral-500">Performance.</span>
+                            </h1>
+
+                            <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mb-12 font-light leading-relaxed">
+                                We design graphene at the atomic level. Creating materials that are stronger, conductive, and exponentially more efficient.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 mb-20">
+                                <Button variant="primary" theme="dark" icon={ArrowRight}>Our Technology</Button>
+                                <Button variant="secondary" theme="dark">View Documentation</Button>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-neutral-800 pt-8">
+                                <StatCard value="C₆" label="Carbon Basis" />
+                                <StatCard value="sp²" label="Hybridization" />
+                                <StatCard value="1 TPa" label="Young's Modulus" />
+                                <StatCard value="5300" label="W/m·K Thermal" />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECTION 2: PRODUCTS (DARK) - Kept for context */}
+                    <section id="products" className="py-24 px-6 bg-neutral-950">
+                        <div className="max-w-7xl mx-auto">
+                            <SectionHeading
+                                number="01"
+                                title="Product Suite"
+                                subtitle="Commercially viable graphene solutions deploying specifically for Construction, Energy, and Industrial sectors."
+                                theme="dark"
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[650px]">
+                                <div className="md:col-span-2 md:order-2 bg-neutral-900 border border-neutral-800 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group rounded-sm">
+                                    <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                                        style={{ backgroundImage: `radial-gradient(circle, #fff 1px, transparent 1px)`, backgroundSize: '20px 20px' }}>
+                                    </div>
+
+                                    <div className="relative z-10">
+                                        <div className="flex items-center space-x-4 mb-8">
+                                            <div className="p-4 bg-white rounded-sm shadow-xl">
+                                                {React.createElement(products[activeProduct].icon, { className: "w-8 h-8 text-black" })}
+                                            </div>
+                                            <h3 className="text-3xl md:text-5xl font-medium text-white tracking-tight">{products[activeProduct].title}</h3>
+                                        </div>
+
+                                        <p className="text-lg md:text-xl text-neutral-400 mb-8 max-w-xl leading-relaxed">
+                                            {products[activeProduct].detail}
+                                        </p>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                                            {products[activeProduct].features.map((feat, i) => (
+                                                <div key={i} className="flex items-center space-x-3 py-2 border-b border-neutral-800">
+                                                    <BarChart3 className="w-5 h-5 text-white" />
+                                                    <span className="text-sm font-medium text-neutral-300">{feat}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="relative z-10">
+                                        <Button variant="primary" theme="dark" className="w-full sm:w-auto shadow-xl">Request Technical Sheet</Button>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-3 overflow-y-auto pr-1 md:order-1">
+                                    {products.map((product, idx) => (
+                                        <div
+                                            key={product.id}
+                                            onClick={() => setActiveProduct(idx)}
+                                            className={`p-6 border-l-4 transition-all cursor-pointer group ${activeProduct === idx
+                                                    ? 'bg-white text-black border-white shadow-xl'
+                                                    : 'bg-neutral-900 text-neutral-500 border-neutral-800 hover:bg-neutral-800 hover:text-white'
+                                                }`}
+                                        >
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="font-medium text-lg">{product.title}</span>
+                                                <ArrowRight className={`w-4 h-4 transition-transform ${activeProduct === idx ? 'opacity-100' : 'opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100'}`} />
+                                            </div>
+                                            <div className={`text-xs uppercase tracking-wider ${activeProduct === idx ? 'text-neutral-500' : 'text-neutral-600'}`}>{product.category}</div>
+                                        </div>
+                                    ))}
+
+                                    <div className="mt-auto p-6 border-2 border-neutral-800 border-dashed bg-transparent text-neutral-500 flex flex-col justify-center items-center text-center rounded-sm h-full min-h-[150px]">
+                                        <span className="text-xs font-bold uppercase tracking-widest text-white mb-2">In Development Pipeline</span>
+                                        <span className="text-sm">Rustene • Graphyre • Thermaphene</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

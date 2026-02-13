@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Wave Background - Monoatom Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Particle Wave Component ---
+        const ParticleWave = () => {
+            const canvasRef = useRef(null);
+
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                let width, height;
+                let particles = [];
+                let animationFrameId;
+
+                const init = () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                    particles = [];
+
+                    // Create particles in a grid
+                    const spacing = width < 768 ? 30 : 40;
+                    const rows = Math.ceil(height / spacing);
+                    const cols = Math.ceil(width / spacing);
+
+                    for (let x = 0; x < cols; x++) {
+                        for (let y = 0; y < rows; y++) {
+                            particles.push({
+                                x: x * spacing,
+                                y: y * spacing,
+                                originX: x * spacing,
+                                originY: y * spacing,
+                                size: Math.random() * 1.5 + 0.5,
+                                phase: Math.random() * Math.PI * 2
+                            });
+                        }
+                    }
+                };
+
+                const animate = (time) => {
+                    ctx.clearRect(0, 0, width, height);
+
+                    // Wave parameters
+                    const timeScale = time * 0.001;
+
+                    particles.forEach((p, i) => {
+                        // Calculate wave movement
+                        const waveX = Math.sin(p.originY * 0.01 + p.originX * 0.01 + timeScale) * 10;
+                        const waveY = Math.cos(p.originX * 0.01 + p.originY * 0.01 + timeScale) * 10;
+
+                        // 3D effect: modify size/opacity based on wave height
+                        const depth = Math.sin(p.originX * 0.02 + timeScale * 1.5);
+                        const opacity = 0.1 + (depth + 1) * 0.25; // Range 0.1 to 0.6
+
+                        p.x = p.originX + waveX;
+                        p.y = p.originY + waveY;
+
+                        // Draw Particle
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+                        ctx.fill();
+                    });
+
+                    animationFrameId = requestAnimationFrame(animate);
+                };
+
+                init();
+                window.addEventListener('resize', init);
+                animationFrameId = requestAnimationFrame(animate);
+
+                return () => {
+                    window.removeEventListener('resize', init);
+                    cancelAnimationFrame(animationFrameId);
+                };
+            }, []);
+
+            return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full block" />;
+        };
+
+        // --- Main App ---
+        function App() {
+            return (
+                <div className="w-full h-screen bg-black overflow-hidden relative">
+                    <ParticleWave />
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:monoatomlabs.com)",
+      "Bash(npm run build:*)",
+      "Bash(timeout 10 npm run dev:*)",
+      "Bash(npm init:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(wc:*)",
+      "Bash(ls:*)",
+      "Bash(node scripts/audit-navigation.cjs:*)"
+    ]
+  }
+}

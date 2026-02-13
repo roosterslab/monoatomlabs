@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hero Experiment 6 - Monoatom Monochrome</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a;
+        }
+
+        /* Neutral-950 */
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-950 text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Icons ---
+        const IconBase = ({ children, className, ...props }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className} {...props}>{children}</svg>
+        );
+        const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></IconBase>;
+        const Menu = (props) => <IconBase {...props}><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></IconBase>;
+        const X = (props) => <IconBase {...props}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></IconBase>;
+        const Hexagon = (props) => <IconBase {...props}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></IconBase>;
+        const Layers = (props) => <IconBase {...props}><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></IconBase>;
+        const Sun = (props) => <IconBase {...props}><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></IconBase>;
+        const Shield = (props) => <IconBase {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></IconBase>;
+        const Beaker = (props) => <IconBase {...props}><path d="M4.5 3h15" /><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3" /><path d="M6 14h12" /></IconBase>;
+        const BarChart3 = (props) => <IconBase {...props}><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></IconBase>;
+        const Zap = (props) => <IconBase {...props}><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></IconBase>;
+
+        // --- Monochrome Voltage Grid Component ---
+        const MonochromeGrid = () => {
+            const canvasRef = useRef(null);
+            const mouseRef = useRef({ x: -500, y: -500 });
+
+            useEffect(() => {
+                const canvas = canvasRef.current;
+                const ctx = canvas.getContext('2d');
+                let width, height;
+                let animationFrameId;
+
+                // Config
+                const HEX_RADIUS = 30;
+                const PULSE_SPEED = 4;
+                const PULSE_CHANCE = 0.25;
+                const DECAY_RATE = 0.94;
+
+                // State
+                let nodes = [];
+                let pulses = [];
+
+                const nodeMap = new Map();
+                const getOrCreateNode = (x, y) => {
+                    const key = `${x.toFixed(1)},${y.toFixed(1)}`;
+                    if (!nodeMap.has(key)) {
+                        nodeMap.set(key, { x, y, neighbors: [], energy: 0 });
+                    }
+                    return nodeMap.get(key);
+                };
+
+                const init = () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                    nodes = [];
+                    pulses = [];
+                    nodeMap.clear();
+
+                    const xOffset = HEX_RADIUS * 3 / 2;
+                    const yOffset = HEX_RADIUS * Math.sqrt(3);
+                    const cols = Math.ceil(width / xOffset) + 2;
+                    const rows = Math.ceil(height / yOffset) + 2;
+
+                    for (let q = -1; q < cols; q++) {
+                        for (let r = -1; r < rows; r++) {
+                            const cx = q * xOffset;
+                            const cy = r * yOffset + (q % 2 !== 0 ? yOffset / 2 : 0);
+
+                            const corners = [];
+                            for (let k = 0; k < 6; k++) {
+                                const angle = Math.PI / 180 * (60 * k);
+                                const vx = cx + HEX_RADIUS * Math.cos(angle);
+                                const vy = cy + HEX_RADIUS * Math.sin(angle);
+                                corners.push(getOrCreateNode(vx, vy));
+                            }
+
+                            for (let k = 0; k < 6; k++) {
+                                const n1 = corners[k];
+                                const n2 = corners[(k + 1) % 6];
+                                if (!n1.neighbors.includes(n2)) {
+                                    n1.neighbors.push(n2);
+                                    n2.neighbors.push(n1);
+                                }
+                            }
+                        }
+                    }
+                    nodes = Array.from(nodeMap.values());
+                };
+
+                const animate = () => {
+                    // Trail effect - Dark Neutral Background
+                    ctx.fillStyle = 'rgba(10, 10, 10, 0.4)';
+                    ctx.fillRect(0, 0, width, height);
+
+                    // 1. Draw Bonds (Grid Lines)
+                    ctx.strokeStyle = '#262626'; // Neutral-800
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    nodes.forEach(node => {
+                        node.neighbors.forEach(neighbor => {
+                            ctx.moveTo(node.x, node.y);
+                            ctx.lineTo(neighbor.x, neighbor.y);
+                        });
+                    });
+                    ctx.stroke();
+
+                    // 2. Spawn Energy
+                    if (Math.random() < PULSE_CHANCE) {
+                        const startNode = nodes[Math.floor(Math.random() * nodes.length)];
+                        if (startNode.neighbors.length > 0) {
+                            const endNode = startNode.neighbors[Math.floor(Math.random() * startNode.neighbors.length)];
+                            pulses.push({
+                                start: startNode,
+                                end: endNode,
+                                progress: 0,
+                                type: Math.random() > 0.5 ? 'bright' : 'dim' // Variation in brightness
+                            });
+                        }
+                    }
+
+                    // 3. Update Pulses
+                    ctx.shadowBlur = 8;
+
+                    for (let i = pulses.length - 1; i >= 0; i--) {
+                        const p = pulses[i];
+                        const dist = Math.hypot(p.start.x - p.end.x, p.start.y - p.end.y);
+                        p.progress += PULSE_SPEED / dist;
+
+                        if (p.progress >= 1) {
+                            p.end.energy = 1.0;
+
+                            if (Math.random() > 0.1 && p.end.neighbors.length > 0) {
+                                const validNeighbors = p.end.neighbors.filter(n => n !== p.start);
+                                if (validNeighbors.length > 0) {
+                                    const nextNode = validNeighbors[Math.floor(Math.random() * validNeighbors.length)];
+                                    p.start = p.end;
+                                    p.end = nextNode;
+                                    p.progress = 0;
+                                } else {
+                                    pulses.splice(i, 1);
+                                }
+                            } else {
+                                pulses.splice(i, 1);
+                            }
+                        } else {
+                            const curX = p.start.x + (p.end.x - p.start.x) * p.progress;
+                            const curY = p.start.y + (p.end.y - p.start.y) * p.progress;
+
+                            // Monochrome Colors
+                            const color = p.type === 'bright' ? '#ffffff' : '#a3a3a3';
+                            ctx.shadowColor = '#ffffff';
+                            ctx.fillStyle = color;
+
+                            ctx.beginPath();
+                            ctx.arc(curX, curY, 1.8, 0, Math.PI * 2);
+                            ctx.fill();
+                        }
+                    }
+                    ctx.shadowBlur = 0;
+
+                    // 4. Draw Glowing Atoms (Vertices)
+                    nodes.forEach(node => {
+                        const distToMouse = Math.hypot(node.x - mouseRef.current.x, node.y - mouseRef.current.y);
+                        if (distToMouse < 150) {
+                            node.energy = Math.min(node.energy + 0.1, 1);
+                        }
+
+                        if (node.energy > 0.01) {
+                            // White Glow
+                            ctx.fillStyle = `rgba(255, 255, 255, ${node.energy})`;
+                            ctx.beginPath();
+                            ctx.arc(node.x, node.y, 1.5 + node.energy * 2, 0, Math.PI * 2);
+                            ctx.fill();
+                            node.energy *= DECAY_RATE;
+                        }
+                    });
+
+                    animationFrameId = requestAnimationFrame(animate);
+                };
+
+                const handleMouseMove = (e) => {
+                    mouseRef.current = { x: e.clientX, y: e.clientY };
+                };
+
+                init();
+                window.addEventListener('resize', init);
+                window.addEventListener('mousemove', handleMouseMove);
+                animationFrameId = requestAnimationFrame(animate);
+
+                return () => {
+                    window.removeEventListener('resize', init);
+                    window.removeEventListener('mousemove', handleMouseMove);
+                    cancelAnimationFrame(animationFrameId);
+                };
+            }, []);
+
+            return <canvas ref={canvasRef} className="absolute inset-0 z-0" />;
+        };
+
+        // --- Shared Components ---
+        const Button = ({ children, variant = 'primary', theme = 'light', className = '', icon: Icon, onClick }) => {
+            const baseStyle = "inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-all duration-300 rounded-sm group shadow-sm relative overflow-hidden";
+            const getColors = () => {
+                if (variant === 'primary') {
+                    // Stark White on Black
+                    return "bg-white text-black hover:bg-neutral-200 border border-white z-10 shadow-lg";
+                } else if (variant === 'secondary') {
+                    // Transparent with White Border
+                    return "bg-transparent text-white border border-neutral-700 hover:border-white hover:bg-neutral-900 z-10";
+                } else {
+                    return "text-neutral-400 hover:text-white px-0 py-2 shadow-none";
+                }
+            };
+            return (
+                <button onClick={onClick} className={`${baseStyle} ${getColors()} ${className}`}>
+                    {children}
+                    {Icon && <Icon className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />}
+                </button>
+            );
+        };
+
+        const StatCard = ({ value, label }) => (
+            <div className="border-l border-neutral-800 pl-6 py-2 group hover:border-white transition-colors duration-300">
+                <div className="text-4xl font-light text-white mb-1 group-hover:text-neutral-200 transition-colors">{value}</div>
+                <div className="text-xs text-neutral-500 uppercase tracking-wider font-medium group-hover:text-neutral-300">{label}</div>
+            </div>
+        );
+
+        const Navbar = ({ scrolled }) => {
+            const [isOpen, setIsOpen] = useState(false);
+            return (
+                <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-neutral-950/90 backdrop-blur-md border-neutral-800 py-4' : 'bg-transparent border-transparent py-6'}`}>
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="flex items-center justify-between h-12">
+                            <div className="flex items-center gap-2">
+                                <Hexagon className="w-8 h-8 text-white fill-white/10" strokeWidth={1.5} />
+                                <span className="text-xl font-bold tracking-tight text-white">MONOATOM<span className="font-light text-neutral-500">LABS</span></span>
+                            </div>
+                            <div className="hidden md:flex items-center space-x-8">
+                                <Button variant="primary" theme="dark" className="h-9 px-4 text-xs shadow-none">Contact Us</Button>
+                            </div>
+                            <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+                                {isOpen ? <X /> : <Menu />}
+                            </button>
+                        </div>
+                    </div>
+                </nav>
+            );
+        };
+
+        function App() {
+            const [scrolled, setScrolled] = useState(false);
+            const [activeProduct, setActiveProduct] = useState(0);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const products = [
+                {
+                    id: 'graphacrete',
+                    title: 'Graphacrete',
+                    category: 'Construction',
+                    icon: Layers,
+                    description: 'High-performance graphene additives for stronger, longer-lasting construction materials.',
+                    features: ['+50% Compressive Strength', 'Reduces Carbon Footprint', 'Micro-crack Resistant'],
+                    detail: 'Graphacrete utilizes graphene nano-platelets dispersed within the cement matrix to block moisture ingress and create a nano-reinforced microstructure.'
+                },
+                {
+                    id: 'graffisol',
+                    title: 'Graffisol',
+                    category: 'Energy',
+                    icon: Sun,
+                    description: 'Next-generation nanocoating designed to enhance photon absorption and thermal management.',
+                    features: ['+17% Power Output', 'Anti-soiling Surface', 'Thermal Dissipation'],
+                    detail: 'Proven field trials show 7-8% immediate efficiency gain with payback typically within 18 months.'
+                },
+                {
+                    id: 'ceraphene',
+                    title: 'Ceraphene',
+                    category: 'Automotive',
+                    icon: Shield,
+                    description: 'Ultra-durable graphene-enhanced ceramic coating providing industry-leading protection.',
+                    features: ['9H+ Hardness', '3-5 Year Durability', 'Hydrophobic Barrier'],
+                    detail: 'Costs 60-70% less than premium competitors while offering superior durability against heat, UV, and oxidation.'
+                },
+                {
+                    id: 'hdgpe',
+                    title: 'HD-G-PE',
+                    category: 'Industrial',
+                    icon: Beaker,
+                    description: 'Graphene-reinforced polymer enhancer engineered for HDPE pipes and films.',
+                    features: ['+30% Tensile Strength', '20x Elongation Improvement', 'Superior UV Stability'],
+                    detail: 'Engineered for critical infrastructure requiring extended lifespan and reduced crack propagation.'
+                }
+            ];
+
+            return (
+                <div className="min-h-screen bg-neutral-950 text-white font-sans selection:bg-white selection:text-black">
+                    <Navbar scrolled={scrolled} />
+
+                    {/* SECTION 1: HERO (EXPERIMENT 6 - MONOCHROME) */}
+                    <section className="relative pt-32 pb-24 md:pt-52 md:pb-40 px-6 bg-neutral-950 overflow-hidden border-b border-neutral-900">
+                        {/* Monochrome Voltage Grid Canvas */}
+                        <MonochromeGrid />
+
+                        {/* Gradients */}
+                        <div className="absolute inset-0 z-0 bg-gradient-to-r from-neutral-950 via-neutral-950/80 to-transparent pointer-events-none"></div>
+                        <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-neutral-950 to-transparent pointer-events-none"></div>
+
+                        <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left">
+                            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/80 backdrop-blur mb-8 shadow-sm fade-in">
+                                <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_12px_rgba(255,255,255,0.6)]"></span>
+                                <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">Unlocking the Trillion Dollar Economy</span>
+                            </div>
+
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium text-white tracking-tighter leading-tight mb-8 drop-shadow-2xl fade-in delay-100">
+                                High Energy <br />
+                                <span className="text-neutral-500">Density.</span>
+                            </h1>
+
+                            <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mb-12 font-light leading-relaxed fade-in delay-200">
+                                Monoatom Labs engineers breakthrough graphene derivatives to transition enterprises into Industry 4.0. Stronger, lighter, conductive, and sustainable.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 mb-20 fade-in delay-300">
+                                <Button variant="primary" theme="dark" icon={ArrowRight}>Explore Innovations</Button>
+                                <Button variant="secondary" theme="dark">View Documentation</Button>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-neutral-800 pt-8 fade-in delay-300">
+                                <StatCard value="10+" label="Innovations" />
+                                <StatCard value="5+" label="Market Ready" />
+                                <StatCard value="99%" label="Purity Level" />
+                                <StatCard value="200 m²/g" label="Surface Area" />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECTION 2: PRODUCTS (DARK) */}
+                    <section id="products" className="py-24 px-6 bg-neutral-950">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="mb-12 md:mb-20">
+                                <span className="block font-mono text-xs mb-4 tracking-widest uppercase font-semibold text-neutral-500">
+                                    01 — Product Suite
+                                </span>
+                                <h2 className="text-3xl md:text-5xl font-light tracking-tight leading-tight max-w-2xl text-white">
+                                    Commercially viable graphene solutions deploying specifically for Construction, Energy, and Industrial sectors.
+                                </h2>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[650px]">
+                                {/* Active Product */}
+                                <div className="md:col-span-2 md:order-2 bg-neutral-900 border border-neutral-800 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group rounded-sm shadow-2xl">
+                                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none"
+                                        style={{ backgroundImage: `radial-gradient(circle, #fff 1px, transparent 1px)`, backgroundSize: '20px 20px' }}>
+                                    </div>
+
+                                    {/* White Accent Line */}
+                                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-white to-transparent"></div>
+
+                                    <div className="relative z-10">
+                                        <div className="flex items-center space-x-4 mb-8">
+                                            <div className="p-4 bg-white rounded-sm shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                                                {React.createElement(products[activeProduct].icon, { className: "w-8 h-8 text-black" })}
+                                            </div>
+                                            <h3 className="text-3xl md:text-5xl font-medium text-white tracking-tight">{products[activeProduct].title}</h3>
+                                        </div>
+                                        <p className="text-lg md:text-xl text-neutral-400 mb-8 max-w-xl leading-relaxed">
+                                            {products[activeProduct].detail}
+                                        </p>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                                            {products[activeProduct].features.map((feat, i) => (
+                                                <div key={i} className="flex items-center space-x-3 py-2 border-b border-neutral-800">
+                                                    <Zap className="w-4 h-4 text-white" />
+                                                    <span className="text-sm font-medium text-neutral-300">{feat}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className="relative z-10">
+                                        <Button variant="primary" theme="dark" className="w-full sm:w-auto">Request Technical Sheet</Button>
+                                    </div>
+                                </div>
+
+                                {/* Selection List */}
+                                <div className="flex flex-col gap-3 overflow-y-auto pr-1 md:order-1">
+                                    {products.map((product, idx) => (
+                                        <div
+                                            key={product.id}
+                                            onClick={() => setActiveProduct(idx)}
+                                            className={`p-6 border-l-4 transition-all cursor-pointer group ${activeProduct === idx
+                                                    ? 'bg-white text-black border-white shadow-xl'
+                                                    : 'bg-neutral-900 text-neutral-500 border-neutral-800 hover:bg-neutral-800 hover:text-white hover:border-neutral-600'
+                                                }`}
+                                        >
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="font-medium text-lg">{product.title}</span>
+                                                <ArrowRight className={`w-4 h-4 transition-transform ${activeProduct === idx ? 'opacity-100 text-black' : 'opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100'}`} />
+                                            </div>
+                                            <div className={`text-xs uppercase tracking-wider ${activeProduct === idx ? 'text-neutral-500' : 'text-neutral-600'}`}>{product.category}</div>
+                                        </div>
+                                    ))}
+                                    <div className="mt-auto p-6 border-2 border-neutral-800 border-dashed bg-transparent text-neutral-500 flex flex-col justify-center items-center text-center rounded-sm h-full min-h-[150px]">
+                                        <span className="text-xs font-bold uppercase tracking-widest text-white mb-2">In Development Pipeline</span>
+                                        <span className="text-sm">Rustene • Graphyre • Thermaphene</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

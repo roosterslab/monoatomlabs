@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monoatom Labs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .animate-spin-slow {
+            animation: spin 8s linear infinite;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        // --- Icons (Lucide React Equivalents) ---
+        const IconBase = ({ children, className, ...props }) => (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className={className}
+                {...props}
+            >
+                {children}
+            </svg>
+        );
+
+        const ArrowRight = (props) => <IconBase {...props}><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></IconBase>;
+        const Menu = (props) => <IconBase {...props}><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></IconBase>;
+        const X = (props) => <IconBase {...props}><path d="M18 6 6 18" /><path d="m6 6 12 12" /></IconBase>;
+        const Hexagon = (props) => <IconBase {...props}><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /></IconBase>;
+        const Layers = (props) => <IconBase {...props}><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></IconBase>;
+        const Sun = (props) => <IconBase {...props}><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></IconBase>;
+        const Shield = (props) => <IconBase {...props}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" /></IconBase>;
+        const Beaker = (props) => <IconBase {...props}><path d="M4.5 3h15" /><path d="M6 3v16a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V3" /><path d="M6 14h12" /></IconBase>;
+        const User = (props) => <IconBase {...props}><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></IconBase>;
+        const Mail = (props) => <IconBase {...props}><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></IconBase>;
+        const MapPin = (props) => <IconBase {...props}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" /><circle cx="12" cy="10" r="3" /></IconBase>;
+        const Phone = (props) => <IconBase {...props}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" /></IconBase>;
+        const BarChart3 = (props) => <IconBase {...props}><path d="M3 3v18h18" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></IconBase>;
+
+        // --- Components ---
+
+        // Button adapts based on the 'theme' prop (light/dark context)
+        const Button = ({ children, variant = 'primary', theme = 'light', className = '', icon: Icon, onClick }) => {
+            const baseStyle = "inline-flex items-center justify-center px-6 py-3 text-sm font-medium transition-all duration-300 rounded-sm group shadow-sm";
+
+            const getColors = () => {
+                if (variant === 'primary') {
+                    return theme === 'dark'
+                        ? "bg-white text-black hover:bg-neutral-200 border border-white"
+                        : "bg-neutral-900 text-white hover:bg-neutral-800 border border-neutral-900";
+                } else if (variant === 'secondary') {
+                    return theme === 'dark'
+                        ? "bg-transparent text-white border border-neutral-700 hover:border-white hover:bg-neutral-900"
+                        : "bg-white text-neutral-900 border border-neutral-200 hover:border-neutral-900";
+                } else { // Text
+                    return theme === 'dark'
+                        ? "text-neutral-400 hover:text-white px-0 py-2 shadow-none"
+                        : "text-neutral-500 hover:text-neutral-900 px-0 py-2 shadow-none";
+                }
+            };
+
+            return (
+                <button onClick={onClick} className={`${baseStyle} ${getColors()} ${className}`}>
+                    {children}
+                    {Icon && <Icon className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1" />}
+                </button>
+            );
+        };
+
+        const SectionHeading = ({ number, title, subtitle, theme = 'light' }) => (
+            <div className="mb-12 md:mb-20">
+                <span className={`block font-mono text-xs mb-4 tracking-widest uppercase font-semibold ${theme === 'dark' ? 'text-neutral-500' : 'text-neutral-400'}`}>
+                    {number} — {title}
+                </span>
+                <h2 className={`text-3xl md:text-5xl font-light tracking-tight leading-tight max-w-2xl ${theme === 'dark' ? 'text-white' : 'text-neutral-900'}`}>
+                    {subtitle}
+                </h2>
+            </div>
+        );
+
+        const StatCard = ({ value, label }) => (
+            <div className="border-l border-neutral-200 pl-6 py-2">
+                <div className="text-4xl font-light text-neutral-900 mb-1">{value}</div>
+                <div className="text-xs text-neutral-500 uppercase tracking-wider font-medium">{label}</div>
+            </div>
+        );
+
+        const Navbar = ({ scrolled }) => {
+            const [isOpen, setIsOpen] = useState(false);
+
+            const textColorClass = "text-neutral-900";
+
+            return (
+                <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-white/95 backdrop-blur-md border-neutral-200 shadow-sm py-4' : 'bg-white/50 backdrop-blur-sm border-transparent py-6'}`}>
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="flex items-center justify-between h-12">
+                            <div className="flex items-center gap-2">
+                                <Hexagon className="w-8 h-8 text-neutral-900 fill-neutral-100" strokeWidth={1.5} />
+                                <span className="text-xl font-bold tracking-tight text-neutral-900">MONOATOM<span className="font-light text-neutral-500">LABS</span></span>
+                            </div>
+
+                            <div className="hidden md:flex items-center space-x-8">
+                                {['Products', 'Technology', 'About', 'Impact'].map((item) => (
+                                    <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-medium transition-colors text-neutral-600 hover:text-neutral-900">
+                                        {item}
+                                    </a>
+                                ))}
+                                <Button
+                                    variant="primary"
+                                    theme="light"
+                                    className="h-9 px-4 text-xs shadow-none"
+                                >
+                                    Contact Us
+                                </Button>
+                            </div>
+
+                            <button className="md:hidden text-neutral-900" onClick={() => setIsOpen(!isOpen)}>
+                                {isOpen ? <X /> : <Menu />}
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Mobile Menu */}
+                    {isOpen && (
+                        <div className="md:hidden bg-white border-b border-neutral-200 absolute w-full shadow-xl">
+                            <div className="px-6 py-4 space-y-4">
+                                {['Products', 'Technology', 'About', 'Impact'].map((item) => (
+                                    <a key={item} href={`#${item.toLowerCase()}`} className="block text-sm font-medium text-neutral-600 hover:text-neutral-900" onClick={() => setIsOpen(false)}>
+                                        {item}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </nav>
+            );
+        };
+
+        // --- Main App ---
+
+        function App() {
+            const [scrolled, setScrolled] = useState(false);
+            const [activeProduct, setActiveProduct] = useState(0);
+
+            useEffect(() => {
+                const handleScroll = () => setScrolled(window.scrollY > 50);
+                window.addEventListener('scroll', handleScroll);
+                return () => window.removeEventListener('scroll', handleScroll);
+            }, []);
+
+            const products = [
+                {
+                    id: 'graphacrete',
+                    title: 'Graphacrete',
+                    category: 'Construction',
+                    icon: Layers,
+                    description: 'High-performance graphene additives for stronger, longer-lasting construction materials.',
+                    features: ['+50% Compressive Strength', 'Reduces Carbon Footprint', 'Micro-crack Resistant'],
+                    detail: 'Graphacrete utilizes graphene nano-platelets dispersed within the cement matrix to block moisture ingress and create a nano-reinforced microstructure.'
+                },
+                {
+                    id: 'graffisol',
+                    title: 'Graffisol',
+                    category: 'Energy',
+                    icon: Sun,
+                    description: 'Next-generation nanocoating designed to enhance photon absorption and thermal management.',
+                    features: ['+17% Power Output', 'Anti-soiling Surface', 'Thermal Dissipation'],
+                    detail: 'Proven field trials show 7-8% immediate efficiency gain with payback typically within 18 months.'
+                },
+                {
+                    id: 'ceraphene',
+                    title: 'Ceraphene',
+                    category: 'Automotive',
+                    icon: Shield,
+                    description: 'Ultra-durable graphene-enhanced ceramic coating providing industry-leading protection.',
+                    features: ['9H+ Hardness', '3-5 Year Durability', 'Hydrophobic Barrier'],
+                    detail: 'Costs 60-70% less than premium competitors while offering superior durability against heat, UV, and oxidation.'
+                },
+                {
+                    id: 'hdgpe',
+                    title: 'HD-G-PE',
+                    category: 'Industrial',
+                    icon: Beaker,
+                    description: 'Graphene-reinforced polymer enhancer engineered for HDPE pipes and films.',
+                    features: ['+30% Tensile Strength', '20x Elongation Improvement', 'Superior UV Stability'],
+                    detail: 'Engineered for critical infrastructure requiring extended lifespan and reduced crack propagation.'
+                }
+            ];
+
+            return (
+                <div className="min-h-screen bg-white text-neutral-800 font-sans selection:bg-neutral-900 selection:text-white">
+                    <Navbar scrolled={scrolled} />
+
+                    {/* SECTION 1: HERO (LIGHT) */}
+                    <section className="relative pt-32 pb-24 md:pt-52 md:pb-40 px-6 bg-white overflow-hidden border-b border-neutral-100">
+                        {/* Light Grid Background */}
+                        <div className="absolute inset-0 z-0 opacity-40 pointer-events-none"
+                            style={{
+                                backgroundImage: `linear-gradient(to right, #e5e5e5 1px, transparent 1px), linear-gradient(to bottom, #e5e5e5 1px, transparent 1px)`,
+                                backgroundSize: '40px 40px'
+                            }}>
+                        </div>
+
+                        {/* Subtle Light Glow */}
+                        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-neutral-100 rounded-full blur-3xl opacity-60 -mr-32 -mt-32 pointer-events-none"></div>
+
+                        <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left">
+                            <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-neutral-200 bg-white/80 backdrop-blur mb-8 shadow-sm">
+                                <span className="w-2 h-2 rounded-full bg-neutral-900 animate-pulse"></span>
+                                <span className="text-xs font-bold text-neutral-600 tracking-wide uppercase">Unlocking the Trillion Dollar Economy</span>
+                            </div>
+
+                            <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium text-neutral-900 tracking-tighter leading-tight mb-8">
+                                Material Science <br />
+                                <span className="text-neutral-400">Reinvented.</span>
+                            </h1>
+
+                            <p className="text-xl md:text-2xl text-neutral-500 max-w-2xl mb-12 font-light leading-relaxed">
+                                Monoatom Labs engineers breakthrough graphene derivatives to transition enterprises into Industry 4.0. Stronger, lighter, conductive, and sustainable.
+                            </p>
+
+                            <div className="flex flex-col sm:flex-row gap-4 mb-20">
+                                <Button variant="primary" theme="light" icon={ArrowRight}>Explore Innovations</Button>
+                                <Button variant="secondary" theme="light">View Documentation</Button>
+                            </div>
+
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-neutral-200 pt-8">
+                                <StatCard value="10+" label="Innovations" />
+                                <StatCard value="5+" label="Market Ready" />
+                                <StatCard value="99%" label="Purity Level" />
+                                <StatCard value="200 m²/g" label="Surface Area" />
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECTION 2: PRODUCTS (DARK) */}
+                    <section id="products" className="py-24 px-6 bg-neutral-950">
+                        <div className="max-w-7xl mx-auto">
+                            <SectionHeading
+                                number="01"
+                                title="Product Suite"
+                                subtitle="Commercially viable graphene solutions deploying specifically for Construction, Energy, and Industrial sectors."
+                                theme="dark"
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 h-auto md:h-[650px]">
+                                {/* Active Product Highlight - Dark Mode */}
+                                <div className="md:col-span-2 md:order-2 bg-neutral-900 border border-neutral-800 p-8 md:p-12 flex flex-col justify-between relative overflow-hidden group rounded-sm">
+                                    {/* Pattern */}
+                                    <div className="absolute inset-0 opacity-[0.05] pointer-events-none"
+                                        style={{ backgroundImage: `radial-gradient(circle, #fff 1px, transparent 1px)`, backgroundSize: '20px 20px' }}>
+                                    </div>
+
+                                    <div className="relative z-10">
+                                        <div className="flex items-center space-x-4 mb-8">
+                                            <div className="p-4 bg-white rounded-sm shadow-xl">
+                                                {React.createElement(products[activeProduct].icon, { className: "w-8 h-8 text-black" })}
+                                            </div>
+                                            <h3 className="text-3xl md:text-5xl font-medium text-white tracking-tight">{products[activeProduct].title}</h3>
+                                        </div>
+
+                                        <p className="text-lg md:text-xl text-neutral-400 mb-8 max-w-xl leading-relaxed">
+                                            {products[activeProduct].detail}
+                                        </p>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-10">
+                                            {products[activeProduct].features.map((feat, i) => (
+                                                <div key={i} className="flex items-center space-x-3 py-2 border-b border-neutral-800">
+                                                    <BarChart3 className="w-5 h-5 text-white" />
+                                                    <span className="text-sm font-medium text-neutral-300">{feat}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className="relative z-10">
+                                        <Button variant="primary" theme="dark" className="w-full sm:w-auto shadow-xl">Request Technical Sheet</Button>
+                                    </div>
+                                </div>
+
+                                {/* Selection List */}
+                                <div className="flex flex-col gap-3 overflow-y-auto pr-1 md:order-1">
+                                    {products.map((product, idx) => (
+                                        <div
+                                            key={product.id}
+                                            onClick={() => setActiveProduct(idx)}
+                                            className={`p-6 border-l-4 transition-all cursor-pointer group ${activeProduct === idx
+                                                    ? 'bg-white text-black border-white shadow-xl'
+                                                    : 'bg-neutral-900 text-neutral-500 border-neutral-800 hover:bg-neutral-800 hover:text-white'
+                                                }`}
+                                        >
+                                            <div className="flex justify-between items-center mb-1">
+                                                <span className="font-medium text-lg">{product.title}</span>
+                                                <ArrowRight className={`w-4 h-4 transition-transform ${activeProduct === idx ? 'opacity-100' : 'opacity-0 -translate-x-2 group-hover:translate-x-0 group-hover:opacity-100'}`} />
+                                            </div>
+                                            <div className={`text-xs uppercase tracking-wider ${activeProduct === idx ? 'text-neutral-500' : 'text-neutral-600'}`}>{product.category}</div>
+                                        </div>
+                                    ))}
+
+                                    {/* Pipeline Teaser */}
+                                    <div className="mt-auto p-6 border-2 border-neutral-800 border-dashed bg-transparent text-neutral-500 flex flex-col justify-center items-center text-center rounded-sm h-full min-h-[150px]">
+                                        <span className="text-xs font-bold uppercase tracking-widest text-white mb-2">In Development Pipeline</span>
+                                        <span className="text-sm">Rustene • Graphyre • Thermaphene</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECTION 3: TECHNOLOGY (LIGHT) */}
+                    <section id="technology" className="py-24 px-6 bg-neutral-50 relative overflow-hidden border-b border-neutral-200">
+                        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 items-center relative z-10">
+                            <div>
+                                <SectionHeading
+                                    number="02"
+                                    title="Our Methodology"
+                                    subtitle="We don't just innovate in the lab. We scale for the real world."
+                                    theme="light"
+                                />
+                                <div className="space-y-12">
+                                    <div className="flex gap-6 group">
+                                        <div className="w-16 h-16 flex items-center justify-center bg-white border border-neutral-200 text-neutral-900 font-light text-2xl shrink-0 rounded-sm shadow-sm group-hover:bg-neutral-900 group-hover:text-white transition-colors">1</div>
+                                        <div>
+                                            <h4 className="text-neutral-900 text-xl font-medium mb-2">Lab Scale Innovation</h4>
+                                            <p className="text-neutral-500 text-base leading-relaxed">Developing proprietary graphene formulations in state-of-the-art facilities with scientists from IISC and IIT.</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-6 group">
+                                        <div className="w-16 h-16 flex items-center justify-center bg-white border border-neutral-200 text-neutral-900 font-light text-2xl shrink-0 rounded-sm shadow-sm group-hover:bg-neutral-900 group-hover:text-white transition-colors">2</div>
+                                        <div>
+                                            <h4 className="text-neutral-900 text-xl font-medium mb-2">Validation & Testing</h4>
+                                            <p className="text-neutral-500 text-base leading-relaxed">Rigorous field trials. Solar coatings tested for 18 months; Concrete additives validated by NABL reports.</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-6 group">
+                                        <div className="w-16 h-16 flex items-center justify-center bg-neutral-900 border border-neutral-900 text-white font-light text-2xl shrink-0 rounded-sm shadow-md">3</div>
+                                        <div>
+                                            <h4 className="text-neutral-900 text-xl font-medium mb-2">Commercial Deployment</h4>
+                                            <p className="text-neutral-500 text-base leading-relaxed">Mass manufacturing capabilities to supply industrial quantities, not just samples.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Visual Diagram - Light Theme */}
+                            <div className="relative h-full min-h-[400px] border border-neutral-200 bg-white/50 backdrop-blur-sm p-8 flex items-center justify-center rounded-sm">
+                                <div className="relative z-10 text-center">
+                                    <Hexagon className="w-32 h-32 text-neutral-900 mx-auto mb-6 animate-spin-slow" strokeWidth={0.5} />
+                                    <h5 className="text-neutral-900 font-mono text-sm tracking-widest uppercase mb-2">Graphene Nano-Platelets</h5>
+                                    <p className="text-neutral-500 text-xs">High Aspect Ratio • High Purity</p>
+                                </div>
+
+                                {/* Orbiting particles */}
+                                <div className="absolute inset-0 pointer-events-none">
+                                    <div className="absolute top-1/2 left-1/2 w-[300px] h-[300px] border border-neutral-300 rounded-full -translate-x-1/2 -translate-y-1/2 opacity-40"></div>
+                                    <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] border border-neutral-200 rounded-full -translate-x-1/2 -translate-y-1/2 opacity-30"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECTION 4: LEADERSHIP (LIGHT) */}
+                    <section id="about" className="py-24 px-6 bg-white border-b border-neutral-200">
+                        <div className="max-w-7xl mx-auto">
+                            <SectionHeading
+                                number="03"
+                                title="Leadership"
+                                subtitle="Deep science meets industrial scale."
+                                theme="light"
+                            />
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="group p-10 border border-neutral-200 bg-neutral-50 hover:bg-white hover:shadow-xl transition-all duration-300">
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="p-3 bg-white border border-neutral-200 shadow-sm rounded-full">
+                                            <User className="w-6 h-6 text-neutral-900" />
+                                        </div>
+                                        <div className="text-right">
+                                            <h3 className="text-2xl text-neutral-900 font-medium">Sushanth Paatnaik</h3>
+                                            <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold mt-1">Co-Founder & CEO</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="h-px bg-neutral-200 w-full mb-8 group-hover:bg-neutral-900 transition-colors"></div>
+
+                                    <p className="text-neutral-600 leading-relaxed mb-8">
+                                        6-time President of India Awardee, NASA & MIT recognized innovator. The scientific brain focused on next-gen technologies rooted in graphene and advanced chemical engineering.
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['MIT TR35', 'TED Speaker', 'NASA Awardee'].map(tag => (
+                                            <span key={tag} className="text-xs font-medium border border-neutral-200 bg-white px-3 py-1 text-neutral-600 rounded-full">{tag}</span>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="group p-10 border border-neutral-200 bg-neutral-50 hover:bg-white hover:shadow-xl transition-all duration-300">
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="p-3 bg-white border border-neutral-200 shadow-sm rounded-full">
+                                            <BarChart3 className="w-6 h-6 text-neutral-900" />
+                                        </div>
+                                        <div className="text-right">
+                                            <h3 className="text-2xl text-neutral-900 font-medium">Aayush Bansal</h3>
+                                            <p className="text-xs text-neutral-500 uppercase tracking-widest font-bold mt-1">Co-Founder & Strategic Investor</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="h-px bg-neutral-200 w-full mb-8 group-hover:bg-neutral-900 transition-colors"></div>
+
+                                    <p className="text-neutral-600 leading-relaxed mb-8">
+                                        Industrialist with 38 years in steel & manufacturing. Promoter of Kalika Steel. Instrumental in bridging breakthrough material innovations with real-world supply chains.
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                        {['Industrial Scaling', 'Strategic Ops', 'Market Expansion'].map(tag => (
+                                            <span key={tag} className="text-xs font-medium border border-neutral-200 bg-white px-3 py-1 text-neutral-600 rounded-full">{tag}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* SECTION 5: FOOTER (DARK) */}
+                    <footer id="contact" className="bg-neutral-950 text-white pt-24 pb-12 px-6">
+                        <div className="max-w-7xl mx-auto">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
+                                <div>
+                                    <Hexagon className="w-12 h-12 text-white mb-8" strokeWidth={1} />
+                                    <h2 className="text-5xl md:text-6xl font-medium tracking-tight mb-8">
+                                        Ready to upgrade your materials?
+                                    </h2>
+                                    <p className="text-xl text-neutral-500 max-w-md mb-10">
+                                        Partner with Monoatom Labs to integrate graphene solutions into your industrial workflow.
+                                    </p>
+                                    <div className="flex flex-col sm:flex-row gap-4">
+                                        <Button variant="primary" theme="dark">Get in Touch</Button>
+                                        <Button variant="text" theme="dark" className="underline decoration-1 underline-offset-4">Download Company Profile</Button>
+                                    </div>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 text-sm lg:pl-12 border-l border-neutral-900">
+                                    <div>
+                                        <h4 className="font-bold mb-6 uppercase tracking-wider text-xs text-neutral-500">Headquarters</h4>
+                                        <div className="flex items-start space-x-4 mb-2 text-neutral-300">
+                                            <MapPin className="w-5 h-5 mt-1 shrink-0 text-neutral-500" />
+                                            <span className="text-base">3rd Floor, iHub Gujarat,<br />Ahmedabad - 380015</span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-bold mb-6 uppercase tracking-wider text-xs text-neutral-500">Connect</h4>
+                                        <div className="space-y-4 text-neutral-300">
+                                            <a href="mailto:info@monoatomlabs.com" className="flex items-center space-x-4 hover:text-white transition-colors">
+                                                <Mail className="w-5 h-5 text-neutral-500" />
+                                                <span className="text-base">info@monoatomlabs.com</span>
+                                            </a>
+                                            <div className="flex items-center space-x-4">
+                                                <Phone className="w-5 h-5 text-neutral-500" />
+                                                <span className="text-base">+91 989 819 9809</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <h4 className="font-bold mb-6 uppercase tracking-wider text-xs text-neutral-500">Navigation</h4>
+                                        <ul className="space-y-3 text-neutral-400">
+                                            <li><a href="#" className="hover:text-white transition-colors">Home</a></li>
+                                            <li><a href="#products" className="hover:text-white transition-colors">Products</a></li>
+                                            <li><a href="#technology" className="hover:text-white transition-colors">Methodology</a></li>
+                                            <li><a href="#about" className="hover:text-white transition-colors">Leadership</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="pt-8 border-t border-neutral-900 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-600">
+                                <p>&copy; {new Date().getFullYear()} Monoatom Labs. All rights reserved.</p>
+                                <div className="flex space-x-8 mt-4 md:mt-0">
+                                    <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+                                    <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>
