@@ -3,20 +3,17 @@ frontend:
   phases:
     preBuild:
       commands:
-        # Initialize git submodules (nested)
-        - echo "Initializing git submodules..."
-        - git submodule update --init --recursive
-        # Navigate to app directory
-        - cd visiting-card-dev/maker
-        # Install dependencies
+        # Install dependencies at root
         - npm ci
     build:
       commands:
+        # Build the app
         - npm run build
   artifacts:
-    baseDirectory: visiting-card-dev/maker/dist
+    # Output directory for Vite
+    baseDirectory: dist
     files:
       - '**/*'
   cache:
     paths:
-      - visiting-card-dev/maker/node_modules/**/*
+      - node_modules/**/*
