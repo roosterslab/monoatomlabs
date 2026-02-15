@@ -17,7 +17,7 @@ const Footer = () => {
                     <div>
                         <Hexagon className="w-12 h-12 text-white mb-8" strokeWidth={1} />
                         <h2 className="text-5xl md:text-6xl font-medium tracking-tight mb-8">
-                            Ready to upgrade your materials?
+                            Ready to enable Industry 4.0?
                         </h2>
                         <p className="text-xl text-neutral-500 max-w-md mb-10">
                             Partner with Monoatom Labs to integrate graphene solutions into your industrial workflow.

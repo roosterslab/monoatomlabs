@@ -4,6 +4,8 @@ import PageHeader from '../../components/ui/PageHeader';
 import SectionHeading from '../../components/ui/SectionHeading';
 import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
+import CompetitiveComparison from '../../components/products/CompetitiveComparison';
+import CustomerSuccessStories from '../../components/products/CustomerSuccessStories';
 import { ShieldCheck, Sparkles, TrendingDown, Clock, Check, Car, Droplets, Wallet, Layers, BarChart3 } from 'lucide-react';
 import { products } from '../../data/content';
 
@@ -507,6 +509,9 @@ const Ceraphene = () => {
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />
+
+      <CompetitiveComparison product="ceraphene" />
+      <CustomerSuccessStories product="ceraphene" />
     </div>
   );
 };

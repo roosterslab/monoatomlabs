@@ -40,10 +40,10 @@ const Hero = () => {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-neutral-800 pt-8">
-                    <StatCard value="C₆" label="Carbon Basis" theme="dark" />
-                    <StatCard value="sp²" label="Hybridization" theme="dark" />
-                    <StatCard value="1 TPa" label="Young's Modulus" theme="dark" />
-                    <StatCard value="5300" label="W/m·K Thermal" theme="dark" />
+                    <StatCard value="10+" label="Breakthrough Innovations" theme="dark" />
+                    <StatCard value="5+" label="Commercial Products" theme="dark" />
+                    <StatCard value="2" label="Advanced Facilities" theme="dark" />
+                    <StatCard value="5" label="Pilot Technologies" theme="dark" />
                 </div>
             </div>
         </section>

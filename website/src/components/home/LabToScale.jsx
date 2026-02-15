@@ -1,6 +1,6 @@
 import React from 'react';
 import { Microscope, Beaker, Factory, ArrowRight, Sparkles } from 'lucide-react';
-import { AtomsToIndustryBackground } from '../backgrounds';
+import { DarkHexBackground } from '../backgrounds';
 
 const ProcessCard = ({ icon: Icon, number, title, description, features, isLast }) => (
     <>
@@ -84,73 +84,68 @@ const LabToScale = () => {
     ];
 
     return (
-        <section className="relative py-32 px-6 bg-neutral-950 border-t border-neutral-900 overflow-hidden">
-            {/* Static Background for Testing (Animation Disabled) */}
-            <div className="absolute inset-0 bg-neutral-950">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-neutral-900 via-neutral-950 to-neutral-950"></div>
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
+        <DarkHexBackground
+            className="py-32 px-6 border-t border-neutral-900"
+            contentClassName="max-w-7xl mx-auto relative z-10"
+        >
+            {/* Header */}
+            <div className="text-center mb-20">
+                <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6 backdrop-blur-sm">
+                    <Sparkles className="w-4 h-4 text-brand-400" />
+                    <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">
+                        Our Process
+                    </span>
+                </div>
+
+                <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 leading-tight drop-shadow-xl">
+                    From Atomic Scale to
+                    <br />
+                    <span className="text-brand-100 pb-2 inline-block drop-shadow-md">
+                        Industrial Reality
+                    </span>
+                </h2>
+
+                <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
+                    We don't just innovate in the lab—we ensure every breakthrough scales from prototype to mass manufacturing,
+                    bridging the critical gap between nanoscale research and real-world impact.
+                </p>
             </div>
 
-            <div className="max-w-7xl mx-auto relative z-10">
-                {/* Header */}
-                <div className="text-center mb-20">
-                    <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6 backdrop-blur-sm">
-                        <Sparkles className="w-4 h-4 text-brand-400" />
-                        <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">
-                            Our Process
-                        </span>
+            {/* Process Flow - 2 Steps Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8 items-center mb-16 max-w-5xl mx-auto">
+                {processes.map((process, index) => (
+                    <ProcessCard
+                        key={index}
+                        {...process}
+                        isLast={index === processes.length - 1}
+                    />
+                ))}
+            </div>
+
+            {/* Bottom Stats */}
+            <div className="bg-neutral-900/60 border border-neutral-800 text-white rounded-3xl p-12 backdrop-blur-md relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-r from-brand-500/5 to-transparent opacity-50"></div>
+
+                <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                    <div className="group">
+                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">2</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">State-of-the-Art Facilities</div>
                     </div>
-
-                    <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 leading-tight drop-shadow-xl">
-                        From Atomic Scale to
-                        <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 via-brand-100 to-brand-300 pb-2 inline-block drop-shadow-md">
-                            Industrial Reality
-                        </span>
-                    </h2>
-
-                    <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
-                        We don't just innovate in the lab—we ensure every breakthrough scales from prototype to mass manufacturing,
-                        bridging the critical gap between nanoscale research and real-world impact.
-                    </p>
-                </div>
-
-                {/* Process Flow - 2 Steps Layout */}
-                <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8 items-center mb-16 max-w-5xl mx-auto">
-                    {processes.map((process, index) => (
-                        <ProcessCard
-                            key={index}
-                            {...process}
-                            isLast={index === processes.length - 1}
-                        />
-                    ))}
-                </div>
-
-                {/* Bottom Stats */}
-                <div className="bg-neutral-900/60 border border-neutral-800 text-white rounded-3xl p-12 backdrop-blur-md relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-brand-500/5 to-transparent opacity-50"></div>
-
-                    <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-                        <div className="group">
-                            <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">2</div>
-                            <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">State-of-the-Art Facilities</div>
-                        </div>
-                        <div className="group">
-                            <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">14+</div>
-                            <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Years R&D Experience</div>
-                        </div>
-                        <div className="group">
-                            <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">Ton</div>
-                            <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Scale Production</div>
-                        </div>
-                        <div className="group">
-                            <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">100%</div>
-                            <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Quality Validated</div>
-                        </div>
+                    <div className="group">
+                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">14+</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Years R&D Experience</div>
+                    </div>
+                    <div className="group">
+                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">Ton</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Scale Production</div>
+                    </div>
+                    <div className="group">
+                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">100%</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Quality Validated</div>
                     </div>
                 </div>
             </div>
-        </section>
+        </DarkHexBackground>
     );
 };
 

@@ -8,6 +8,7 @@ import {
 import PageHeader from '../../../components/ui/PageHeader';
 import SectionHeading from '../../../components/ui/SectionHeading';
 import Button from '../../../components/ui/Button';
+import PilotTechnologies from '../../../components/pipeline/PilotTechnologies';
 
 // --- DATA SOURCE ---
 // Product Images (Using existing assets where available, otherwise generic placeholders)
@@ -446,6 +447,9 @@ const PipelineOverview = () => {
           </div>
         </div>
       </section>
+
+      {/* Pilot Technologies Showcase */}
+      <PilotTechnologies />
 
       {/* Grid Section */}
       <section className="py-12 px-6 min-h-[800px] bg-neutral-50">

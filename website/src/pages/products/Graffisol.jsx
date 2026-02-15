@@ -4,6 +4,8 @@ import PageHeader from '../../components/ui/PageHeader';
 import SectionHeading from '../../components/ui/SectionHeading';
 import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
+import CompetitiveComparison from '../../components/products/CompetitiveComparison';
+import CustomerSuccessStories from '../../components/products/CustomerSuccessStories';
 import { Sun, Thermometer, Zap, Clock, Check, BarChart3, ShieldCheck, MousePointerClick } from 'lucide-react';
 import { products } from '../../data/content';
 
@@ -529,6 +531,9 @@ const Graffisol = () => {
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />
+
+      <CompetitiveComparison product="graffisol" />
+      <CustomerSuccessStories product="graffisol" />
     </div>
   );
 };

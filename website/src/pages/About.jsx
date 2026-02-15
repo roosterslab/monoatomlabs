@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import PageHeader from '../components/ui/PageHeader';
 import SectionHeading from '../components/ui/SectionHeading';
 import Button from '../components/ui/Button';
+import TrustValidation from '../components/about/TrustValidation';
+import CustomerJourney from '../components/home/CustomerJourney';
+import CTAHub from '../components/about/CTAHub';
 import { Target, Eye, Globe, Zap, Droplets, Wind, Heart, Users, GraduationCap, Award, Briefcase, Microscope, FlaskConical, Settings, ClipboardCheck, Building2 } from 'lucide-react';
 
 const CapabilityBlock = ({ icon: Icon, title, items }) => (
@@ -298,44 +301,14 @@ const About = () => {
                 </div>
             </section>
 
-            {/* Partners */}
-            <section className="py-24 px-6 border-b border-neutral-200">
-                <div className="max-w-7xl mx-auto">
-                    <SectionHeading title="Partnership Network" theme="light" subtitle="Collaborating with premier research institutions." />
+            {/* Trust & Validation */}
+            <TrustValidation />
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-                        {['IISc', 'IIT', 'NCL'].map((partner) => (
-                            <div key={partner} className="h-32 bg-neutral-50 border border-neutral-200 flex flex-col items-center justify-center p-6 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
-                                <Building2 className="w-8 h-8 text-neutral-600 mb-2" />
-                                <span className="text-xl font-display font-medium text-neutral-900">{partner}</span>
-                                <span className="text-xs text-neutral-500 uppercase tracking-wide mt-1">Research Partner</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
+            {/* Customer Journey */}
+            <CustomerJourney />
 
-            {/* CTA */}
-            <section className="py-24 px-6">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-3xl font-display font-medium text-neutral-900 mb-6">Connect With Us</h2>
-                    <p className="text-lg text-neutral-600 mb-10">
-                        Let's build the future together. Explore partnership opportunities and discover how we can help you succeed.
-                    </p>
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <Link to="/contact">
-                            <Button variant="primary" theme="light" className="h-12 px-8">
-                                Partnership Opportunities
-                            </Button>
-                        </Link>
-                        <Link to="/contact">
-                            <Button variant="secondary" theme="light" className="h-12 px-8">
-                                Contact Our Team
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
-            </section>
+            {/* CTA Hub */}
+            <CTAHub />
         </div>
     );
 };

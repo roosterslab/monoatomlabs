@@ -87,7 +87,7 @@ const HexagonWave = ({ className = "absolute inset-0 z-0" }) => {
 
                 // Draw Hexagon
                 ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
-                ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.05})`; // Very faint fill
+                ctx.fillStyle = `rgba(255, 255, 255, ${opacity * 0.15})`; // Increased fill visibility
                 ctx.lineWidth = 1.5;
 
                 drawHexagon(ctx, p.x, p.y, p.size);
@@ -106,7 +106,7 @@ const HexagonWave = ({ className = "absolute inset-0 z-0" }) => {
         };
     }, []);
 
-    return <canvas ref={canvasRef} className={className} />;
+    return <canvas ref={canvasRef} className={className} style={{ width: '100%', height: '100%' }} />;
 };
 
 export default HexagonWave;
