@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FileText, Phone, Calculator, Handshake, FlaskConical, TrendingUp, Download, Calendar } from 'lucide-react';
+import {
+    FileText, Phone, Calculator, Handshake, FlaskConical,
+    TrendingUp, Download, Calendar, ArrowRight, Mail, MapPin, Sparkles
+} from 'lucide-react';
 import Button from '../ui/Button';
 
 const CTAHub = () => {
@@ -8,101 +11,99 @@ const CTAHub = () => {
         {
             audience: "Manufacturers",
             icon: Download,
-            color: "from-blue-500 to-cyan-600",
             ctas: [
-                { text: "Download Product Catalog", icon: FileText, type: "primary", link: "/contact" },
-                { text: "Request Technical Specifications", icon: FileText, type: "secondary", link: "/contact" }
+                { text: "Download Catalog", icon: FileText, link: "/contact" },
+                { text: "Tech Specs", icon: FileText, link: "/contact" }
             ],
-            description: "Get detailed specs, performance data, and application guides"
+            description: "Get detailed specs, performance data, and application guides for integration."
         },
         {
             audience: "Decision Makers",
             icon: TrendingUp,
-            color: "from-purple-500 to-pink-600",
             ctas: [
-                { text: "Schedule Consultation Call", icon: Phone, type: "primary", link: "/contact" },
-                { text: "Use ROI Calculator", icon: Calculator, type: "secondary", link: "/products/graphacrete" }
+                { text: "Schedule Consultation", icon: Phone, link: "/contact" },
+                { text: "ROI Calculator", icon: Calculator, link: "/products/graphacrete" }
             ],
-            description: "Understand ROI and business impact with expert guidance"
+            description: "Understand business impact, ROI, and strategic advantages with expert guidance."
         },
         {
             audience: "Partners",
             icon: Handshake,
-            color: "from-green-500 to-emerald-600",
             ctas: [
-                { text: "Explore Licensing Options", icon: FileText, type: "primary", link: "/partnership" },
-                { text: "Discuss JV Opportunities", icon: Calendar, type: "secondary", link: "/contact" }
+                { text: "Licensing Options", icon: FileText, link: "/partnership" },
+                { text: "JV Opportunities", icon: Calendar, link: "/contact" }
             ],
-            description: "Two proven models: Technology Licensing or JV-SPV partnerships"
+            description: "Explore technology licensing, joint ventures, and strategic alliances."
         },
         {
             audience: "Researchers",
             icon: FlaskConical,
-            color: "from-orange-500 to-red-600",
             ctas: [
-                { text: "Download White Papers", icon: Download, type: "primary", link: "/contact" },
-                { text: "Request Sample Kit", icon: FlaskConical, type: "secondary", link: "/contact" }
+                { text: "White Papers", icon: Download, link: "/contact" },
+                { text: "Sample Kit", icon: FlaskConical, link: "/contact" }
             ],
-            description: "Access technical documentation and sample materials"
+            description: "Access technical documentation, validation reports, and material samples."
         }
     ];
 
     const quickLinks = [
-        { text: "View All Products", icon: FileText, link: "/products" },
-        { text: "See Competitive Comparison", icon: TrendingUp, link: "/products/graphacrete" },
-        { text: "Read Case Studies", icon: FileText, link: "/contact" },
-        { text: "Download Certifications", icon: Download, link: "/contact" },
-        { text: "Contact Technical Team", icon: Phone, link: "/contact" },
-        { text: "Schedule Site Visit", icon: Calendar, link: "/contact" }
+        { text: "View All Products", link: "/products" },
+        { text: "Competitive Comparison", link: "/products/graphacrete" },
+        { text: "Case Studies", link: "/contact" },
+        { text: "Certifications", link: "/contact" },
+        { text: "Technical Support", link: "/contact" },
+        { text: "Schedule Site Visit", link: "/contact" }
     ];
 
     return (
-        <section className="py-24 px-6 bg-gradient-to-b from-neutral-50 to-white border-b border-neutral-200">
+        <section className="py-24 px-6 bg-neutral-50 border-t border-neutral-200">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-16">
-                    <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-full mb-6">
-                        <TrendingUp className="w-4 h-4 text-blue-600" />
-                        <span className="text-sm font-bold text-blue-700 uppercase tracking-wide">Take Action</span>
+                {/* Header */}
+                <div className="text-center mb-20">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-mono font-medium tracking-wider uppercase mb-6">
+                        <TrendingUp className="w-3 h-3" />
+                        Next Steps
                     </div>
-
                     <h2 className="text-4xl md:text-5xl font-display font-medium text-neutral-900 mb-6">
-                        What Would You Like to Do?
+                        Start Your Transformation
                     </h2>
-                    <p className="text-xl text-neutral-600 max-w-3xl mx-auto font-light">
-                        Choose your path based on your role and requirements
+                    <p className="text-xl text-neutral-500 max-w-2xl mx-auto font-light leading-relaxed">
+                        Choose the path that matches your role and requirements to accelerate your journey with advanced materials.
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                {/* Role Cards Grid */}
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-24">
                     {ctaCards.map((card, index) => {
                         const Icon = card.icon;
                         return (
                             <div
                                 key={index}
-                                className="bg-white border-2 border-neutral-200 rounded-2xl overflow-hidden hover:border-neutral-900 hover:shadow-2xl transition-all"
+                                className="bg-white p-8 rounded-2xl border border-neutral-200 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 group flex flex-col"
                             >
-                                <div className={`bg-gradient-to-br ${card.color} p-8 text-white`}>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <Icon className="w-10 h-10" />
-                                        <h3 className="text-2xl font-display font-bold">For {card.audience}</h3>
-                                    </div>
-                                    <p className="opacity-90 font-light">{card.description}</p>
+                                <div className="w-12 h-12 bg-neutral-50 rounded-xl border border-neutral-100 flex items-center justify-center text-blue-600 mb-6 group-hover:scale-110 transition-transform duration-300">
+                                    <Icon className="w-6 h-6" />
                                 </div>
 
-                                <div className="p-8 space-y-4">
+                                <h3 className="text-lg font-bold text-neutral-900 mb-2">For {card.audience}</h3>
+                                <p className="text-sm text-neutral-500 leading-relaxed mb-8 flex-grow">
+                                    {card.description}
+                                </p>
+
+                                <div className="space-y-3 mt-auto">
                                     {card.ctas.map((cta, idx) => {
                                         const CtaIcon = cta.icon;
                                         return (
-                                            <Link key={idx} to={cta.link}>
-                                                <button
-                                                    className={`w-full flex items-center justify-center gap-3 px-6 py-4 rounded-lg font-bold transition-all ${
-                                                        cta.type === 'primary'
-                                                            ? 'bg-neutral-900 text-white hover:bg-neutral-800'
-                                                            : 'border-2 border-neutral-300 text-neutral-900 hover:border-neutral-900'
-                                                    }`}
-                                                >
-                                                    <CtaIcon className="w-5 h-5" />
-                                                    {cta.text}
+                                            <Link key={idx} to={cta.link} className="block">
+                                                <button className={`w-full flex items-center justify-between text-left px-4 py-3 rounded-lg text-sm font-medium transition-all ${idx === 0
+                                                        ? 'bg-neutral-900 text-white hover:bg-black group-hover:shadow-md'
+                                                        : 'bg-white border border-neutral-200 text-neutral-600 hover:border-neutral-400 hover:text-neutral-900'
+                                                    }`}>
+                                                    <span className="flex items-center gap-2">
+                                                        <CtaIcon className="w-4 h-4" />
+                                                        {cta.text}
+                                                    </span>
+                                                    {idx === 0 && <ArrowRight className="w-4 h-4 opacity-70" />}
                                                 </button>
                                             </Link>
                                         );
@@ -113,62 +114,56 @@ const CTAHub = () => {
                     })}
                 </div>
 
-                <div className="bg-neutral-900 text-white rounded-2xl p-12 shadow-xl">
-                    <h3 className="text-3xl font-display font-bold text-center mb-8">Quick Links</h3>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {quickLinks.map((link, index) => {
-                            const LinkIcon = link.icon;
-                            return (
-                                <Link key={index} to={link.link}>
-                                    <button
-                                        className="w-full flex items-center gap-3 p-4 bg-white/10 rounded-lg hover:bg-white/20 transition-all border border-white/20 hover:border-white/40"
-                                    >
-                                        <LinkIcon className="w-5 h-5 flex-shrink-0" />
-                                        <span className="text-left font-medium">{link.text}</span>
-                                    </button>
+                {/* Unified Footer Section: Quick Links + Contact */}
+                <div className="grid lg:grid-cols-3 gap-8">
+                    {/* Quick Links Column */}
+                    <div className="lg:col-span-2 bg-white rounded-2xl border border-neutral-200 p-8 md:p-12">
+                        <h3 className="text-xl font-display font-medium text-neutral-900 mb-8 flex items-center gap-3">
+                            <Sparkles className="w-5 h-5 text-blue-500" />
+                            Quick Access
+                        </h3>
+                        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+                            {quickLinks.map((link, index) => (
+                                <Link key={index} to={link.link} className="flex items-center gap-3 p-3 rounded-lg hover:bg-neutral-50 border border-transparent hover:border-neutral-100 transition-colors group">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-neutral-300 group-hover:bg-blue-500 transition-colors"></div>
+                                    <span className="text-sm font-medium text-neutral-600 group-hover:text-neutral-900 transition-colors">
+                                        {link.text}
+                                    </span>
                                 </Link>
-                            );
-                        })}
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                <div className="mt-16 text-center p-10 bg-gradient-to-br from-blue-50 to-cyan-50 border-2 border-blue-200 rounded-2xl">
-                    <h3 className="text-3xl font-display font-bold text-neutral-900 mb-4">
-                        Not Sure Where to Start?
-                    </h3>
-                    <p className="text-lg text-neutral-600 mb-8 max-w-2xl mx-auto font-light">
-                        Talk to our team to determine the best path forward for your specific requirements
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    {/* Contact Column */}
+                    <div className="bg-gradient-to-br from-neutral-900 to-neutral-800 rounded-2xl p-8 md:p-12 text-white flex flex-col justify-between shadow-2xl shadow-neutral-900/20">
+                        <div>
+                            <h3 className="text-xl font-display font-medium mb-2">Need Guidance?</h3>
+                            <p className="text-neutral-400 text-sm leading-relaxed mb-8">
+                                Not sure where to start? Our technical team is ready to help you define your requirements.
+                            </p>
+
+                            <div className="space-y-4 mb-8">
+                                <div className="flex items-center gap-3 text-sm text-neutral-300">
+                                    <Mail className="w-4 h-4 text-blue-400" />
+                                    info@monoatomlabs.com
+                                </div>
+                                <div className="flex items-center gap-3 text-sm text-neutral-300">
+                                    <Phone className="w-4 h-4 text-blue-400" />
+                                    +91 989 819 9809
+                                </div>
+                                <div className="flex items-start gap-3 text-sm text-neutral-300">
+                                    <MapPin className="w-4 h-4 text-blue-400 mt-0.5" />
+                                    <span>iHub Gujarat, Ahmedabad</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <Link to="/contact">
-                            <button className="bg-neutral-900 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-neutral-800 transition-all inline-flex items-center">
-                                <Phone className="w-5 h-5 mr-2" />
+                            <button className="w-full py-4 bg-white text-neutral-900 rounded-xl font-bold hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
+                                <Phone className="w-4 h-4" />
                                 Schedule Discovery Call
                             </button>
                         </Link>
-                        <Link to="/contact">
-                            <button className="border-2 border-neutral-900 text-neutral-900 px-10 py-4 rounded-full font-bold text-lg hover:bg-neutral-100 transition-all inline-flex items-center">
-                                <FileText className="w-5 h-5 mr-2" />
-                                Send Us Your Requirements
-                            </button>
-                        </Link>
-                    </div>
-
-                    <div className="mt-8 pt-8 border-t border-blue-200">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-                            <div>
-                                <div className="font-bold text-neutral-900 mb-2">📧 Email</div>
-                                <div className="text-neutral-600 font-light">info@monoatomlabs.com</div>
-                            </div>
-                            <div>
-                                <div className="font-bold text-neutral-900 mb-2">📞 Phone</div>
-                                <div className="text-neutral-600 font-light">+91 989 819 9809</div>
-                            </div>
-                            <div>
-                                <div className="font-bold text-neutral-900 mb-2">📍 Location</div>
-                                <div className="text-neutral-600 font-light">3rd Floor, iHub Gujarat, Ahmedabad - 380015</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

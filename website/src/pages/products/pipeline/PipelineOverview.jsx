@@ -1,12 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowRight, Beaker, Shield, Zap, Layers, Wind, Droplets, Battery,
-  Microscope, ChevronRight, Activity, Thermometer, X, Cpu, Globe
+  Microscope, ChevronRight, Activity, Thermometer, X, Cpu, Globe, Filter
 } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
-import SectionHeading from '../../../components/ui/SectionHeading';
 import Button from '../../../components/ui/Button';
 import PilotTechnologies from '../../../components/pipeline/PilotTechnologies';
 
@@ -161,7 +160,7 @@ const pipelineCategories = [
   }
 ];
 
-// Combine all items for the grid
+// Combine all items
 const allItems = [...pipelineCategories[0].items, ...pipelineCategories[1].items];
 
 // Map product IDs to routes
@@ -211,12 +210,6 @@ const DetailModal = ({ item, onClose }) => {
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
-
-            {/* Overlay Patterns */}
-            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
-            {item.type === 'R&D' && (
-              <div className="absolute inset-0 bg-[size:20px_20px] bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)]"></div>
-            )}
           </motion.div>
 
           <div className="absolute bottom-0 left-0 p-8 w-full z-10">
@@ -271,31 +264,6 @@ const DetailModal = ({ item, onClose }) => {
                   </li>
                 ))}
               </ul>
-
-              {/* TRL Meter */}
-              <div className="mt-8 pt-6 border-t border-neutral-100">
-                <div className="flex justify-between items-end mb-2">
-                  <h3 className="text-xs font-bold text-neutral-400 uppercase tracking-widest">Readiness Level (TRL {item.trl})</h3>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded border uppercase ${item.type === 'Pilot' ? 'bg-purple-100 text-purple-700 border-purple-200' : 'bg-blue-100 text-blue-700 border-blue-200'
-                    }`}>{item.trlLabel}</span>
-                </div>
-                <div className="flex gap-1 h-2">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((level) => (
-                    <div
-                      key={level}
-                      className={`flex-1 rounded-full ${level <= item.trl
-                          ? (item.type === 'Pilot' ? 'bg-purple-500' : 'bg-blue-500')
-                          : 'bg-neutral-100'
-                        }`}
-                    ></div>
-                  ))}
-                </div>
-                <div className="flex justify-between mt-1 text-[10px] text-neutral-400 font-mono">
-                  <span>Concept</span>
-                  <span>Validated</span>
-                  <span>Commercial</span>
-                </div>
-              </div>
             </div>
             <div>
               <h3 className="text-xs font-bold text-neutral-500 uppercase tracking-widest mb-4">Sector Impact</h3>
@@ -322,14 +290,6 @@ const PipelineCard = ({ item, onClick }) => {
   const isPilot = item.type === 'Pilot';
   const productRoute = getProductRoute(item.id);
 
-  const handleClick = (e) => {
-    // Allow modal on click, but also navigation via link
-    if (e.target.closest('a')) {
-      return; // Let the link handle navigation
-    }
-    onClick(item);
-  };
-
   return (
     <Link to={productRoute} className="block h-full">
       <motion.div
@@ -338,68 +298,56 @@ const PipelineCard = ({ item, onClick }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-        className={`group relative h-[400px] rounded-2xl overflow-hidden cursor-pointer border transition-all duration-500 ${isPilot ? 'border-neutral-200 hover:border-purple-300' : 'border-neutral-200 hover:border-blue-300'
-          }`}
-        whileHover={{ y: -5, boxShadow: "0 20px 40px -10px rgba(0,0,0,0.1)" }}
+        className="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-neutral-200 bg-white hover:border-blue-300 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-500"
+        whileHover={{ y: -5 }}
       >
-      {/* Background Image */}
-      <motion.div className="absolute inset-0 bg-neutral-900" layoutId={`image-container-${item.id}`}>
-        {item.image ? (
-          <img
-            src={item.image}
-            alt={item.name}
-            className="w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-700 group-hover:scale-105 transform"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <item.icon size={80} className="text-neutral-800" />
-          </div>
-        )}
-        <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-900/40 to-transparent"></div>
+        {/* Card Image Area (Top Half) */}
+        <motion.div className="h-[240px] relative bg-neutral-900 group-hover:h-[220px] transition-all duration-500" layoutId={`image-container-${item.id}`}>
+          {item.image ? (
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-700 group-hover:scale-105 transform"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-neutral-800">
+              <item.icon size={64} className="text-neutral-700" />
+            </div>
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent opacity-60"></div>
 
-        {/* Overlay Effects */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-soft-light"></div>
-
-        {/* R&D Grid Pattern */}
-        {!isPilot && (
-          <div className="absolute inset-0 bg-[size:40px_40px] bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-        )}
-
-        {/* Pilot Scan Line */}
-        {isPilot && (
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/10 to-transparent h-[10%] w-full -translate-y-full group-hover:translate-y-[200%] transition-transform duration-1000"></div>
-        )}
-      </motion.div>
-
-      {/* Content */}
-      <div className="absolute inset-0 p-8 flex flex-col justify-end z-10">
-        <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-          <div className="flex items-center justify-between mb-3">
+          {/* Status Badge */}
+          <div className="absolute top-4 left-4">
             <motion.div layoutId={`status-${item.id}`} className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border backdrop-blur-md ${isPilot ? 'bg-purple-500/20 border-purple-500/30 text-purple-200' : 'bg-blue-500/20 border-blue-500/30 text-blue-200'
               }`}>
               {item.status}
             </motion.div>
-            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              <ArrowRight className="text-white w-5 h-5" />
-            </div>
+          </div>
+        </motion.div>
+
+        {/* Content Area (Bottom Half) */}
+        <div className="p-6 relative">
+          <div className="flex justify-between items-start mb-2">
+            <motion.h3 layoutId={`title-${item.id}`} className="text-2xl font-display font-medium text-neutral-900 group-hover:text-blue-700 transition-colors">{item.name}</motion.h3>
+            <ArrowRight className="text-neutral-300 group-hover:text-blue-500 transition-colors transform group-hover:translate-x-1" size={20} />
           </div>
 
-          <motion.h3 layoutId={`title-${item.id}`} className="text-3xl font-display font-medium text-white mb-2 leading-tight">{item.name}</motion.h3>
-          <motion.p layoutId={`subtitle-${item.id}`} className="text-neutral-400 text-sm mb-4 line-clamp-2">{item.subtitle}</motion.p>
+          <motion.p layoutId={`subtitle-${item.id}`} className="text-sm font-mono text-neutral-500 uppercase tracking-wide mb-4">{item.subtitle}</motion.p>
 
-          {/* Hover Details */}
-          <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-300 opacity-0 group-hover:opacity-100">
-            <div className="pt-4 border-t border-white/10 flex flex-wrap gap-2">
-              {item.specs.slice(0, 2).map((spec, i) => (
-                <span key={i} className="text-[10px] text-neutral-300 bg-white/5 px-2 py-1 rounded border border-white/10">
-                  {spec}
-                </span>
-              ))}
-            </div>
+          <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed mb-4 font-light">
+            {item.description}
+          </p>
+
+          {/* Tech Tags */}
+          <div className="flex flex-wrap gap-2 mt-auto">
+            {item.specs.slice(0, 2).map((spec, i) => (
+              <span key={i} className="text-[10px] font-medium text-neutral-600 bg-neutral-100 px-2 py-1 rounded border border-neutral-200 group-hover:border-blue-200 group-hover:bg-blue-50 transition-colors">
+                {spec}
+              </span>
+            ))}
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
     </Link>
   );
 };
@@ -420,40 +368,47 @@ const PipelineOverview = () => {
         subtitle="Exploring the frontiers of material science. Discover our next-generation technologies currently in development."
       />
 
-      {/* Hero / Filter Section */}
-      <section className="py-12 border-b border-neutral-100 sticky top-0 bg-white/80 backdrop-blur-md z-30">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-          <h2 className="text-2xl font-display font-medium text-neutral-900">Lab Projects</h2>
-
-          <div className="flex p-1 bg-neutral-100 rounded-full border border-neutral-200">
-            <button
-              onClick={() => setFilter('all')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${filter === 'all' ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}
-            >
-              All Projects
-            </button>
-            <button
-              onClick={() => setFilter('r&d')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${filter === 'r&d' ? 'bg-white text-blue-600 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}
-            >
-              R&D Pipeline
-            </button>
-            <button
-              onClick={() => setFilter('pilot')}
-              className={`px-6 py-2 rounded-full text-sm font-medium transition-all ${filter === 'pilot' ? 'bg-white text-purple-600 shadow-sm' : 'text-neutral-500 hover:text-neutral-700'}`}
-            >
-              Pilot Trials
-            </button>
-          </div>
+      {/* Floating Filter Bar */}
+      <div className="sticky top-24 z-30 px-6 mb-12">
+        <div className="max-w-fit mx-auto bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl shadow-black/5 rounded-full p-1.5 flex items-center gap-1">
+          <button
+            onClick={() => setFilter('all')}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${filter === 'all' ? 'bg-neutral-900 text-white shadow-md' : 'text-neutral-500 hover:text-neutral-900 hover:bg-neutral-100/50'}`}
+          >
+            All Projects
+          </button>
+          <button
+            onClick={() => setFilter('r&d')}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${filter === 'r&d' ? 'bg-blue-600 text-white shadow-md' : 'text-neutral-500 hover:text-blue-600 hover:bg-blue-50'}`}
+          >
+            R&D Pipeline
+          </button>
+          <button
+            onClick={() => setFilter('pilot')}
+            className={`px-6 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${filter === 'pilot' ? 'bg-purple-600 text-white shadow-md' : 'text-neutral-500 hover:text-purple-600 hover:bg-purple-50'}`}
+          >
+            Pilot Trials
+          </button>
         </div>
-      </section>
+      </div>
 
-      {/* Pilot Technologies Showcase */}
-      <PilotTechnologies />
+      {/* Pilot Technologies Showcase (Now on White Background) */}
+      <div className="bg-white py-12 relative z-20">
+        <PilotTechnologies />
+      </div>
 
       {/* Grid Section */}
-      <section className="py-12 px-6 min-h-[800px] bg-neutral-50">
+      <section className="py-24 px-6 bg-neutral-50 min-h-[800px] border-t border-neutral-200">
         <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="text-3xl font-display font-medium text-neutral-900">
+              Active Development
+            </h2>
+            <div className="text-sm text-neutral-500 font-mono">
+              {filteredItems.length} Projects Loaded
+            </div>
+          </div>
+
           <motion.div
             layout
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
@@ -474,16 +429,28 @@ const PipelineOverview = () => {
         )}
       </AnimatePresence>
 
-      <section className="py-24 px-6 bg-white border-t border-neutral-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <Cpu className="w-12 h-12 text-neutral-300 mx-auto mb-6" />
-          <h2 className="text-3xl font-display font-medium text-neutral-900 mb-6">Engineering The Future</h2>
-          <p className="text-lg text-neutral-600 mb-8 max-w-2xl mx-auto">
+      {/* Footer Section */}
+      <section className="py-32 px-6 bg-white border-t border-neutral-200 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-transparent to-transparent opacity-50"></div>
+        <div className="max-w-5xl mx-auto text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-600 text-xs font-mono font-medium tracking-wider uppercase mb-8">
+            <Cpu className="w-3 h-3" />
+            R&D Partnership
+          </div>
+          <h2 className="text-4xl md:text-5xl font-display font-medium text-neutral-900 mb-6">
+            Engineer The Future With Us
+          </h2>
+          <p className="text-xl text-neutral-500 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
             Our R&D philosophy is built on iteration, validation, and scale. We don't just invent materials; we engineer solutions for the world's most complex problems.
           </p>
-          <Link to="/partnership">
-            <Button variant="primary">Partner With R&D</Button>
-          </Link>
+          <div className="flex justify-center gap-4">
+            <Link to="/partnership">
+              <Button variant="primary" className="px-8 py-4">Partner With R&D</Button>
+            </Link>
+            <Link to="/contact">
+              <Button variant="secondary" className="px-8 py-4">Contact Labs</Button>
+            </Link>
+          </div>
         </div>
       </section>
     </div>
