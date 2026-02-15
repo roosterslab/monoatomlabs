@@ -6,7 +6,7 @@ import { Users, GraduationCap, Award, Briefcase, Globe } from 'lucide-react';
 
 const Founders = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Leadership"
         title="Founders & Team"

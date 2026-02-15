@@ -13,7 +13,9 @@
  */
 
 export { default as HexagonWave } from './HexagonWave';
+export { default as HexagonWaveOptimized } from './HexagonWaveOptimized';
 export { default as DarkHexBackground } from './DarkHexBackground';
+export { default as DarkHexBackgroundOptimized } from './DarkHexBackgroundOptimized';
 export { default as DarkBackground } from './DarkBackground';
 export { default as AtomsToIndustry } from './AtomsToIndustry';
 export { default as AtomsToIndustryBackground } from './AtomsToIndustryBackground';

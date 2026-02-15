@@ -413,7 +413,7 @@ const PipelineOverview = () => {
     : allItems.filter(item => filter === 'r&d' ? item.type === 'R&D' : item.type === 'Pilot');
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="R&D"
         title="Innovation Pipeline"

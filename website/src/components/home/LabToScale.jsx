@@ -1,6 +1,6 @@
 import React from 'react';
 import { Microscope, Beaker, Factory, ArrowRight, Sparkles } from 'lucide-react';
-import { DarkHexBackground } from '../backgrounds';
+// Background now global in MainLayout
 
 const ProcessCard = ({ icon: Icon, number, title, description, features, isLast }) => (
     <>
@@ -84,10 +84,8 @@ const LabToScale = () => {
     ];
 
     return (
-        <DarkHexBackground
-            className="py-32 px-6 border-t border-neutral-900"
-            contentClassName="max-w-7xl mx-auto relative z-10"
-        >
+        <section className="py-32 px-6 border-t border-neutral-900 bg-black/10 relative">
+            <div className="max-w-7xl mx-auto relative z-10">
             {/* Header */}
             <div className="text-center mb-20">
                 <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6 backdrop-blur-sm">
@@ -145,7 +143,8 @@ const LabToScale = () => {
                     </div>
                 </div>
             </div>
-        </DarkHexBackground>
+            </div>
+        </section>
     );
 };
 

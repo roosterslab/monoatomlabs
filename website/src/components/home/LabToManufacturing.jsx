@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { FlaskConical, Factory, CheckCircle2, TrendingUp, ArrowRight } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 import Button from '../ui/Button';
-import { DarkHexBackground } from '../backgrounds';
+// Background now global in MainLayout
 
 const LabToManufacturing = () => {
     const journeyStages = [
@@ -76,11 +76,8 @@ const LabToManufacturing = () => {
     };
 
     return (
-        <DarkHexBackground
-            className="py-24 px-6 border-b border-neutral-900"
-            contentClassName="max-w-7xl mx-auto"
-            hexOpacity={70}
-        >
+        <section className="py-24 px-6 border-b border-neutral-900 bg-black/10 relative">
+            <div className="max-w-7xl mx-auto">
             {/* Section Header */}
             <div className="text-center mb-16">
                 <div className="inline-block bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-6 py-2 text-neutral-200 font-semibold mb-6">
@@ -143,7 +140,8 @@ const LabToManufacturing = () => {
                     </Button>
                 </Link>
             </div>
-        </DarkHexBackground>
+            </div>
+        </section>
     );
 };
 

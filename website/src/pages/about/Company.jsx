@@ -7,7 +7,7 @@ import { Target, Eye, Globe, Zap, Droplets, Wind, Heart } from 'lucide-react';
 
 const Company = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Company"
         title="About Monoatom Labs"

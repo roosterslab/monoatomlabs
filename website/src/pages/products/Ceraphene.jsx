@@ -499,7 +499,7 @@ const Ceraphene = () => {
   ];
 
   return (
-    <div className="bg-white min-h-screen pb-24">
+    <div className="min-h-screen">
       <PageHeader
         category="Automotive"
         title="Ceraphene"

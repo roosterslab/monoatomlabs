@@ -53,7 +53,7 @@ const IndustrySection = ({ title, description, icon: Icon, applications, benefit
 
 const Industries = () => {
     return (
-        <div className="bg-white min-h-screen">
+        <div className="min-h-screen">
             <PageHeader
                 category="Applications"
                 title="Industries We Serve"

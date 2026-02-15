@@ -6,7 +6,7 @@ import Button from '../../../components/ui/Button';
 
 const HydrogenMembranes = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Field Trials"
         title="Hydrogen Separation Membranes"

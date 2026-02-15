@@ -7,7 +7,7 @@ import { Handshake, FileCheck, ArrowRight } from 'lucide-react';
 
 const Partnership = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Collaboration"
         title="Partnership Opportunities"

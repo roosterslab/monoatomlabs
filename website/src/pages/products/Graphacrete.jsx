@@ -595,7 +595,7 @@ const Graphacrete = () => {
   ];
 
   return (
-    <div className="bg-white min-h-screen pb-24">
+    <div className="min-h-screen">
       <PageHeader
         category="Construction"
         title="Graphacrete"

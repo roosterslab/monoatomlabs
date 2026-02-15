@@ -21,7 +21,7 @@ const CapabilityCard = ({ icon: Icon, title, description, benefits }) => (
 
 const Technology = () => {
     return (
-        <div className="bg-white min-h-screen">
+        <div className="min-h-screen">
             <PageHeader
                 category="R&D Platform"
                 title="Technology & Methodology"

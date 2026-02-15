@@ -6,7 +6,7 @@ import Button from '../../../components/ui/Button';
 
 const BatteryStorage = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Field Trials"
         title="Battery Storage Systems"

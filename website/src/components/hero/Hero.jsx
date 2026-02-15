@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import Button from '../ui/Button';
 import StatCard from '../ui/StatCard';
-import GrapheneLattice from './GrapheneLattice';
+import GrapheneLatticeOptimized from './GrapheneLatticeOptimized';
 
 const Hero = () => {
     return (
         <section className="relative pt-32 pb-24 md:pt-52 md:pb-40 px-6 bg-black overflow-hidden border-b border-neutral-800">
-            {/* 3D GRAPHENE LATTICE CANVAS */}
-            <GrapheneLattice />
+            {/* 3D GRAPHENE LATTICE CANVAS - OPTIMIZED */}
+            <GrapheneLatticeOptimized />
 
             {/* Heavy radial gradient to focus attention on center and text */}
             <div className="absolute inset-0 z-0 bg-radial-gradient from-transparent to-black pointer-events-none" style={{ background: 'radial-gradient(circle at center, transparent 0%, #000 90%)' }}></div>

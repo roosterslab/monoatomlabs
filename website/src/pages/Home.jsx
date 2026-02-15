@@ -1,8 +1,8 @@
 import React, { lazy, Suspense } from 'react';
 // Load above-the-fold content immediately
 import Hero from '../components/hero/Hero';
-import Industry40Enabler from '../components/home/Industry40Enabler';
 import ProductsSection from '../components/home/ProductsSection';
+import Industry40Enabler from '../components/home/Industry40Enabler';
 
 // Lazy load below-the-fold sections (not visible on initial load)
 const LabToScale = lazy(() => import('../components/home/LabToScale'));
@@ -22,12 +22,12 @@ const Home = () => {
         <>
             {/* ========== ABOVE THE FOLD - Loads Immediately ========== */}
             <Hero />
-            <Industry40Enabler />
             <ProductsSection />
 
             {/* ========== BELOW THE FOLD - Lazy Loaded ========== */}
             <Suspense fallback={<SectionLoader />}>
                 <LabToScale />
+                <Industry40Enabler />
                 <LabToManufacturing />
                 <CustomerJourney />
                 <ImpactMetricsDashboard />

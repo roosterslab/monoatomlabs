@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TrendingUp, Users, Award, Leaf } from 'lucide-react';
-import { DarkHexBackground } from '../backgrounds';
+// Background now global in MainLayout
 
 const ImpactMetricsDashboard = () => {
     const metrics = [
@@ -94,11 +94,8 @@ const ImpactMetricsDashboard = () => {
     };
 
     return (
-        <DarkHexBackground
-            className="py-24 px-6 border-b border-neutral-900 text-white"
-            contentClassName="max-w-7xl mx-auto"
-            hexOpacity={70}
-        >
+        <section className="py-24 px-6 border-b border-neutral-900 text-white bg-black/10 relative">
+            <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-full mb-6">
                         <TrendingUp className="w-4 h-4 text-green-400" />
@@ -165,7 +162,8 @@ const ImpactMetricsDashboard = () => {
                     Data updated monthly • Last updated: February 2026
                 </p>
             </div>
-        </DarkHexBackground>
+            </div>
+        </section>
     );
 };
 

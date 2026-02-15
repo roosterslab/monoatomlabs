@@ -1,6 +1,5 @@
 import React from 'react';
 import { ArrowRight, FileText, Calendar, MessageSquare, Phone, Mail } from 'lucide-react';
-import { DarkHexBackground } from '../backgrounds';
 
 const CTAHub = () => {
     return (

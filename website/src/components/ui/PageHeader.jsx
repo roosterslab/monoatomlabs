@@ -1,10 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { DarkHexBackground } from '../backgrounds';
 
 const PageHeader = ({ title, subtitle, category }) => {
     return (
-        <DarkHexBackground className="pt-32 pb-16 px-6 border-b border-neutral-900">
+        <section className="pt-32 pb-16 px-6 border-b border-neutral-900 bg-black/10">
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -24,7 +23,7 @@ const PageHeader = ({ title, subtitle, category }) => {
                     </p>
                 </motion.div>
             </div>
-        </DarkHexBackground>
+        </section>
     );
 };
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Building2, Sun, Factory, TrendingUp, ArrowUpRight } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
-import { DarkHexBackground } from '../backgrounds';
+// Background now global in MainLayout
 
 const themeStyles = {
     blue: {
@@ -129,7 +129,7 @@ const ProvenImpact = () => {
     ];
 
     return (
-        <DarkHexBackground id="proven-impact" className="py-24 px-6 border-b border-neutral-800">
+        <section id="proven-impact" className="py-24 px-6 border-b border-neutral-800 bg-black/10">
             <div className="max-w-7xl mx-auto">
                 <SectionHeading
                     number="04"
@@ -169,7 +169,7 @@ const ProvenImpact = () => {
                     </div>
                 </div>
             </div>
-        </DarkHexBackground>
+        </section>
     );
 };
 

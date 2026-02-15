@@ -34,7 +34,7 @@ const Contact = () => {
   const data = contentData.contact;
 
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Connect"
         title="Contact Us"

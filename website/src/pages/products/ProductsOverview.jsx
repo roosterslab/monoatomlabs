@@ -39,7 +39,7 @@ const ProductCard = ({ name, subtitle, highlight, icon: Icon, path, image }) => 
 
 const ProductsOverview = () => {
   return (
-    <div className="bg-white min-h-screen">
+    <div className="min-h-screen">
       <PageHeader
         category="Portfolio"
         title="Products Overview"
