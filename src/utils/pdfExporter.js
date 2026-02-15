@@ -92,26 +92,41 @@ async function renderToCanvas(element, scale = 3) {
   return canvas;
 }
 
+// Card size presets
+export const CARD_SIZES = {
+  'standard-us': { width: 3.5, height: 2, name: 'Standard US (3.5" × 2")', unit: 'in' },
+  'vistaprint-standard': { width: 3.5, height: 2, name: 'VistaPrint Standard (3.5" × 2")', unit: 'in' },
+  'vistaprint-premium': { width: 3.5, height: 2.25, name: 'VistaPrint Premium (3.5" × 2.25")', unit: 'in' },
+  'vistaprint-mini': { width: 2.75, height: 1.1, name: 'VistaPrint Mini (2.75" × 1.1")', unit: 'in' },
+  'vistaprint-square': { width: 2.5, height: 2.5, name: 'VistaPrint Square (2.5" × 2.5")', unit: 'in' },
+  'european-standard': { width: 85, height: 55, name: 'European Standard (85mm × 55mm)', unit: 'mm' },
+  'square': { width: 2.5, height: 2.5, name: 'Square (2.5" × 2.5")', unit: 'in' },
+  'slim': { width: 3.5, height: 1.75, name: 'Slim (3.5" × 1.75")', unit: 'in' },
+};
+
 /**
  * Export visiting card as print-ready PDF
  * @param {HTMLElement} frontElement - Front card DOM element
  * @param {HTMLElement} backElement - Back card DOM element
  * @param {Object} data - Contact data for filename
+ * @param {string} sizePreset - Size preset key from CARD_SIZES
  * @returns {Promise<void>}
  */
-export async function exportCardAsPDF(frontElement, backElement, data) {
+export async function exportCardAsPDF(frontElement, backElement, data, sizePreset = 'standard-us') {
   try {
     // Wait for all resources to load
     await waitForResources();
 
-    // Standard business card size: 3.5" × 2"
-    const cardWidth = 3.5;
-    const cardHeight = 2;
+    // Get card dimensions from preset
+    const size = CARD_SIZES[sizePreset] || CARD_SIZES['standard-us'];
+    const cardWidth = size.width;
+    const cardHeight = size.height;
+    const unit = size.unit;
 
     // Create PDF in landscape orientation
     const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'in',
+      orientation: cardWidth > cardHeight ? 'landscape' : 'portrait',
+      unit: unit,
       format: [cardWidth, cardHeight],
       compress: true
     });
@@ -131,8 +146,9 @@ export async function exportCardAsPDF(frontElement, backElement, data) {
     const backImg = backCanvas.toDataURL('image/png', 1.0);
     pdf.addImage(backImg, 'PNG', 0, 0, cardWidth, cardHeight, '', 'FAST');
 
-    // Generate filename from contact name
-    const filename = `${data.name.replace(/\s+/g, '-') || 'business-card'}.pdf`;
+    // Generate filename from contact name and size
+    const sizeName = size.name.split(' ')[0];
+    const filename = `${data.name.replace(/\s+/g, '-')}-${sizeName}.pdf` || 'business-card.pdf';
     pdf.save(filename);
 
     return { success: true };

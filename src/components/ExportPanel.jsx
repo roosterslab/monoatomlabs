@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { FileDown, Loader2, CheckCircle, XCircle, Image } from 'lucide-react';
-import { exportCardAsPDF, exportCardAsImage } from '../utils/pdfExporter';
+import { FileDown, Loader2, CheckCircle, XCircle, Image, Ruler } from 'lucide-react';
+import { exportCardAsPDF, exportCardAsImage, CARD_SIZES } from '../utils/pdfExporter';
 
 const ExportPanel = ({ data }) => {
   const [isExporting, setIsExporting] = useState(false);
   const [exportStatus, setExportStatus] = useState(null); // 'success' | 'error' | null
   const [exportType, setExportType] = useState(''); // 'pdf' | 'png-front' | 'png-back' | 'png-both'
+  const [selectedSize, setSelectedSize] = useState('standard-us');
 
   const handleExportPDF = async () => {
     setExportType('pdf');
@@ -40,7 +41,7 @@ const ExportPanel = ({ data }) => {
         tempBackElement = frontElement;
       }
 
-      await exportCardAsPDF(frontElement, tempBackElement, data);
+      await exportCardAsPDF(frontElement, tempBackElement, data, selectedSize);
 
       // Clean up temporary element
       const tempDiv = document.getElementById('temp-card-back');
@@ -116,13 +117,87 @@ const ExportPanel = ({ data }) => {
               </div>
             )}
             {!exportStatus && (
-              <p className="text-gray-400 text-sm">
-                Ready to download your professional business card
-              </p>
+              <div>
+                <p className="text-gray-400 text-sm mb-2">
+                  Ready to download your professional business card
+                </p>
+                <div className="flex items-center gap-2">
+                  <Ruler size={16} className="text-gray-500" />
+                  <span className="text-xs text-gray-500">
+                    Selected: {CARD_SIZES[selectedSize]?.name || 'Standard US'}
+                  </span>
+                </div>
+              </div>
             )}
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Size Selector Dropdown */}
+            <div className="relative group">
+              <button
+                disabled={isExporting}
+                className="flex items-center gap-2 px-4 py-4 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed border border-gray-600"
+              >
+                <Ruler size={20} />
+                <span className="hidden sm:inline">Card Size</span>
+                <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {/* Size Dropdown Menu */}
+              <div className="absolute bottom-full right-0 mb-2 w-72 bg-gray-800 rounded-lg shadow-xl border border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 max-h-96 overflow-y-auto">
+                <div className="p-2">
+                  <p className="text-xs text-gray-400 px-3 py-2 font-semibold uppercase">VistaPrint Sizes</p>
+                  {Object.entries(CARD_SIZES)
+                    .filter(([key]) => key.startsWith('vistaprint'))
+                    .map(([key, size]) => (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedSize(key)}
+                        disabled={isExporting}
+                        className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                          selectedSize === key
+                            ? 'bg-primary-500 text-white'
+                            : 'text-white hover:bg-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>{size.name}</span>
+                          {selectedSize === key && (
+                            <CheckCircle size={16} className="text-white" />
+                          )}
+                        </div>
+                      </button>
+                    ))}
+
+                  <div className="border-t border-gray-700 my-2"></div>
+
+                  <p className="text-xs text-gray-400 px-3 py-2 font-semibold uppercase">Standard Sizes</p>
+                  {Object.entries(CARD_SIZES)
+                    .filter(([key]) => !key.startsWith('vistaprint'))
+                    .map(([key, size]) => (
+                      <button
+                        key={key}
+                        onClick={() => setSelectedSize(key)}
+                        disabled={isExporting}
+                        className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
+                          selectedSize === key
+                            ? 'bg-primary-500 text-white'
+                            : 'text-white hover:bg-gray-700'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <span>{size.name}</span>
+                          {selectedSize === key && (
+                            <CheckCircle size={16} className="text-white" />
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            </div>
             {/* HD Images Dropdown Button */}
             <div className="relative group">
               <button
