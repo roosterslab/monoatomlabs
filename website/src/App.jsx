@@ -3,24 +3,19 @@ import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import ScrollToTop from './components/ScrollToTop';
 
-// Loading fallback component
+// Minimal loading fallback - appears for <200ms, so keep it simple
 const PageLoader = () => (
-  <div className="min-h-screen bg-black flex items-center justify-center">
-    <div className="text-center">
-      <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-neutral-700 border-t-white mb-4"></div>
-      <p className="text-neutral-400 text-sm">Loading...</p>
-    </div>
-  </div>
+  <div className="min-h-screen bg-white"></div>
 );
 
-// Eagerly load Home page (most common entry point)
+// Eagerly load frequently visited pages for instant navigation
 import Home from './pages/Home';
+import About from './pages/About';
+import ProductsOverview from './pages/products/ProductsOverview';
+import Contact from './pages/Contact';
+import Partnership from './pages/Partnership';
 
-// Lazy load all other pages
-const About = lazy(() => import('./pages/About'));
-
-// Product Pages
-const ProductsOverview = lazy(() => import('./pages/products/ProductsOverview'));
+// Lazy load product detail pages (less frequently accessed)
 const Graphacrete = lazy(() => import('./pages/products/Graphacrete'));
 const Graffisol = lazy(() => import('./pages/products/Graffisol'));
 const Ceraphene = lazy(() => import('./pages/products/Ceraphene'));
@@ -52,10 +47,6 @@ const Construction = lazy(() => import('./pages/industries/Construction'));
 const SolarEnergy = lazy(() => import('./pages/industries/SolarEnergy'));
 const Automotive = lazy(() => import('./pages/industries/Automotive'));
 const AdvancedMaterials = lazy(() => import('./pages/industries/AdvancedMaterials'));
-
-// Other Pages
-const Contact = lazy(() => import('./pages/Contact'));
-const Partnership = lazy(() => import('./pages/Partnership'));
 
 function App() {
     return (

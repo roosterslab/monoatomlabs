@@ -4,8 +4,6 @@ import PageHeader from '../../components/ui/PageHeader';
 import SectionHeading from '../../components/ui/SectionHeading';
 import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
-import CompetitiveComparison from '../../components/products/CompetitiveComparison';
-import CustomerSuccessStories from '../../components/products/CustomerSuccessStories';
 import { Check, Layers, BarChart3, Timer, HardHat, TrendingUp } from 'lucide-react';
 import { products } from '../../data/content';
 
@@ -605,9 +603,6 @@ const Graphacrete = () => {
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />
-
-      <CompetitiveComparison product="graphacrete" />
-      <CustomerSuccessStories product="graphacrete" />
     </div>
   );
 };

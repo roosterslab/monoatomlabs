@@ -1,59 +1,41 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
+// Load above-the-fold content immediately
 import Hero from '../components/hero/Hero';
 import Industry40Enabler from '../components/home/Industry40Enabler';
-import LabToManufacturing from '../components/home/LabToManufacturing';
-import CustomerJourney from '../components/home/CustomerJourney';
-import LabToScale from '../components/home/LabToScale';
 import ProductsSection from '../components/home/ProductsSection';
-import ImpactMetrics from '../components/home/ImpactMetrics';
-import ImpactMetricsDashboard from '../components/home/ImpactMetricsDashboard';
-import PartnershipModels from '../components/home/PartnershipModels';
-import CertificationsSection from '../components/home/CertificationsSection';
-import FAQSection from '../components/home/FAQSection';
+
+// Lazy load below-the-fold sections (not visible on initial load)
+const LabToScale = lazy(() => import('../components/home/LabToScale'));
+const LabToManufacturing = lazy(() => import('../components/home/LabToManufacturing'));
+const CustomerJourney = lazy(() => import('../components/home/CustomerJourney'));
+const ImpactMetricsDashboard = lazy(() => import('../components/home/ImpactMetricsDashboard'));
+const ImpactMetrics = lazy(() => import('../components/home/ImpactMetrics'));
+const CertificationsSection = lazy(() => import('../components/home/CertificationsSection'));
+const PartnershipModels = lazy(() => import('../components/home/PartnershipModels'));
+const FAQSection = lazy(() => import('../components/home/FAQSection'));
+
+// Minimal loader for sections (invisible during fast loads)
+const SectionLoader = () => <div className="h-20"></div>;
 
 const Home = () => {
     return (
         <>
-            {/* ========== PHASE 1: HOOK & VALUE PROPOSITION ========== */}
-
-            {/* Hero - Attention Grab */}
+            {/* ========== ABOVE THE FOLD - Loads Immediately ========== */}
             <Hero />
-
-            {/* Industry 4.0 Enabler - Strategic Positioning (Replaces Three Pillars) */}
             <Industry40Enabler />
-
-            {/* Lab to Scale - How We Do It (Process & Scale) */}
-            <LabToScale />
-
-            {/* Product Suite with Mission Impact - Combined Section */}
             <ProductsSection />
 
-            {/* Lab to Manufacturing - Journey from Innovation to Scale */}
-            <LabToManufacturing />
-
-            {/* Customer Journey - Working Together Process */}
-            <CustomerJourney />
-
-            {/* ========== PHASE 3: PROOF & VALIDATION ========== */}
-
-            {/* Impact Metrics Dashboard - Real-World Results */}
-            <ImpactMetricsDashboard />
-
-            {/* Impact Metrics - Environmental Impact (Emotional Appeal) */}
-            <ImpactMetrics />
-
-            {/* ========== PHASE 4: CAPABILITIES & TRUST ========== */}
-
-            {/* Certifications - Quality Assurance (Trust Building) */}
-            <CertificationsSection />
-
-            {/* ========== PHASE 5: ENGAGEMENT & CONVERSION ========== */}
-
-            {/* Partnership Models - Engagement Options (How to Work Together) */}
-            <PartnershipModels />
-
-            {/* FAQ - Remove All Barriers (Address Objections) */}
-            <FAQSection />
+            {/* ========== BELOW THE FOLD - Lazy Loaded ========== */}
+            <Suspense fallback={<SectionLoader />}>
+                <LabToScale />
+                <LabToManufacturing />
+                <CustomerJourney />
+                <ImpactMetricsDashboard />
+                <ImpactMetrics />
+                <CertificationsSection />
+                <PartnershipModels />
+                <FAQSection />
+            </Suspense>
         </>
     );
 };

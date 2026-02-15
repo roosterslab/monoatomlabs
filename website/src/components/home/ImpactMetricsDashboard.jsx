@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TrendingUp, Users, Award, Leaf } from 'lucide-react';
+import { DarkHexBackground } from '../backgrounds';
 
 const ImpactMetricsDashboard = () => {
     const metrics = [
@@ -93,8 +94,11 @@ const ImpactMetricsDashboard = () => {
     };
 
     return (
-        <section className="py-24 px-6 bg-gradient-to-b from-neutral-900 to-neutral-800 text-white border-b border-neutral-800">
-            <div className="max-w-7xl mx-auto">
+        <DarkHexBackground
+            className="py-24 px-6 border-b border-neutral-900 text-white"
+            contentClassName="max-w-7xl mx-auto"
+            hexOpacity={70}
+        >
                 <div className="text-center mb-16">
                     <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-full mb-6">
                         <TrendingUp className="w-4 h-4 text-green-400" />
@@ -156,13 +160,12 @@ const ImpactMetricsDashboard = () => {
                     </div>
                 </div>
 
-                <div className="text-center mt-12">
-                    <p className="text-neutral-500 text-sm font-light">
-                        Data updated monthly • Last updated: February 2026
-                    </p>
-                </div>
+            <div className="text-center mt-12">
+                <p className="text-neutral-500 text-sm font-light">
+                    Data updated monthly • Last updated: February 2026
+                </p>
             </div>
-        </section>
+        </DarkHexBackground>
     );
 };
 
