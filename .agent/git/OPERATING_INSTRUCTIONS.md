@@ -2,14 +2,16 @@
 
 ## Repository Structure
 
-This is a **mono repository** with multiple projects managed as git submodules.
+This is a **mono repository** with multiple projects managed as git submodules, including **nested submodules** (second-order).
 
 ```
 monoatomlabs_dev_root/
 ├── .git/                    # Main repository
-├── .gitmodules              # Submodule configuration
-├── visiting-card-dev/       # Submodule: visiting card project
-└── website/                 # Submodule: main website project
+├── .gitmodules              # Submodule configuration (Level 1)
+├── visiting-card-dev/       # Submodule: visiting card project (Level 1)
+│   ├── .gitmodules          # Nested submodule configuration (Level 2)
+│   └── maker/               # Nested Submodule: maker app (Level 2)
+└── website/                 # Submodule: main website project (Level 1)
 ```
 
 ### Main Repository
@@ -21,7 +23,7 @@ monoatomlabs_dev_root/
 
 ## Submodules Configuration
 
-### 1. visiting-card-dev
+### 1. visiting-card-dev (Level 1)
 ```ini
 [submodule "visiting-card-dev"]
     path = visiting-card-dev
@@ -29,7 +31,21 @@ monoatomlabs_dev_root/
     branch = visiting-card-dev-main
 ```
 
-### 2. website
+#### Nested Submodule: maker (Level 2)
+The `visiting-card-dev` submodule contains its own nested submodule:
+
+**Location**: `visiting-card-dev/maker/`
+
+```ini
+[submodule "maker"]
+    path = maker
+    url = https://github.com/roosterslab/monoatomlabs.git
+    branch = maker-app
+```
+
+This is a **second-order nested submodule** - a submodule within a submodule. When working with visiting-card-dev, use `--recursive` flag to ensure nested submodules are also initialized and updated.
+
+### 2. website (Level 1)
 ```ini
 [submodule "website"]
     path = website
@@ -290,9 +306,11 @@ git submodule update --remote --recursive
 ## File Locations
 
 - **Main Repository**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root`
+- **Visiting Card Submodule**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\visiting-card-dev`
+  - **Nested Maker Submodule**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\visiting-card-dev\maker`
 - **Website Submodule**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\website`
 - **Git Config**: `.git/config` (in each repository)
-- **Submodule Config**: `.gitmodules` (in parent repository)
+- **Submodule Config**: `.gitmodules` (in parent and visiting-card-dev repositories)
 
 ---
 

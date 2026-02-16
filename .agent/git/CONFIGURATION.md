@@ -6,8 +6,11 @@
 monoatomlabs (mono repo)
 │
 ├── Branch: monoatomlabs_dev_root (parent)
-│   ├── Submodule: visiting-card-dev (Branch: visiting-card-dev-main)
-│   └── Submodule: website (Branch: website-main)
+│   ├── Submodule: visiting-card-dev (Branch: visiting-card-dev-main) [Level 1]
+│   │   └── Nested Submodule: maker (Branch: maker-app) [Level 2]
+│   │       └── Remote: origin → roosterslab/monoatomlabs.git
+│   │
+│   └── Submodule: website (Branch: website-main) [Level 1]
 │       ├── Remote: origin → roosterslab/monoatomlabs.git
 │       └── Remote: publish → vrocky/monoatoms-websites.git
 ```
@@ -67,6 +70,27 @@ monoatomlabs (mono repo)
 ```ini
 [credential "https://github.com/vrocky"]
     username = vrocky
+```
+
+---
+
+## Visiting Card Submodule Configuration
+
+**Location**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\visiting-card-dev`
+**Branch**: visiting-card-dev-main
+
+### Nested Submodule (Level 2)
+**Path**: `visiting-card-dev/maker/`
+**Branch**: maker-app
+
+This is a **second-order nested submodule** - a submodule within a submodule.
+
+### Nested Submodule Definition (visiting-card-dev/.gitmodules)
+```ini
+[submodule "maker"]
+    path = maker
+    url = https://github.com/roosterslab/monoatomlabs.git
+    branch = maker-app
 ```
 
 ---

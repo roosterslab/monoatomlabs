@@ -124,10 +124,13 @@ monoatomlabs_dev_root/
 │   ├── CONFIGURATION.md           # Current config
 │   └── WORKFLOWS.md               # Visual workflows
 │
-├── visiting-card-dev/             # Submodule 1
-│   └── [Branch: visiting-card-dev-main]
+├── visiting-card-dev/             # Submodule 1 (Level 1)
+│   ├── [Branch: visiting-card-dev-main]
+│   ├── .gitmodules                # Nested submodule definitions
+│   └── maker/                     # Nested Submodule (Level 2)
+│       └── [Branch: maker-app]
 │
-└── website/                       # Submodule 2
+└── website/                       # Submodule 2 (Level 1)
     ├── [Branch: website-main]
     ├── Remote: origin (mono repo)
     └── Remote: publish (standalone)
@@ -142,6 +145,12 @@ monoatomlabs_dev_root/
 - Projects managed as **git submodules**
 - Each submodule is an independent repository
 - Parent tracks specific commits of submodules
+
+### Nested Submodules (visiting-card-dev)
+- **Second-order nesting**: Submodules can contain their own submodules
+- Example: `visiting-card-dev/maker/` is a nested submodule (Level 2)
+- `visiting-card-dev` contains `.gitmodules` defining `maker` as a submodule
+- Updates require managing multiple levels of the hierarchy
 
 ### Dual Remote Strategy (Website)
 - **origin**: Source of truth, mono repo integration
