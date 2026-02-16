@@ -200,7 +200,7 @@ export const products = {
     tagline: 'Solar Panel Efficiency Enhancement',
     description: 'Graphene-based transparent coating that enhances solar panel efficiency through superior light transmission, thermal management, and self-cleaning properties.',
     shortDescription: 'Boost solar panel efficiency and longevity',
-    image: '/images/graffisol-02.png',
+    image: '/images/graffisol-studio.png',
 
     keyMetrics: [
       { label: 'Efficiency Gain', value: '8-12%' },

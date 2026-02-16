@@ -6,6 +6,7 @@ import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
 import { ShieldCheck, Sparkles, TrendingDown, Clock, Check, Car, Droplets, Wallet, Layers, BarChart3 } from 'lucide-react';
 import ProductLightbox from '../../components/ui/ProductLightbox';
+import ProductHero from '../../components/ui/ProductHero';
 import { products } from '../../data/content';
 
 // Import all infographic components
@@ -61,39 +62,25 @@ const Ceraphene = () => {
       id: 'overview',
       label: 'Overview',
       content: (
-        <div className="space-y-24 mt-12">
+        <div className="space-y-24 mt-24">
           {/* Hero Section */}
-          <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white isolate">
-            <div className="absolute inset-0 z-0">
-              <img
-                src="/images/ceraphene-bg.png"
-                alt="Luxury Car Detailing Application"
-                className="w-full h-full object-cover opacity-50 mix-blend-overlay"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-neutral-900/40"></div>
-            </div>
-
-            <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-4xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-medium tracking-wider uppercase mb-6">
-                <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-                Automotive & Marine
-              </div>
-              <h2 className="text-4xl md:text-5xl font-display font-medium mb-6 leading-tight">
-                Diamond-hard protection. Graphene performance.
-              </h2>
-              <p className="text-lg text-neutral-300 leading-relaxed mb-8 max-w-xl">
-                Ceraphene combines graphene-oxide nanotubes with ceramic compounds to create a 9H+ hardness shield that is lighter, stronger, and more hydrophobic than any competitor.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to="/contact">
-                  <Button variant="primary" theme="dark">Order Sample Kit</Button>
-                </Link>
-                <Link to="#specs">
-                  <Button variant="secondary" theme="dark">View Specs</Button>
-                </Link>
-              </div>
-            </div>
-          </section>
+          <ProductHero
+            title="Diamond-hard protection. Graphene performance."
+            subtitle="Ceraphene combines graphene-oxide nanotubes with ceramic compounds to create a 9H+ hardness shield that is lighter, stronger, and more hydrophobic than any competitor."
+            category="Automotive & Marine"
+            categoryColor="bg-blue-400"
+            images={[
+              '/images/ceraphene_lifecycle_lab_making.png',
+              '/images/ceraphene_lifecycle_lab_testing.png',
+              '/images/ceraphene_lifecycle_studio_application.png',
+              '/images/ceraphene_lifecycle_studio_buffing.png',
+              '/images/ceraphene_lifecycle_result.png'
+            ]}
+            buttons={[
+              { text: 'Order Sample Kit', link: '/contact', variant: 'primary' },
+              { text: 'View Specs', link: '#specs', variant: 'secondary' }
+            ]}
+          />
 
           {/* Product & Stats Dashboard */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">

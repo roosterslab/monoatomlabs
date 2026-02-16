@@ -6,6 +6,7 @@ import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
 import { Check, Layers, BarChart3, Timer, HardHat, TrendingUp } from 'lucide-react';
 import ProductLightbox from '../../components/ui/ProductLightbox';
+import ProductHero from '../../components/ui/ProductHero';
 import { products } from '../../data/content';
 
 // Lazy load infographic components (only loaded when tab is viewed)
@@ -68,39 +69,25 @@ const Graphacrete = () => {
       label: 'Overview',
       content: (
         <Suspense fallback={<InfographicLoader />}>
-          <div className="space-y-24 mt-12">
+          <div className="space-y-24 mt-24">
             {/* Hero Section */}
-            <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white isolate">
-              <div className="absolute inset-0 z-0">
-                <img
-                  src="/images/graphacrete-bg.png"
-                  alt="Graphacrete Infrastructure Application"
-                  className="w-full h-full object-cover opacity-50 mix-blend-overlay"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-neutral-900/40"></div>
-              </div>
-
-              <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-4xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-medium tracking-wider uppercase mb-6">
-                  <span className="w-2 h-2 rounded-full bg-green-400"></span>
-                  Commercial Ready
-                </div>
-                <h2 className="text-4xl md:text-5xl font-display font-medium mb-6 leading-tight">
-                  Reinforcing the future of construction with graphene.
-                </h2>
-                <p className="text-lg text-neutral-300 leading-relaxed mb-8 max-w-xl">
-                  Graphacrete is a next-generation concrete admixture that utilizes graphene nano-platelets to significantly enhance structural integrity while reducing cement consumption and carbon footprint.
-                </p>
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/contact">
-                    <Button variant="primary" theme="dark">Request Technical Data</Button>
-                  </Link>
-                  <Link to="#impact">
-                    <Button variant="secondary" theme="dark">View Cost Analysis</Button>
-                  </Link>
-                </div>
-              </div>
-            </section>
+            <ProductHero
+              title="Reinforcing the future of construction with graphene."
+              subtitle="Graphacrete is a next-generation concrete admixture that utilizes graphene nano-platelets to significantly enhance structural integrity while reducing cement consumption and carbon footprint."
+              category="Commercial Ready"
+              categoryColor="bg-green-400"
+              images={[
+                '/images/graphacrete_lifecycle_lab_making.png',
+                '/images/graphacrete_lifecycle_lab_testing.png',
+                '/images/graphacrete_lifecycle_site_pouring.png',
+                '/images/graphacrete_lifecycle_site_finishing.png',
+                '/images/graphacrete_lifecycle_site_result.png'
+              ]}
+              buttons={[
+                { text: 'Request Technical Data', link: '/contact', variant: 'primary' },
+                { text: 'View Cost Analysis', link: '#impact', variant: 'secondary' }
+              ]}
+            />
 
             {/* Product & Stats Dashboard */}
             <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">

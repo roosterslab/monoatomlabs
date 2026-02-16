@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button';
 import { Sun, Thermometer, Zap, Clock, Check, BarChart3, ShieldCheck, MousePointerClick } from 'lucide-react';
 import { products } from '../../data/content';
 import ProductLightbox from '../../components/ui/ProductLightbox';
+import ProductHero from '../../components/ui/ProductHero';
 
 // Import all infographic components
 import {
@@ -57,41 +58,25 @@ const Graffisol = () => {
       id: 'overview',
       label: 'Overview',
       content: (
-        <div className="space-y-24 mt-12">
+        <div className="space-y-24 mt-24">
           {/* Hero Section */}
-          {/* Hero Section */}
-          <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white isolate">
-            {/* Background Image */}
-            <div className="absolute inset-0 z-0">
-              <img
-                src="/images/graffisol-bg.png"
-                alt="Graffisol Solar Farm Application"
-                className="w-full h-full object-cover opacity-50 mix-blend-overlay"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-neutral-900/40"></div>
-            </div>
-
-            <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-4xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 backdrop-blur-md border border-yellow-500/20 text-yellow-500 text-xs font-medium tracking-wider uppercase mb-6">
-                <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
-                Solar Optimization
-              </div>
-              <h2 className="text-4xl md:text-5xl font-display font-medium mb-6 leading-tight">
-                Unlock the true potential of your solar assets.
-              </h2>
-              <p className="text-lg text-neutral-300 leading-relaxed mb-8 max-w-xl">
-                Graffisol is a transparent graphene nanocoating that boosts energy output by up to 12% through anti-reflective properties, thermal regulation, and self-cleaning capabilities.
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Link to="/contact">
-                  <Button variant="primary" theme="dark">Request Datasheet</Button>
-                </Link>
-                <Link to="#impact">
-                  <Button variant="secondary" theme="dark">View ROI Analysis</Button>
-                </Link>
-              </div>
-            </div>
-          </section>
+          <ProductHero
+            title="Unlock the true potential of your solar assets."
+            subtitle="Graffisol is a transparent graphene nanocoating that boosts energy output by up to 12% through anti-reflective properties, thermal regulation, and self-cleaning capabilities."
+            category="Solar Optimization"
+            categoryColor="bg-yellow-400 animate-pulse"
+            images={[
+              '/images/graffisol_lifecycle_lab_making.png',
+              '/images/graffisol_lifecycle_lab_testing.png',
+              '/images/graffisol_lifecycle_factory_coating.png',
+              '/images/graffisol_lifecycle_site_cleaning.png',
+              '/images/graffisol_lifecycle_site_result.png'
+            ]}
+            buttons={[
+              { text: 'Request Datasheet', link: '/contact', variant: 'primary' },
+              { text: 'View ROI Analysis', link: '#impact', variant: 'secondary' }
+            ]}
+          />
 
           {/* Product & Stats Dashboard */}
           <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -99,7 +84,7 @@ const Graffisol = () => {
             {/* Product Box */}
             <div className="lg:col-span-1 h-full min-h-[300px]">
               <ProductLightbox
-                src="/images/graffisol-studio.png"
+                src="/images/graffisol-02.png"
                 alt="Graffisol Studio View"
                 className="h-full"
               />
