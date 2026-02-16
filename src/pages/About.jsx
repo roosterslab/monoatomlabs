@@ -216,8 +216,6 @@ const About = () => {
                 </div>
             </section>
 
-            <HallOfFame />
-
             {/* SECTION 5: FACILITIES (Tech Specs Grid) */}
             <section id="facilities" className="py-24 px-6 bg-white">
                 <div className="max-w-7xl mx-auto">
@@ -305,6 +303,8 @@ const About = () => {
                     </div>
                 </div>
             </section>
+
+            <HallOfFame />
 
             <TechnologyCapabilities />
             <PartnershipModels />

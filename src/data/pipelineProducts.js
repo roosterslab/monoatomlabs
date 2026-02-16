@@ -12,9 +12,9 @@ export const pipelineProducts = {
     title: 'Hydrogen Membranes',
     subtitle: 'High-selectivity graphene membranes enabling efficient hydrogen separation and production with reduced energy losses for clean energy infrastructure.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-gradient-to-r from-indigo-600 to-indigo-700 shadow-lg shadow-indigo-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/hydrogen_hero.png'],
-    accentColor: 'indigo',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',
@@ -23,7 +23,7 @@ export const pipelineProducts = {
         'Producing high-purity hydrogen is energy-intensive and expensive. Current separation methods like pressure swing adsorption are bulky and inefficient.',
         'Our graphene membranes offer a molecular sieve solution. With precise atomic-scale pores, they allow small hydrogen molecules to pass through while blocking larger contaminants like CO2 and methane, slashing energy costs by up to 50%.'
       ],
-      images: ['/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png', '/images/pipeline/studio/HydrogenMembranes-2.png']
+      images: ['/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png']
     },
 
     processFlow: {
@@ -43,20 +43,17 @@ export const pipelineProducts = {
       hero: {
         icon: Filter,
         title: 'Tunable Selectivity',
-        description: 'By controlling pore size at the angstrom level, we can tune our membranes to separate specific gases with unprecedented selectivity, far surpassing polymeric membranes.',
-        gradient: 'from-indigo-900 via-indigo-950 to-black',
-        iconBg: 'bg-indigo-500/20 border border-indigo-400/30',
-        iconColor: 'text-indigo-300'
+        description: 'By controlling pore size at the angstrom level, we can tune our membranes to separate specific gases with unprecedented selectivity, far surpassing polymeric membranes.'
       },
       stats: [
-        { value: '99.9%', label: 'Purity', description: 'Meeting fuel cell grade standards directly.', bg: 'bg-gradient-to-br from-indigo-50 to-indigo-100/50', border: 'border-indigo-200', color: 'text-indigo-700' },
-        { icon: Zap, title: 'Low Energy', description: 'Passive separation process requires no heat or phase change.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
+        { value: '99.9%', label: 'Purity', description: 'Meeting fuel cell grade standards directly.' },
+        { icon: Zap, title: 'Low Energy', description: 'Passive separation process requires no heat or phase change.' }
       ],
       metrics: [
-        { value: '>1000', label: 'Selectivity (H2/CO2)', labelColor: 'text-indigo-200' },
-        { value: 'High', label: 'Permeance', labelColor: 'text-indigo-200' },
-        { value: '500°C', label: 'Thermal Stability', labelColor: 'text-indigo-200' },
-        { value: 'Compact', label: 'Footprint', labelColor: 'text-indigo-200' }
+        { value: '>1000', label: 'Selectivity (H2/CO2)' },
+        { value: 'High', label: 'Permeance' },
+        { value: '500°C', label: 'Thermal Stability' },
+        { value: 'Compact', label: 'Footprint' }
       ]
     },
 
@@ -64,16 +61,12 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of hydrogen.',
       images: [
-        {
-          type: 'carousel',
-          images: ['/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png', '/images/pipeline/studio/HydrogenMembranes-2.png'],
-          label: 'Studio Module',
-          bg: 'bg-neutral-100'
-        },
+        '/images/pipeline/studio/HydrogenMembranes.png',
+        '/images/pipeline/studio/Gryogen.png',
         {
           type: 'video',
           url: 'https://www.youtube.com/embed/jo5_zAQJozQ',
-          label: 'Product Test Video'
+          label: 'Hydrogen Membrane Technology Demo'
         }
       ]
     },
@@ -133,9 +126,9 @@ export const pipelineProducts = {
     title: 'Mariphene',
     subtitle: 'Desalination Membranes | Solving the global water crisis with ultra-permeable graphene membranes that desalinate seawater at a fraction of the energy cost.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-gradient-to-r from-cyan-600 to-cyan-700 shadow-lg shadow-cyan-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/desalination_hero.png'],
-    accentColor: 'cyan',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',
@@ -225,7 +218,7 @@ export const pipelineProducts = {
     title: 'Aerophenter',
     subtitle: 'Atmospheric Moisture Harvesting | Graphene membranes engineered to harvest atmospheric moisture and convert air into potable water efficiently for sustainable water production.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-gradient-to-r from-teal-500 to-teal-600 shadow-lg shadow-teal-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/atmospheric_hero.png'],
     accentColor: 'teal',
 
@@ -236,7 +229,7 @@ export const pipelineProducts = {
         'Traditional water sources are depleting, and desalination is energy-intensive. Billions of people lack access to clean drinking water, especially in arid regions. We need a decentralized, sustainable solution that taps into the moisture present in the air all around us.',
         'Our Graphene-Enhanced Atmospheric Water Generator (AWG) utilizes the extraordinary surface area and hydrophilic properties of graphene to capture moisture even at low humidity levels, delivering clean water with minimal energy consumption.'
       ],
-      images: ['/images/pipeline/studio/AtmosphericHarvesting.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
+      images: ['/images/pipeline/studio/aerophenter_studio.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
     },
 
     processFlow: {
@@ -277,12 +270,8 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of water security.',
       images: [
-        {
-          type: 'carousel',
-          images: ['/images/pipeline/studio/AtmosphericHarvesting.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png'],
-          label: 'Studio Module',
-          bg: 'bg-neutral-100'
-        },
+        '/images/pipeline/studio/aerophenter_studio.png',
+        '/images/pipeline/studio/AtmosphericHarvesting-2.png',
         {
           type: 'video',
           url: 'https://www.youtube.com/embed/P25aS8s4ar0',
@@ -326,9 +315,9 @@ export const pipelineProducts = {
     title: 'Voltaphene',
     subtitle: 'Graphene Battery Storage | Supercharging energy storage with graphene-enhanced electrodes that deliver higher density, faster charging, and longer lifecycles.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/battery_hero.png'],
-    accentColor: 'amber',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',
@@ -418,9 +407,9 @@ export const pipelineProducts = {
     title: 'Graphene Glass Fibres',
     subtitle: 'Revolutionizing composites with graphene-enhanced sizing that bridges the gap between glass and carbon fibre performance at a fraction of the cost.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-gradient-to-r from-purple-600 to-purple-700 shadow-lg shadow-purple-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/glass_fibres_hero.png'],
-    accentColor: 'purple',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',
@@ -515,9 +504,9 @@ export const pipelineProducts = {
     title: 'Armophene',
     subtitle: 'Improving personal protection with graphene-reinforced ballistics that are lighter, stronger, and more flexible than traditional aramid fibers.',
     category: 'R&D Pipeline',
-    categoryColor: 'bg-gradient-to-r from-slate-800 to-slate-900 text-white border-slate-700 shadow-lg shadow-slate-900/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/armophene_hero.png'],
-    accentColor: 'emerald',
+    accentColor: 'teal',
     textColorClass: 'text-slate-700',
 
     introduction: {
@@ -533,7 +522,7 @@ export const pipelineProducts = {
     processFlow: {
       title: 'How It Works',
       subtitle: 'Dissipating kinetic energy instantly.',
-      accentColor: 'emerald',
+      accentColor: 'teal',
       steps: [
         { icon: Activity, title: 'Synthesis', description: 'Graphene oxide reduced to pristine graphene nanoplatelets.' },
         { icon: Shield, title: 'Composite', description: 'Graphene is embedded into ultra-high-molecular-weight polyethylene (UHMWPE).' },
@@ -586,7 +575,7 @@ export const pipelineProducts = {
     timeline: {
       title: 'Development Roadmap',
       subtitle: 'Protecting those who serve.',
-      accentColor: 'emerald',
+      accentColor: 'teal',
       events: [
         { phase: 'Phase 1: Lab', title: 'Impact Resistance', description: 'Micro-ballistic testing showing 200% improvement over Kevlar per unit weight.', status: 'completed', date: 'Q2 2024' },
         { phase: 'Phase 2: Prototype', title: 'Vest Fabrication', description: 'Creating full tactical vest prototypes for flexibility testing.', status: 'current', date: 'Q1 2026' },
@@ -621,9 +610,9 @@ export const pipelineProducts = {
     title: 'Graphyre',
     subtitle: 'Next-generation graphene-enhanced rubber compounds for tyres that deliver superior durability, lower rolling resistance, and smart sensing capabilities.',
     category: 'Prototype',
-    categoryColor: 'bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg shadow-amber-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/graphyre_hero.png'],
-    accentColor: 'amber',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',
@@ -638,7 +627,7 @@ export const pipelineProducts = {
     processFlow: {
       title: 'How It Works',
       subtitle: 'Reinforcing rubber at the molecular level.',
-      accentColor: 'amber',
+      accentColor: 'teal',
       steps: [
         { icon: Activity, title: 'Integration', description: 'Graphene is dispersed into the rubber compound during mixing.' },
         { icon: Zap, title: 'Bonding', description: 'Graphene forms a reinforcing network within the polymer matrix.' },
@@ -720,9 +709,9 @@ export const pipelineProducts = {
     title: 'Graphosite',
     subtitle: 'Advanced graphene-reinforced composite materials delivering unmatched strength-to-weight ratios for aerospace, automotive, and industrial applications.',
     category: 'Prototype',
-    categoryColor: 'bg-gradient-to-r from-purple-600 to-purple-700 text-white border-purple-500 shadow-lg shadow-purple-600/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/graphosite_hero.png'],
-    accentColor: 'purple',
+    accentColor: 'teal',
     textColorClass: 'text-slate-700',
 
     introduction: {
@@ -738,7 +727,7 @@ export const pipelineProducts = {
     processFlow: {
       title: 'How It Works',
       subtitle: 'Synergy between carbon fiber and graphene.',
-      accentColor: 'purple',
+      accentColor: 'teal',
       steps: [
         { icon: Layers, title: 'Layering', description: 'Graphene sheets are interleaved with carbon fiber layers.' },
         { icon: Zap, title: 'Infusion', description: 'Resin is infused under vacuum to ensure void-free composites.' },
@@ -785,7 +774,7 @@ export const pipelineProducts = {
     timeline: {
       title: 'Development Roadmap',
       subtitle: 'Taking flight.',
-      accentColor: 'purple',
+      accentColor: 'teal',
       events: [
         { phase: 'Phase 1: R&D', title: 'Matrix Optimization', description: 'Achieving uniform graphene dispersion in epoxy resins.', status: 'completed', date: 'Q4 2023' },
         { phase: 'Phase 2: Prototype', title: 'Structural Testing', description: 'Validating a 40% increase in tensile strength over standard carbon fiber.', status: 'current', date: 'Q3 2025' },
@@ -821,9 +810,9 @@ export const pipelineProducts = {
     title: 'Rustene',
     subtitle: 'Graphene-based anti-rusting paint that forms an ultra-thin barrier preventing corrosion and extending metal lifespan.',
     category: 'R&D Pipeline',
-    categoryColor: 'bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/rustene_hero.png'],
-    accentColor: 'blue',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',
@@ -913,9 +902,9 @@ export const pipelineProducts = {
     title: 'Thermaphene',
     subtitle: 'Ultra-thin graphene heating technology delivering lightweight, efficient, and flexible thermal regulation for wearables and industry.',
     category: 'Prototype',
-    categoryColor: 'bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
     heroImages: ['/images/thermaphene_hero.png'],
-    accentColor: 'orange',
+    accentColor: 'teal',
 
     introduction: {
       title: 'The Challenge',

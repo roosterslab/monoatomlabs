@@ -41,7 +41,7 @@ const HallOfFame = () => {
     };
 
     return (
-        <section className="py-24 px-6 bg-gradient-to-b from-neutral-900 to-black border-t border-b border-neutral-800 relative overflow-hidden">
+        <section className="py-24 px-6 border-t border-b border-neutral-800 relative overflow-hidden">
             {/* Background decorative elements */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
                 <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-purple-900/20 rounded-full blur-[120px] animate-pulse"></div>
@@ -74,7 +74,6 @@ const HallOfFame = () => {
                             transition={{ delay: index * 0.15, duration: 0.6 }}
                             className="group relative aspect-[4/3] rounded-2xl overflow-hidden border border-neutral-800 bg-neutral-950 cursor-pointer shadow-lg hover:shadow-2xl hover:shadow-purple-900/20 transition-all duration-500 ring-1 ring-white/5 hover:ring-purple-500/50"
                         >
-                            <div className="absolute inset-0 bg-neutral-900 animate-pulse" />
                             <motion.img
                                 layoutId={`image-${img.src}`}
                                 src={img.src}

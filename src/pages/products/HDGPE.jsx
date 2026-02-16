@@ -58,6 +58,7 @@ const HDGPE = () => {
             category="Polymer Engineering"
             categoryColor="bg-blue-500"
             images={[
+              '/images/HD-G-PE.png',
               '/images/hdgpe_lifecycle_lab_making.png',
               '/images/hdgpe_lifecycle_lab_testing.png',
               '/images/hdgpe_lifecycle_factory_extrusion.png',
@@ -75,8 +76,11 @@ const HDGPE = () => {
             {/* Product Box */}
             <div className="lg:col-span-1 h-full min-h-[300px]">
               <ProductLightbox
-                src="/images/hdgpe-studio.png"
-                alt="HDGPE Studio View"
+                images={[
+                  '/images/HD-G-PE.png',
+                  '/images/hdgpe-studio.png'
+                ]}
+                alt="HD-G-PE Studio View"
                 className="h-full"
                 imageFit="object-contain"
                 innerClassName="bg-white p-4"
