@@ -12,7 +12,7 @@ export const pipelineProducts = {
     title: 'Hydrogen Membranes',
     subtitle: 'High-selectivity graphene membranes enabling efficient hydrogen separation and production with reduced energy losses for clean energy infrastructure.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-indigo-600',
+    categoryColor: 'bg-gradient-to-r from-indigo-600 to-indigo-700 shadow-lg shadow-indigo-500/30',
     heroImages: ['/images/hydrogen_hero.png'],
     accentColor: 'indigo',
 
@@ -44,19 +44,19 @@ export const pipelineProducts = {
         icon: Filter,
         title: 'Tunable Selectivity',
         description: 'By controlling pore size at the angstrom level, we can tune our membranes to separate specific gases with unprecedented selectivity, far surpassing polymeric membranes.',
-        gradient: 'from-indigo-900 to-black',
-        iconBg: 'bg-indigo-500/20',
-        iconColor: 'text-indigo-400'
+        gradient: 'from-indigo-900 via-indigo-950 to-black',
+        iconBg: 'bg-indigo-500/20 border border-indigo-400/30',
+        iconColor: 'text-indigo-300'
       },
       stats: [
-        { value: '99.9%', label: 'Purity', description: 'Meeting fuel cell grade standards directly.', bg: 'bg-indigo-50', border: 'border-indigo-100', color: 'text-indigo-600' },
-        { icon: Zap, title: 'Low Energy', description: 'Passive separation process requires no heat or phase change.', iconColor: 'text-emerald-500' }
+        { value: '99.9%', label: 'Purity', description: 'Meeting fuel cell grade standards directly.', bg: 'bg-gradient-to-br from-indigo-50 to-indigo-100/50', border: 'border-indigo-200', color: 'text-indigo-700' },
+        { icon: Zap, title: 'Low Energy', description: 'Passive separation process requires no heat or phase change.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
-        { value: '>1000', label: 'Selectivity (H2/CO2)', labelColor: 'text-indigo-400' },
-        { value: 'High', label: 'Permeance', labelColor: 'text-indigo-400' },
-        { value: '500°C', label: 'Thermal Stability', labelColor: 'text-indigo-400' },
-        { value: 'Compact', label: 'Footprint', labelColor: 'text-indigo-400' }
+        { value: '>1000', label: 'Selectivity (H2/CO2)', labelColor: 'text-indigo-300' },
+        { value: 'High', label: 'Permeance', labelColor: 'text-indigo-300' },
+        { value: '500°C', label: 'Thermal Stability', labelColor: 'text-indigo-300' },
+        { value: 'Compact', label: 'Footprint', labelColor: 'text-indigo-300' }
       ]
     },
 
@@ -104,7 +104,7 @@ export const pipelineProducts = {
       description: 'Efficient separation is the missing link for affordable hydrogen. Join us in scaling this critical technology.',
       primaryButton: { text: 'Partner with Us', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-indigo-900/20 to-black'
+      gradient: 'from-indigo-900/30 via-indigo-950/20 to-black'
     },
 
     // Special sections (optional)
@@ -133,7 +133,7 @@ export const pipelineProducts = {
     title: 'Mariphene',
     subtitle: 'Desalination Membranes | Solving the global water crisis with ultra-permeable graphene membranes that desalinate seawater at a fraction of the energy cost.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-cyan-600',
+    categoryColor: 'bg-gradient-to-r from-cyan-600 to-cyan-700 shadow-lg shadow-cyan-500/30',
     heroImages: ['/images/desalination_hero.png'],
     accentColor: 'cyan',
 
@@ -165,13 +165,13 @@ export const pipelineProducts = {
         icon: Droplet,
         title: 'High-Flux Permeability',
         description: 'Water molecules pass through our graphene membranes 100x faster than through traditional polymers, allowing for smaller plants and lower operating pressures.',
-        gradient: 'from-cyan-900 to-black',
-        iconBg: 'bg-cyan-500/20',
-        iconColor: 'text-cyan-400'
+        gradient: 'from-cyan-900 via-cyan-950 to-black',
+        iconBg: 'bg-cyan-500/20 border border-cyan-400/30',
+        iconColor: 'text-cyan-300'
       },
       stats: [
-        { value: '-40%', label: 'Energy Use', description: 'Drastically lowering the cost of water.', bg: 'bg-cyan-50', border: 'border-cyan-100', color: 'text-cyan-600' },
-        { icon: Gauge, title: 'Durability', description: 'Resistant to chlorine and bio-fouling.', iconColor: 'text-emerald-500' }
+        { value: '-40%', label: 'Energy Use', description: 'Drastically lowering the cost of water.', bg: 'bg-gradient-to-br from-cyan-50 to-cyan-100/50', border: 'border-cyan-200', color: 'text-cyan-700' },
+        { icon: Gauge, title: 'Durability', description: 'Resistant to chlorine and bio-fouling.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
         { value: '99.7%', label: 'Salt Rejection', labelColor: 'text-cyan-400' },
@@ -216,7 +216,7 @@ export const pipelineProducts = {
       description: 'Help us bring affordable, clean water to the world. We are looking for pilot partners.',
       primaryButton: { text: 'Inquire Now', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-cyan-900/20 to-black'
+      gradient: 'from-cyan-900/30 via-cyan-950/20 to-black'
     }
   },
 
@@ -225,7 +225,7 @@ export const pipelineProducts = {
     title: 'Aerophenter',
     subtitle: 'Atmospheric Moisture Harvesting | Graphene membranes engineered to harvest atmospheric moisture and convert air into potable water efficiently for sustainable water production.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-teal-500',
+    categoryColor: 'bg-gradient-to-r from-teal-500 to-teal-600 shadow-lg shadow-teal-500/30',
     heroImages: ['/images/atmospheric_hero.png'],
     accentColor: 'teal',
 
@@ -257,13 +257,13 @@ export const pipelineProducts = {
         icon: Droplet,
         title: 'Hyper-Efficient Adsorption',
         description: 'Our graphene oxide framework enables moisture capture at humidity levels as low as 20%, significantly outperforming conventional desiccant wheels.',
-        gradient: 'from-teal-900 to-black',
-        iconBg: 'bg-teal-500/20',
-        iconColor: 'text-teal-400'
+        gradient: 'from-teal-900 via-teal-950 to-black',
+        iconBg: 'bg-teal-500/20 border border-teal-400/30',
+        iconColor: 'text-teal-300'
       },
       stats: [
-        { value: '30%', label: 'More Energy Efficient', description: 'Compared to standard compression-based AWGs.', bg: 'bg-teal-50', border: 'border-teal-100', color: 'text-teal-600' },
-        { icon: Zap, title: 'Solar Ready', description: 'Designed for full integration with solar PV systems for zero-carbon operation.', iconColor: 'text-amber-500' }
+        { value: '30%', label: 'More Energy Efficient', description: 'Compared to standard compression-based AWGs.', bg: 'bg-gradient-to-br from-teal-50 to-teal-100/50', border: 'border-teal-200', color: 'text-teal-700' },
+        { icon: Zap, title: 'Solar Ready', description: 'Designed for full integration with solar PV systems for zero-carbon operation.', iconColor: 'text-amber-600', iconBg: 'bg-amber-50 border border-amber-100' }
       ],
       metrics: [
         { value: '50L', label: 'Daily Output (Unit)' },
@@ -317,7 +317,7 @@ export const pipelineProducts = {
       description: 'We are currently seeking pilot partners for our Atmospheric Water Generators. Join us in solving the global water crisis.',
       primaryButton: { text: 'Deploy Pilot', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-teal-900/20 to-black'
+      gradient: 'from-teal-900/30 via-teal-950/20 to-black'
     }
   },
 
@@ -326,7 +326,7 @@ export const pipelineProducts = {
     title: 'Voltaphene',
     subtitle: 'Graphene Battery Storage | Supercharging energy storage with graphene-enhanced electrodes that deliver higher density, faster charging, and longer lifecycles.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-amber-500',
+    categoryColor: 'bg-gradient-to-r from-amber-500 to-amber-600 shadow-lg shadow-amber-500/30',
     heroImages: ['/images/battery_hero.png'],
     accentColor: 'amber',
 
@@ -358,13 +358,13 @@ export const pipelineProducts = {
         icon: Zap,
         title: 'Rapid Charge Kinetic',
         description: 'Graphene\'s exceptional conductivity allows for ultra-fast charging rates (5C+) without overheating, enabling an 80% charge in under 15 minutes.',
-        gradient: 'from-amber-900 to-black',
-        iconBg: 'bg-amber-500/20',
-        iconColor: 'text-amber-400'
+        gradient: 'from-amber-900 via-amber-950 to-black',
+        iconBg: 'bg-amber-500/20 border border-amber-400/30',
+        iconColor: 'text-amber-300'
       },
       stats: [
-        { value: '3x', label: 'Capacity', description: 'Versus standard graphite anodes.', bg: 'bg-amber-50', border: 'border-amber-100', color: 'text-amber-600' },
-        { icon: Repeat, title: 'Lifecycle', description: 'Retains 90% capacity after 1000 cycles.', iconColor: 'text-emerald-500' }
+        { value: '3x', label: 'Capacity', description: 'Versus standard graphite anodes.', bg: 'bg-gradient-to-br from-amber-50 to-amber-100/50', border: 'border-amber-200', color: 'text-amber-700' },
+        { icon: Repeat, title: 'Lifecycle', description: 'Retains 90% capacity after 1000 cycles.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
         { value: '20 Min', label: 'Charge Time (0-80%)' },
@@ -409,7 +409,7 @@ export const pipelineProducts = {
       description: 'We are seeking automotive and grid partners to validate our next-gen battery cells.',
       primaryButton: { text: 'Partner Inquiry', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-amber-900/20 to-black'
+      gradient: 'from-amber-900/30 via-amber-950/20 to-black'
     }
   },
 
@@ -418,7 +418,7 @@ export const pipelineProducts = {
     title: 'Graphene Glass Fibres',
     subtitle: 'Revolutionizing composites with graphene-enhanced sizing that bridges the gap between glass and carbon fibre performance at a fraction of the cost.',
     category: 'Pilot Trials',
-    categoryColor: 'bg-purple-600',
+    categoryColor: 'bg-gradient-to-r from-purple-600 to-purple-700 shadow-lg shadow-purple-500/30',
     heroImages: ['/images/glass_fibres_hero.png'],
     accentColor: 'purple',
 
@@ -450,13 +450,13 @@ export const pipelineProducts = {
         icon: Layers,
         title: 'Interfacial Toughness',
         description: 'The graphene coating acts as a chemical bridge, increasing the interlaminar shear strength by up to 35%. This prevents delamination, the most common failure mode in composites.',
-        gradient: 'from-purple-900 to-black',
-        iconBg: 'bg-purple-500/20',
-        iconColor: 'text-purple-400'
+        gradient: 'from-purple-900 via-purple-950 to-black',
+        iconBg: 'bg-purple-500/20 border border-purple-400/30',
+        iconColor: 'text-purple-300'
       },
       stats: [
-        { value: '+50%', label: 'Fatigue Life', description: 'Withstanding more cycles under load.', bg: 'bg-purple-50', border: 'border-purple-100', color: 'text-purple-600' },
-        { icon: Cuboid, title: 'Cost Effective', description: 'Performance boost without the high price of carbon fibre.', iconColor: 'text-emerald-500' }
+        { value: '+50%', label: 'Fatigue Life', description: 'Withstanding more cycles under load.', bg: 'bg-gradient-to-br from-purple-50 to-purple-100/50', border: 'border-purple-200', color: 'text-purple-700' },
+        { icon: Cuboid, title: 'Cost Effective', description: 'Performance boost without the high price of carbon fibre.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
         { value: 'High', label: 'Tensile Strength' },
@@ -506,7 +506,7 @@ export const pipelineProducts = {
       description: 'Upgrade your composites today. Contact us for sample materials and technical data.',
       primaryButton: { text: 'Request Samples', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-purple-900/20 to-black'
+      gradient: 'from-purple-900/30 via-purple-950/20 to-black'
     }
   },
 
@@ -515,7 +515,7 @@ export const pipelineProducts = {
     title: 'Armophene',
     subtitle: 'Improving personal protection with graphene-reinforced ballistics that are lighter, stronger, and more flexible than traditional aramid fibers.',
     category: 'R&D Pipeline',
-    categoryColor: 'bg-slate-800 text-white border-slate-700',
+    categoryColor: 'bg-gradient-to-r from-slate-800 to-slate-900 text-white border-slate-700 shadow-lg shadow-slate-900/30',
     heroImages: ['/images/armophene_hero.png'],
     accentColor: 'emerald',
     textColorClass: 'text-slate-700',
@@ -621,7 +621,7 @@ export const pipelineProducts = {
     title: 'Graphyre',
     subtitle: 'Next-generation graphene-enhanced rubber compounds for tyres that deliver superior durability, lower rolling resistance, and smart sensing capabilities.',
     category: 'Prototype',
-    categoryColor: 'bg-amber-500',
+    categoryColor: 'bg-gradient-to-r from-amber-500 to-orange-600 shadow-lg shadow-amber-500/30',
     heroImages: ['/images/graphyre_hero.png'],
     accentColor: 'amber',
 
@@ -654,13 +654,13 @@ export const pipelineProducts = {
         icon: Gauge,
         title: 'Hyper-Alert Sensing',
         description: 'Graphyre isn\'t just tough; it\'s smart. The graphene network acts as a conductive sensor, providing real-time data on tread depth, temperature, and pressure directly to the driver.',
-        gradient: 'from-amber-900 to-black',
-        iconBg: 'bg-amber-500/20',
-        iconColor: 'text-amber-400'
+        gradient: 'from-amber-900 via-orange-950 to-black',
+        iconBg: 'bg-amber-500/20 border border-amber-400/30',
+        iconColor: 'text-amber-300'
       },
       stats: [
-        { value: '30%', label: 'More Mileage', description: 'Significantly extending tyre lifespan.', bg: 'bg-amber-50', border: 'border-amber-100', color: 'text-amber-600' },
-        { icon: DollarSign, title: 'Fuel Savings', description: 'Reduced rolling resistance lowers fuel consumption by up to 10%.', iconColor: 'text-emerald-500' }
+        { value: '30%', label: 'More Mileage', description: 'Significantly extending tyre lifespan.', bg: 'bg-gradient-to-br from-amber-50 to-orange-100/50', border: 'border-amber-200', color: 'text-amber-700' },
+        { icon: DollarSign, title: 'Fuel Savings', description: 'Reduced rolling resistance lowers fuel consumption by up to 10%.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
         { value: 'A+', label: 'Wet Grip Rating', labelColor: 'text-amber-500' },
@@ -711,7 +711,7 @@ export const pipelineProducts = {
       description: 'We are looking for fleet partners to pilot Graphyre smart tyres. Experience the future of mobility.',
       primaryButton: { text: 'Partner Inquiry', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-amber-900/20 to-black'
+      gradient: 'from-amber-900/30 via-amber-950/20 to-black'
     }
   },
 
@@ -720,7 +720,7 @@ export const pipelineProducts = {
     title: 'Graphosite',
     subtitle: 'Advanced graphene-reinforced composite materials delivering unmatched strength-to-weight ratios for aerospace, automotive, and industrial applications.',
     category: 'Prototype',
-    categoryColor: 'bg-purple-600 text-white border-purple-500',
+    categoryColor: 'bg-gradient-to-r from-purple-600 to-purple-700 text-white border-purple-500 shadow-lg shadow-purple-600/30',
     heroImages: ['/images/graphosite_hero.png'],
     accentColor: 'purple',
     textColorClass: 'text-slate-700',
@@ -821,7 +821,7 @@ export const pipelineProducts = {
     title: 'Rustene',
     subtitle: 'Graphene-based anti-rusting paint that forms an ultra-thin barrier preventing corrosion and extending metal lifespan.',
     category: 'R&D Pipeline',
-    categoryColor: 'bg-blue-500',
+    categoryColor: 'bg-gradient-to-r from-blue-500 to-blue-600 shadow-lg shadow-blue-500/30',
     heroImages: ['/images/rustene_hero.png'],
     accentColor: 'blue',
 
@@ -853,13 +853,13 @@ export const pipelineProducts = {
         icon: Shield,
         title: 'The Tortuous Path Effect',
         description: 'Graphene platelets within the coating create a complex maze that corrosive molecules must navigate, increasing the effective diffusion path length by orders of magnitude.',
-        gradient: 'from-blue-900 to-black',
-        iconBg: 'bg-blue-500/20',
-        iconColor: 'text-blue-400'
+        gradient: 'from-blue-900 via-blue-950 to-black',
+        iconBg: 'bg-blue-500/20 border border-blue-400/30',
+        iconColor: 'text-blue-300'
       },
       stats: [
-        { value: '5x', label: 'Lifespan Extension', description: 'Significantly reducing maintenance cycles.', bg: 'bg-blue-50', border: 'border-blue-100', color: 'text-blue-600' },
-        { icon: ShieldCheck, title: 'Self-Healing', description: 'Smart polymer matrix can self-repair micro-cracks before rust begins.', iconColor: 'text-emerald-500' }
+        { value: '5x', label: 'Lifespan Extension', description: 'Significantly reducing maintenance cycles.', bg: 'bg-gradient-to-br from-blue-50 to-blue-100/50', border: 'border-blue-200', color: 'text-blue-700' },
+        { icon: ShieldCheck, title: 'Self-Healing', description: 'Smart polymer matrix can self-repair micro-cracks before rust begins.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
         { value: '5000h+', label: 'Salt Spray Test', labelColor: 'text-blue-500' },
@@ -904,7 +904,7 @@ export const pipelineProducts = {
       description: 'Looking to extend the life of your infrastructure? We are looking for industrial partners for pilot applications.',
       primaryButton: { text: 'Inquire Now', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-blue-900/20 to-black'
+      gradient: 'from-blue-900/30 via-blue-950/20 to-black'
     }
   },
 
@@ -913,7 +913,7 @@ export const pipelineProducts = {
     title: 'Thermaphene',
     subtitle: 'Ultra-thin graphene heating technology delivering lightweight, efficient, and flexible thermal regulation for wearables and industry.',
     category: 'Prototype',
-    categoryColor: 'bg-orange-500',
+    categoryColor: 'bg-gradient-to-r from-orange-500 to-orange-600 shadow-lg shadow-orange-500/30',
     heroImages: ['/images/thermaphene_hero.png'],
     accentColor: 'orange',
 
@@ -945,13 +945,13 @@ export const pipelineProducts = {
         icon: Flame,
         title: 'Far-Infrared Heating',
         description: 'Unlike resistive wires that heat the air, Thermaphene emits far-infrared radiation that penetrates and warms objects directly, mimicking the feeling of sunlight.',
-        gradient: 'from-orange-900 to-black',
-        iconBg: 'bg-orange-500/20',
-        iconColor: 'text-orange-400'
+        gradient: 'from-orange-900 via-orange-950 to-black',
+        iconBg: 'bg-orange-500/20 border border-orange-400/30',
+        iconColor: 'text-orange-300'
       },
       stats: [
-        { value: '99%', label: 'Efficiency', description: 'Almost zero energy loss in conversion.', bg: 'bg-orange-50', border: 'border-orange-100', color: 'text-orange-600' },
-        { icon: Battery, title: 'Low Power', description: 'Runs effectively on standard 5V/12V battery packs.', iconColor: 'text-emerald-500' }
+        { value: '99%', label: 'Efficiency', description: 'Almost zero energy loss in conversion.', bg: 'bg-gradient-to-br from-orange-50 to-orange-100/50', border: 'border-orange-200', color: 'text-orange-700' },
+        { icon: Battery, title: 'Low Power', description: 'Runs effectively on standard 5V/12V battery packs.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
         { value: '<1mm', label: 'Thickness', labelColor: 'text-orange-500' },
@@ -996,7 +996,7 @@ export const pipelineProducts = {
       description: 'Thermaphene is redefining thermal management. Partner with us to integrate this technology into your next product line.',
       primaryButton: { text: 'Get Started', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
-      gradient: 'from-orange-900/20 to-black'
+      gradient: 'from-orange-900/30 via-orange-950/20 to-black'
     }
   }
 };

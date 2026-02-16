@@ -31,12 +31,12 @@ export const BentoItem = ({
     const spanClass = `${colSpanClasses[colSpan] || 'md:col-span-1'} ${rowSpanClasses[rowSpan] || 'md:row-span-1'}`;
 
     const themeClasses = theme === 'dark'
-        ? 'bg-neutral-900 border-neutral-800 text-white'
-        : 'bg-white border-neutral-200 text-neutral-900';
+        ? 'bg-gradient-to-br from-neutral-900 via-neutral-900 to-black border-neutral-800/50 text-white shadow-[0_8px_30px_rgba(0,0,0,0.25)]'
+        : 'bg-gradient-to-br from-white to-neutral-50/30 border-neutral-200/70 text-neutral-900 shadow-[0_4px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_10px_40px_rgba(0,0,0,0.1)]';
 
     return (
         <div className={`
-            rounded-3xl border p-6 flex flex-col justify-between overflow-hidden relative group
+            rounded-3xl border p-6 flex flex-col justify-between overflow-hidden relative group transition-all duration-500
             ${spanClass} ${themeClasses} ${className}
         `}>
             {children}
