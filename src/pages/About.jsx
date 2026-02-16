@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import PageHeader from '../components/ui/PageHeader';
 import TrustValidation from '../components/about/TrustValidation';
 import CTAHub from '../components/about/CTAHub';
+import TechnologyCapabilities from '../components/about/TechnologyCapabilities';
+import PartnershipModels from '../components/home/PartnershipModels';
 import { Target, Eye, Globe, Zap, Droplets, Wind, Heart, Users, GraduationCap, Award, Briefcase, Microscope, FlaskConical, Settings, ClipboardCheck, Building2, CheckCircle2, Factory, ArrowRight, Sparkles } from 'lucide-react';
 import Button from '../components/ui/Button';
 
@@ -301,6 +303,8 @@ const About = () => {
                 </div>
             </section>
 
+            <TechnologyCapabilities />
+            <PartnershipModels />
             <TrustValidation />
             <CTAHub />
         </div>

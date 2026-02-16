@@ -44,10 +44,11 @@ const ProductsOverview = () => {
         category="Portfolio"
         title="Products Overview"
         subtitle="Market-available graphene solutions delivering validated performance, consistent quality, and industrial scalability."
+        transparent={true}
       />
 
       {/* Commercial Products */}
-      <section className="py-24 px-6 border-b border-neutral-200">
+      <section className="py-24 px-6 bg-white border-b border-neutral-200">
         <div className="max-w-7xl mx-auto">
           <SectionHeading number="01" title="Commercial Solutions" theme="light" />
 
@@ -135,7 +136,7 @@ const ProductsOverview = () => {
       </section>
 
       {/* Pipeline Teaser */}
-      <section className="py-24 px-6">
+      <section className="py-24 px-6 bg-gradient-to-br from-neutral-50 via-blue-50 to-purple-50 border-t border-neutral-200">
         <div className="max-w-4xl mx-auto text-center">
           <FlaskConical className="w-12 h-12 text-neutral-900 mx-auto mb-6" strokeWidth={1} />
           <h2 className="text-3xl font-display font-medium text-neutral-900 mb-6">Innovation Pipeline</h2>

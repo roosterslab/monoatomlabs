@@ -20,7 +20,7 @@ const MetricCard = ({ icon: Icon, value, unit, label, color, delay }) => (
 
             <div>
                 <div className="flex items-baseline gap-2 mb-2">
-                    <span className={`text-5xl font-mono font-bold text-neutral-900 tracking-tighter group-hover:text-${color}-600 transition-colors`}>
+                    <span className={`text-3xl sm:text-4xl md:text-5xl font-mono font-bold text-neutral-900 tracking-tighter group-hover:text-${color}-600 transition-colors`}>
                         {value}
                     </span>
                     <span className={`text-sm font-bold text-${color}-600 uppercase tracking-widest`}>{unit}</span>
@@ -132,7 +132,7 @@ const ImpactMetrics = () => {
                                 Planet First
                             </span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-display font-bold text-neutral-900 leading-tight">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-neutral-900 leading-tight">
                             Measurable<br />
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-cyan-600">Green Impact</span>
                         </h2>

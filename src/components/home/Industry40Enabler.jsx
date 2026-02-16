@@ -38,7 +38,7 @@ const Industry40Enabler = () => {
     ];
 
     return (
-        <section className="py-32 px-6 bg-white border-b border-neutral-200 relative overflow-hidden">
+        <section className="py-16 md:py-24 lg:py-32 px-6 bg-white border-b border-neutral-200 relative overflow-hidden">
             {/* Background decoration - Enhanced for depth */}
             <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-blue-50/50 rounded-full blur-3xl opacity-60 pointer-events-none -translate-y-1/2 translate-x-1/4"></div>
             <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-neutral-100/80 rounded-full blur-3xl opacity-60 pointer-events-none translate-y-1/3 -translate-x-1/4"></div>
@@ -51,7 +51,7 @@ const Industry40Enabler = () => {
                         01 — Industry 4.0 Enabler
                     </div>
 
-                    <h2 className="text-4xl md:text-7xl font-display font-medium tracking-tight text-neutral-900 leading-[1.1] mb-6 max-w-4xl">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-medium tracking-tight text-neutral-900 leading-[1.1] mb-6 max-w-4xl">
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">Advanced</span> Materials for the
                         <br className="hidden md:block" /> 4th Industrial Revolution
                     </h2>
@@ -128,7 +128,7 @@ const Industry40Enabler = () => {
                                 </p>
 
                                 <div className="mt-auto pt-8 border-t border-white/10 flex flex-wrap gap-4">
-                                    <Link to="/industries">
+                                    <Link to="/products">
                                         <Button variant="primary" theme="dark" icon={ArrowRight}>
                                             View Solutions
                                         </Button>

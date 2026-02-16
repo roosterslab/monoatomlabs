@@ -26,7 +26,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
                     <div>
                         <Logo size={20} showText={false} theme="dark" className="mb-8" />
-                        <h2 className="text-5xl md:text-6xl font-medium tracking-tight mb-8">
+                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium tracking-tight mb-8">
                             Ready to enable Industry 4.0?
                         </h2>
                         <p className="text-xl text-neutral-500 max-w-md mb-10">
@@ -68,14 +68,15 @@ const Footer = () => {
                 </div>
 
                 {/* Quick Links Section */}
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 mb-16">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 md:gap-12 mb-16">
                     {/* Company Links */}
                     <div>
                         <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Company</h4>
                         <ul className="space-y-2.5 text-sm text-neutral-400">
                             <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-                            <li><Link to="/about" className="hover:text-white transition-colors">Founders & Team</Link></li>
-                            <li><Link to="/about" className="hover:text-white transition-colors">Facilities</Link></li>
+                            <li><Link to="/about/company" className="hover:text-white transition-colors">Our Company</Link></li>
+                            <li><Link to="/about/facilities" className="hover:text-white transition-colors">Facilities</Link></li>
+                            <li><Link to="/about/founders" className="hover:text-white transition-colors">Founders</Link></li>
                         </ul>
                     </div>
 
@@ -88,37 +89,26 @@ const Footer = () => {
                             <li><Link to="/products/graffisol" className="hover:text-white transition-colors">Graffisol</Link></li>
                             <li><Link to="/products/ceraphene" className="hover:text-white transition-colors">Ceraphene</Link></li>
                             <li><Link to="/products/hd-g-pe" className="hover:text-white transition-colors">HD-G-PE</Link></li>
-                            <li><Link to="/products/pipeline" className="hover:text-white transition-colors">Pipeline</Link></li>
                         </ul>
                     </div>
 
-                    {/* Technology Links */}
+                    {/* Innovation Pipeline Links */}
                     <div>
-                        <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Technology</h4>
+                        <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Innovation Pipeline</h4>
                         <ul className="space-y-2.5 text-sm text-neutral-400">
-                            <li><Link to="/technology/platform" className="hover:text-white transition-colors">Our Platform</Link></li>
-                            <li><Link to="/technology/pilot-projects" className="hover:text-white transition-colors">Pilot Projects</Link></li>
-                            <li><Link to="/technology/capabilities" className="hover:text-white transition-colors">Capabilities</Link></li>
+                            <li><Link to="/products/pipeline" className="hover:text-white transition-colors">Overview</Link></li>
+                            <li><Link to="/products/pipeline/rustene" className="hover:text-white transition-colors">Rustene</Link></li>
+                            <li><Link to="/products/pipeline/graphyre" className="hover:text-white transition-colors">Graphyre</Link></li>
+                            <li><Link to="/products/pipeline/graphosite" className="hover:text-white transition-colors">Graphosite</Link></li>
+                            <li><Link to="/products/pipeline/thermaphene" className="hover:text-white transition-colors">Thermaphene</Link></li>
+                            <li><Link to="/products/pipeline/armophene" className="hover:text-white transition-colors">Armophene</Link></li>
                         </ul>
                     </div>
 
-                    {/* Industries Links */}
+                    {/* Contact Links */}
                     <div>
-                        <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Industries</h4>
+                        <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Connect</h4>
                         <ul className="space-y-2.5 text-sm text-neutral-400">
-                            <li><Link to="/industries" className="hover:text-white transition-colors">Overview</Link></li>
-                            <li><Link to="/industries/construction" className="hover:text-white transition-colors">Construction</Link></li>
-                            <li><Link to="/industries/solar-energy" className="hover:text-white transition-colors">Solar Energy</Link></li>
-                            <li><Link to="/industries/automotive" className="hover:text-white transition-colors">Automotive</Link></li>
-                            <li><Link to="/industries/advanced-materials" className="hover:text-white transition-colors">Advanced Materials</Link></li>
-                        </ul>
-                    </div>
-
-                    {/* Resources Links */}
-                    <div>
-                        <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Resources</h4>
-                        <ul className="space-y-2.5 text-sm text-neutral-400">
-                            <li><Link to="/partnership" className="hover:text-white transition-colors">Partnership</Link></li>
                             <li><Link to="/contact" className="hover:text-white transition-colors">Contact Us</Link></li>
                         </ul>
                     </div>
@@ -126,17 +116,13 @@ const Footer = () => {
 
                 {/* Bottom Section with Logo */}
                 <div className="pt-8 border-t border-neutral-900">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                         <Link to="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity">
                             <Logo size={20} theme="dark" />
                         </Link>
-                        <div className="flex flex-col sm:flex-row gap-6 text-xs text-neutral-600">
-                            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                        <div className="text-xs text-neutral-600">
+                            <p>&copy; {new Date().getFullYear()} Monoatom Labs. All rights reserved.</p>
                         </div>
-                    </div>
-                    <div className="text-xs text-neutral-600 text-center md:text-left">
-                        <p>&copy; {new Date().getFullYear()} Monoatom Labs. All rights reserved.</p>
                     </div>
                 </div>
             </div>

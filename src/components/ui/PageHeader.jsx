@@ -1,9 +1,9 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const PageHeader = ({ title, subtitle, category }) => {
+const PageHeader = ({ title, subtitle, category, transparent = false }) => {
     return (
-        <section className="pt-40 pb-16 px-6 border-b border-neutral-900 bg-black/10">
+        <section className={`pt-40 pb-16 px-6 border-b ${transparent ? 'border-neutral-200 bg-transparent' : 'border-neutral-900 bg-black/10'}`}>
             <div className="max-w-7xl mx-auto">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -11,7 +11,7 @@ const PageHeader = ({ title, subtitle, category }) => {
                     transition={{ duration: 0.6 }}
                 >
                     {category && (
-                        <span className="inline-block py-1 px-3 rounded-full bg-neutral-900 border border-neutral-800 text-xs font-medium text-neutral-400 mb-6 tracking-wide uppercase">
+                        <span className="inline-block py-1 px-3 rounded-full bg-neutral-900 border border-neutral-800 text-neutral-400 text-xs font-medium mb-6 tracking-wide uppercase">
                             {category}
                         </span>
                     )}

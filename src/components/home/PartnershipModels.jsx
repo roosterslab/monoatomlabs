@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Package, Handshake, Lightbulb, ArrowRight, Check } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 
-const PartnershipCard = ({ icon: Icon, title, subtitle, features, cta, color, delay }) => (
+const PartnershipCard = ({ icon: Icon, title, subtitle, features, cta, color, delay, link }) => (
     <div
         className={`group relative bg-white border-2 border-neutral-200 rounded-3xl p-8 hover:border-${color}-300 hover:shadow-xl transition-all duration-500 cursor-pointer flex flex-col h-full`}
         style={{ animationDelay: `${delay}ms` }}
@@ -35,16 +36,18 @@ const PartnershipCard = ({ icon: Icon, title, subtitle, features, cta, color, de
             ))}
         </ul>
 
-        <button className={`w-full flex items-center justify-center gap-2 px-6 py-4 bg-neutral-900 border border-neutral-900 text-white rounded-xl hover:bg-${color}-600 hover:border-${color}-600 hover:shadow-lg transition-all duration-300 group-hover:translate-y-[-2px]`}>
-            <span className="font-semibold tracking-wide">{cta}</span>
-            <ArrowRight className="w-4 h-4" />
-        </button>
+        <Link to={link}>
+            <button className={`w-full flex items-center justify-center gap-2 px-6 py-4 bg-neutral-900 border border-neutral-900 text-white rounded-xl hover:bg-${color}-600 hover:border-${color}-600 hover:shadow-lg transition-all duration-300 group-hover:translate-y-[-2px]`}>
+                <span className="font-semibold tracking-wide">{cta}</span>
+                <ArrowRight className="w-4 h-4" />
+            </button>
+        </Link>
     </div>
 );
 
 const PartnershipModels = () => {
     return (
-        <section className="py-32 px-6 bg-gradient-to-b from-white via-neutral-50 to-white border-b border-neutral-200">
+        <section className="py-16 md:py-24 lg:py-32 px-6 bg-gradient-to-b from-white via-neutral-50 to-white border-b border-neutral-200">
             <div className="max-w-7xl mx-auto">
                 <div className="text-center mb-20">
                     <SectionHeading
@@ -70,6 +73,7 @@ const PartnershipModels = () => {
                         cta="Request Quote"
                         color="cyan"
                         delay={0}
+                        link="/contact"
                     />
                     <PartnershipCard
                         icon={Handshake}
@@ -85,6 +89,7 @@ const PartnershipModels = () => {
                         cta="Partner With Us"
                         color="amber"
                         delay={100}
+                        link="/contact"
                     />
                     <PartnershipCard
                         icon={Lightbulb}
@@ -100,6 +105,7 @@ const PartnershipModels = () => {
                         cta="Start R&D Project"
                         color="purple"
                         delay={200}
+                        link="/contact"
                     />
                 </div>
 
@@ -114,10 +120,12 @@ const PartnershipModels = () => {
                         <p className="text-neutral-600 mb-8 max-w-xl mx-auto">
                             We offer specialized procurement channels for large-scale infrastructure projects and government tenders.
                         </p>
-                        <button className="inline-flex items-center gap-3 px-8 py-4 bg-neutral-900 text-white font-bold rounded-xl hover:bg-neutral-800 transition-all duration-300 shadow-lg hover:shadow-xl">
-                            Contact Executive Team
-                            <ArrowRight className="w-5 h-5" />
-                        </button>
+                        <Link to="/contact">
+                            <button className="inline-flex items-center gap-3 px-8 py-4 bg-neutral-900 text-white font-bold rounded-xl hover:bg-neutral-800 transition-all duration-300 shadow-lg hover:shadow-xl">
+                                Contact Executive Team
+                                <ArrowRight className="w-5 h-5" />
+                            </button>
+                        </Link>
                     </div>
                 </div>
             </div>

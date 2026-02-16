@@ -136,13 +136,13 @@ const CertificationsSection = () => {
                                 Our in-house characterization facility ensures that every nanometer of material meets the strictest global standards before it leaves our facility.
                             </p>
 
-                            <button className="group flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white transition-all">
+                            <a href="/lab-spec-sheet.pdf" download="MonoAtom-Labs-Spec-Sheet.pdf" className="group inline-flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-white transition-all">
                                 <Binary className="w-4 h-4 text-neutral-400 group-hover:text-cyan-400" />
                                 <span className="font-mono text-sm">Download Lab Spec Sheet</span>
-                            </button>
+                            </a>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                             {equipmentList.map((eq, i) => (
                                 <EquipmentStatus key={i} {...eq} />
                             ))}

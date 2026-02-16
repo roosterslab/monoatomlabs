@@ -201,7 +201,7 @@ const CompetitiveComparison = ({ product }) => {
 
                     <div className="bg-white border-2 border-neutral-200 rounded-b-2xl overflow-x-auto">
                         {/* Table Header */}
-                        <div className="grid grid-cols-5 gap-4 p-6 bg-neutral-50 border-b border-neutral-200 font-bold text-sm min-w-[800px]">
+                        <div className="grid grid-cols-5 gap-2 md:gap-4 p-4 md:p-6 bg-neutral-50 border-b border-neutral-200 font-bold text-xs md:text-sm">
                             <div>Performance Metric</div>
                             {current.competitors.map((comp, idx) => (
                                 <div key={idx} className={idx === 0 ? 'text-green-600' : 'text-neutral-600'}>
@@ -215,7 +215,7 @@ const CompetitiveComparison = ({ product }) => {
                         {current.metrics.map((metric, idx) => (
                             <div
                                 key={idx}
-                                className="grid grid-cols-5 gap-4 p-6 border-b border-neutral-200 hover:bg-neutral-50 transition-colors items-center min-w-[800px]"
+                                className="grid grid-cols-5 gap-2 md:gap-4 p-4 md:p-6 border-b border-neutral-200 hover:bg-neutral-50 transition-colors items-center"
                             >
                                 <div>
                                     <div className="font-bold text-neutral-900">{metric.name}</div>

@@ -84,7 +84,7 @@ const LabToManufacturing = () => {
                     From Lab to Manufacturing
                 </div>
 
-                <h2 className="text-4xl md:text-6xl font-medium mb-6 leading-tight tracking-tight text-white">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight tracking-tight text-white">
                     We Don't Just Innovate<br />
                     <span className="text-neutral-400">We Scale to Market</span>
                 </h2>
@@ -97,7 +97,7 @@ const LabToManufacturing = () => {
             </div>
 
             {/* Journey Stages */}
-            <div className="grid md:grid-cols-4 gap-6 mb-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
                 {journeyStages.map((stage, index) => {
                     const Icon = stage.icon;
                     const colors = getColorClasses(stage.color);
@@ -134,7 +134,7 @@ const LabToManufacturing = () => {
 
             {/* CTA */}
             <div className="text-center">
-                <Link to="/partnership">
+                <Link to="/contact">
                     <Button variant="primary" theme="dark" icon={ArrowRight}>
                         Partner With Us
                     </Button>

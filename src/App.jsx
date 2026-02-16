@@ -13,7 +13,11 @@ import Home from './pages/Home';
 import About from './pages/About';
 import ProductsOverview from './pages/products/ProductsOverview';
 import Contact from './pages/Contact';
-import Partnership from './pages/Partnership';
+
+// About sub-pages
+const Company = lazy(() => import('./pages/about/Company'));
+const Facilities = lazy(() => import('./pages/about/Facilities'));
+const Founders = lazy(() => import('./pages/about/Founders'));
 
 // Lazy load product detail pages (less frequently accessed)
 const Graphacrete = lazy(() => import('./pages/products/Graphacrete'));
@@ -34,19 +38,6 @@ const AtmosphericHarvesting = lazy(() => import('./pages/products/pipeline/Atmos
 const GrapheneGlassFibres = lazy(() => import('./pages/products/pipeline/GrapheneGlassFibres'));
 const BatteryStorage = lazy(() => import('./pages/products/pipeline/BatteryStorage'));
 
-// Technology Pages
-const Technology = lazy(() => import('./pages/Technology'));
-const Platform = lazy(() => import('./pages/technology/Platform'));
-const PilotProjects = lazy(() => import('./pages/technology/PilotProjects'));
-const Capabilities = lazy(() => import('./pages/technology/Capabilities'));
-
-// Industries Pages
-const Industries = lazy(() => import('./pages/Industries'));
-const IndustriesOverview = lazy(() => import('./pages/industries/IndustriesOverview'));
-const Construction = lazy(() => import('./pages/industries/Construction'));
-const SolarEnergy = lazy(() => import('./pages/industries/SolarEnergy'));
-const Automotive = lazy(() => import('./pages/industries/Automotive'));
-const AdvancedMaterials = lazy(() => import('./pages/industries/AdvancedMaterials'));
 
 function App() {
     return (
@@ -57,8 +48,11 @@ function App() {
                     <Route path="/" element={<MainLayout />}>
                         <Route index element={<Home />} />
 
-                    {/* About Route */}
+                    {/* About Routes */}
                     <Route path="about" element={<About />} />
+                    <Route path="about/company" element={<Company />} />
+                    <Route path="about/facilities" element={<Facilities />} />
+                    <Route path="about/founders" element={<Founders />} />
 
                     {/* Product Routes */}
                     <Route path="products" element={<ProductsOverview />} />
@@ -80,21 +74,7 @@ function App() {
                     <Route path="products/pipeline/graphene-glass-fibres" element={<GrapheneGlassFibres />} />
                     <Route path="products/pipeline/battery-storage" element={<BatteryStorage />} />
 
-                    {/* Technology Routes */}
-                    <Route path="technology" element={<Technology />} />
-                    <Route path="technology/platform" element={<Platform />} />
-                    <Route path="technology/pilot-projects" element={<PilotProjects />} />
-                    <Route path="technology/capabilities" element={<Capabilities />} />
-
-                    {/* Industries Routes */}
-                    <Route path="industries" element={<Industries />} />
-                    <Route path="industries/construction" element={<Construction />} />
-                    <Route path="industries/solar-energy" element={<SolarEnergy />} />
-                    <Route path="industries/automotive" element={<Automotive />} />
-                    <Route path="industries/advanced-materials" element={<AdvancedMaterials />} />
-
                     {/* Other Routes */}
-                    <Route path="partnership" element={<Partnership />} />
                     <Route path="contact" element={<Contact />} />
 
                     {/* Placeholder routes - redirect to contact */}

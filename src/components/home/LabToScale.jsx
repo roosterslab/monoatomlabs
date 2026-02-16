@@ -84,7 +84,7 @@ const LabToScale = () => {
     ];
 
     return (
-        <section className="py-32 px-6 border-t border-neutral-900 bg-black/10 relative">
+        <section className="py-16 md:py-24 lg:py-32 px-6 border-t border-neutral-900 bg-black/10 relative">
             <div className="max-w-7xl mx-auto relative z-10">
             {/* Header */}
             <div className="text-center mb-20">
@@ -95,7 +95,7 @@ const LabToScale = () => {
                     </span>
                 </div>
 
-                <h2 className="text-4xl md:text-6xl font-display font-bold text-white mb-6 leading-tight drop-shadow-xl">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 leading-tight drop-shadow-xl">
                     From Atomic Scale to
                     <br />
                     <span className="text-brand-100 pb-2 inline-block drop-shadow-md">
@@ -124,21 +124,21 @@ const LabToScale = () => {
             <div className="bg-neutral-900/60 border border-neutral-800 text-white rounded-3xl p-12 backdrop-blur-md relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-r from-brand-500/5 to-transparent opacity-50"></div>
 
-                <div className="relative z-10 grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
+                <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
                     <div className="group">
-                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">2</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">2</div>
                         <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">State-of-the-Art Facilities</div>
                     </div>
                     <div className="group">
-                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">14+</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">14+</div>
                         <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Years R&D Experience</div>
                     </div>
                     <div className="group">
-                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">Ton</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">Ton</div>
                         <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Scale Production</div>
                     </div>
                     <div className="group">
-                        <div className="text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">100%</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">100%</div>
                         <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Quality Validated</div>
                     </div>
                 </div>

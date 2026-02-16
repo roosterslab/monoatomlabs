@@ -21,7 +21,7 @@ const Hero = () => {
                     <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">Unlocking Trillion Dollar Economy</span>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl lg:text-8xl font-medium text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
+                <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-medium text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
                     Structured for <br />
                     <span className="text-neutral-500">Performance.</span>
                 </h1>
@@ -31,11 +31,11 @@ const Hero = () => {
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-20">
-                    <Link to="/technology">
-                        <Button variant="primary" theme="dark" icon={ArrowRight}>Our Technology</Button>
+                    <Link to="/products">
+                        <Button variant="primary" theme="dark" icon={ArrowRight}>Explore Products</Button>
                     </Link>
-                    <Link to="/technology/platform">
-                        <Button variant="secondary" theme="dark">View Documentation</Button>
+                    <Link to="/about">
+                        <Button variant="secondary" theme="dark">Learn About Us</Button>
                     </Link>
                 </div>
 

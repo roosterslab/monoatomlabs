@@ -78,7 +78,7 @@ const ProductsSection = () => {
                         </span>
                     </div>
 
-                    <h2 className="text-4xl md:text-6xl font-display font-bold text-neutral-900 mb-6 leading-tight">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-neutral-900 mb-6 leading-tight">
                         Advanced Nanomaterials for
                         <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-800 to-neutral-500">
@@ -120,10 +120,10 @@ const ProductsSection = () => {
                     theme="light"
                 />
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto min-h-[600px] mt-12">
+                <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-12 gap-6 h-auto min-h-[400px] md:min-h-[600px] mt-12">
 
                     {/* SELECTION LIST (Left Side - 4 Cols) */}
-                    <div className="lg:col-span-4 flex flex-col gap-3">
+                    <div className="md:col-span-1 lg:col-span-4 flex flex-col gap-3">
                         {products.map((product, idx) => {
                             const isActive = activeProduct === idx;
                             return (
@@ -175,7 +175,7 @@ const ProductsSection = () => {
                     </div>
 
                     {/* DETAIL VIEW (Right Side - 8 Cols) */}
-                    <div className="lg:col-span-8 relative">
+                    <div className="md:col-span-2 lg:col-span-8 relative">
                         <div className="h-full bg-white border border-neutral-200 shadow-2xl p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
                             {/* Decorative HUD Elements */}
                             <div className="absolute top-0 right-0 p-4 opacity-5">

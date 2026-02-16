@@ -87,7 +87,7 @@ const Navbar = () => {
 
                                 {/* Mega Menu Dropdown */}
                                 {activeDropdown === item && (
-                                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[600px] bg-neutral-950/95 backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl p-3 animate-in fade-in slide-in-from-top-2 duration-200 ring-1 ring-white/5 grid grid-cols-2 gap-2">
+                                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-[90vw] sm:w-[600px] max-w-[600px] bg-neutral-950/95 backdrop-blur-xl border border-neutral-800 rounded-2xl shadow-2xl p-3 animate-in fade-in slide-in-from-top-2 duration-200 ring-1 ring-white/5 grid grid-cols-1 sm:grid-cols-2 gap-2">
                                         {navigationItems[item].map((subItem) => (
                                             <Link
                                                 key={subItem.path}
@@ -151,7 +151,7 @@ const Navbar = () => {
             {/* Mobile Menu */}
             {
                 isOpen && (
-                    <div className="md:hidden bg-neutral-950 border-b border-neutral-800 absolute w-full shadow-xl">
+                    <div className="md:hidden bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 absolute top-full left-0 right-0 w-full shadow-xl z-40">
                         <div className="px-6 py-4 space-y-2">
                             {Object.keys(navigationItems).map((item) => (
                                 <div key={item}>

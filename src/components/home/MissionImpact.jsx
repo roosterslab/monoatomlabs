@@ -24,7 +24,7 @@ const PillarCard = ({ icon: Icon, title, color, delay }) => (
 
 const MissionImpact = () => {
     return (
-        <section className="relative py-32 px-6 bg-gradient-to-br from-black via-neutral-900 to-black overflow-hidden">
+        <section className="relative py-16 md:py-24 lg:py-32 px-6 bg-gradient-to-br from-black via-neutral-900 to-black overflow-hidden">
             {/* Animated background grid */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30"></div>
 
@@ -42,7 +42,7 @@ const MissionImpact = () => {
                         </span>
                     </div>
 
-                    <h2 className="text-5xl md:text-7xl font-display font-bold text-white mb-6 leading-tight">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-bold text-white mb-6 leading-tight">
                         Advanced Nanomaterials for
                         <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-neutral-200 to-white">

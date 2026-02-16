@@ -85,10 +85,10 @@ const ImpactMetricsDashboard = () => {
         }, [value, hasAnimated]);
 
         return (
-            <div ref={ref} className="text-6xl font-display font-bold">
+            <div ref={ref} className="text-4xl sm:text-5xl md:text-6xl font-display font-bold">
                 {count.toFixed(value % 1 !== 0 ? 1 : 0)}
                 {suffix}
-                {unit && <span className="text-3xl ml-1">{unit}</span>}
+                {unit && <span className="text-xl sm:text-2xl md:text-3xl ml-1">{unit}</span>}
             </div>
         );
     };
@@ -102,7 +102,7 @@ const ImpactMetricsDashboard = () => {
                         <span className="text-sm font-bold text-green-300 uppercase tracking-wide">Real Impact</span>
                     </div>
 
-                    <h2 className="text-4xl md:text-6xl font-medium mb-6 leading-tight tracking-tight">
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight tracking-tight">
                         Making a Measurable Difference
                     </h2>
                     <p className="text-xl md:text-2xl text-neutral-300 max-w-3xl mx-auto font-light">

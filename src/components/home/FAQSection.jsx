@@ -105,7 +105,7 @@ const FAQSection = () => {
     return (
         <section className="py-24 px-6 bg-white border-b border-neutral-200">
             <div className="max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 md:gap-12">
                     {/* Left Column: Header & Objections */}
                     <div className="lg:col-span-5 space-y-8">
                         <SectionHeading

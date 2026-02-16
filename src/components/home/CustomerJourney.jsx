@@ -104,7 +104,7 @@ const CustomerJourney = () => {
                     {/* Timeline connector */}
                     <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-neutral-200 -translate-y-1/2"></div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 relative">
                         {steps.map((step, index) => {
                             const Icon = step.icon;
                             const colors = getColorClasses(step.color);
