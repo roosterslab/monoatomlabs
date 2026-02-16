@@ -10,18 +10,18 @@ import Button from '../../../components/ui/Button';
 import PilotTechnologies from '../../../components/pipeline/PilotTechnologies';
 
 // --- DATA SOURCE ---
-// Product Images (Using generated "White Studio" assets)
+// Product Images (Icons + Studio photos for slideshow)
 const productImages = {
-  rustene: ['/images/pipeline/studio/Rustene.png'],
-  graphyre: ['/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png'],
-  graphosite: ['/images/pipeline/studio/Graphosite.png'],
-  thermaphene: ['/images/pipeline/studio/Thermophene.png'],
-  armophene: ['/images/pipeline/studio/Armophene.png', '/images/pipeline/studio/Armophene-2.png'],
-  hydrogen: ['/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png'],
-  desalination: ['/images/pipeline/studio/DesalinationMembranes.png'],
-  glass: ['/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png'],
-  battery: ['/images/pipeline/studio/Voltaphene.png'],
-  aerowater: ['/images/pipeline/studio/AtmosphericHarvesting.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
+  rustene: ['/images/pipeline/application-icon/rustene_studio.png', '/images/pipeline/application-icon/rustene_hero.png', '/images/pipeline/studio/Rustene.png'],
+  graphyre: ['/images/pipeline/application-icon/graphyre_studio.png', '/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png'],
+  graphosite: ['/images/pipeline/application-icon/graphosite_studio.png', '/images/pipeline/studio/Graphosite.png'],
+  thermaphene: ['/images/pipeline/application-icon/thermaphene_studio.png', '/images/pipeline/application-icon/thermaphene_hero.png', '/images/pipeline/studio/Thermophene.png'],
+  armophene: ['/images/pipeline/application-icon/armophene_studio.png', '/images/pipeline/studio/Armophene.png', '/images/pipeline/studio/Armophene-2.png'],
+  hydrogen: ['/images/pipeline/application-icon/hydrogen_membrane_studio.png', '/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png'],
+  desalination: ['/images/pipeline/application-icon/desalination_membrane_studio.png', '/images/pipeline/studio/DesalinationMembranes.png'],
+  glass: ['/images/pipeline/application-icon/graphene_glass_fibres_studio.png', '/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png'],
+  battery: ['/images/pipeline/application-icon/battery_storage_studio.png', '/images/pipeline/studio/Voltaphene.png'],
+  aerowater: ['/images/pipeline/application-icon/atmospheric_harvesting_studio.png', '/images/pipeline/studio/aerophenter_studio.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
 };
 
 const pipelineCategories = [
