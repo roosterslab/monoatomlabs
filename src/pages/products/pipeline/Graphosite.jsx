@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layers, Box, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const Graphosite = () => {
   const features = [
@@ -28,6 +29,8 @@ const Graphosite = () => {
         title="Graphosite"
         subtitle="Lightweight, high-strength graphene-reinforced fibres engineered for next-generation structural composites."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

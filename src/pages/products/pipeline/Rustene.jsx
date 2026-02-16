@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Shield, ArrowRight, CheckCircle2, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const Rustene = () => {
   const features = [
@@ -26,6 +27,8 @@ const Rustene = () => {
         title="Rustene"
         subtitle="Graphene-based anti-rusting paint that forms an ultra-thin barrier preventing corrosion and extending metal lifespan."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Activity, CheckCircle2, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const HydrogenMembranes = () => {
   const features = [
@@ -28,6 +29,8 @@ const HydrogenMembranes = () => {
         title="Hydrogen Separation Membranes"
         subtitle="High-selectivity graphene membranes enabling efficient hydrogen separation and production with reduced energy losses for clean energy infrastructure."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

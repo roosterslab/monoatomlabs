@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Wind, Gauge, Star, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const Graphyre = () => {
   const features = [
@@ -27,6 +28,8 @@ const Graphyre = () => {
         title="Graphyre"
         subtitle="Graphene-reinforced tyres delivering higher strength, lower rolling resistance, and extended service life for next-generation mobility."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Thermometer, Zap, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const Thermaphene = () => {
   const features = [
@@ -28,6 +29,8 @@ const Thermaphene = () => {
         title="Thermaphene"
         subtitle="Graphene-based heating solution enabling lightweight and high-performance winter wear."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

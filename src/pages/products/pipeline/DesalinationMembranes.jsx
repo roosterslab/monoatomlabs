@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Droplet, CheckCircle2, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const DesalinationMembranes = () => {
   const features = [
@@ -28,6 +29,8 @@ const DesalinationMembranes = () => {
         title="Seawater Desalination Membranes"
         subtitle="Ultra-thin graphene membranes delivering high-flux, low-energy seawater desalination and industrial water purification for global water security."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

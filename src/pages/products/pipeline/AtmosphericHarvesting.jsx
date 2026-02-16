@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Wind, CheckCircle2, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const AtmosphericHarvesting = () => {
   const features = [
@@ -28,6 +29,8 @@ const AtmosphericHarvesting = () => {
         title="Atmospheric Moisture Harvesting"
         subtitle="Graphene membranes engineered to harvest atmospheric moisture and convert air into potable water efficiently for sustainable water production."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">

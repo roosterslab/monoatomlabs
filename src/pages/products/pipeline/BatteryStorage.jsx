@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Battery, CheckCircle2, ChevronRight } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import BackNavigation from '../../../components/ui/BackNavigation';
 
 const BatteryStorage = () => {
   const features = [
@@ -28,6 +29,8 @@ const BatteryStorage = () => {
         title="Battery Storage Systems"
         subtitle="Graphene-enabled battery storage systems delivering higher power density, faster response, and extended lifecycle for next-generation energy solutions."
       />
+
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
       <div className="bg-white border-t border-neutral-200">
         <section className="py-24 px-6">
