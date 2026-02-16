@@ -10,17 +10,18 @@ import Button from '../../../components/ui/Button';
 import PilotTechnologies from '../../../components/pipeline/PilotTechnologies';
 
 // --- DATA SOURCE ---
-// Product Images (Using existing assets where available, otherwise generic placeholders)
+// Product Images (Using generated "White Studio" assets)
 const productImages = {
-  rustene: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/rustene_coating_demo_1770299350202.png',
-  graphyre: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/graphyre_tire_concept_1770299415833.png',
-  graphosite: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/graphosite_fiber_structure_1770299515135.png',
-  thermaphene: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/thermaphene_heating_fabric_1770299604729.png',
-  armophene: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/armophene_ballistic_plate_1770299683940.png',
-  hydrogen: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/hydrogen_membrane_unit_1770300104145.png',
-  desalination: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/desalination_membrane_closeup_1770300134932.png',
-  glass: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/graphene_glass_fibre_spool_1770300183554.png',
-  battery: 'file:///C:/Users/globql-ws/.gemini/antigravity/brain/f9a3c1bb-0c1f-4026-b16d-cfa064ce4158/battery_storage_module_1770300213143.png'
+  rustene: '/images/rustene_studio.png',
+  graphyre: '/images/graphyre_studio.png',
+  graphosite: '/images/graphosite_studio.png',
+  thermaphene: '/images/thermaphene_studio.png',
+  armophene: '/images/armophene_studio.png',
+  hydrogen: '/images/hydrogen_membrane_studio.png',
+  desalination: '/images/desalination_membrane_studio.png',
+  glass: '/images/graphene_glass_fibres_studio.png',
+  battery: '/images/battery_storage_studio.png',
+  aerowater: '/images/atmospheric_harvesting_studio.png' // Added missing image key
 };
 
 const pipelineCategories = [
@@ -98,7 +99,7 @@ const pipelineCategories = [
     items: [
       {
         id: 'hydrogen',
-        name: 'H2-Sep',
+        name: 'Gryogen',
         subtitle: 'Hydrogen Selection Membrane',
         description: 'High-selectivity graphene membranes enabling efficient hydrogen separation and production with reduced energy losses.',
         status: 'Pilot Trial',
@@ -110,7 +111,7 @@ const pipelineCategories = [
       },
       {
         id: 'desalination',
-        name: 'AquaGraphene',
+        name: 'Mariphene',
         subtitle: 'Desalination Membrane',
         description: 'Ultra-thin graphene membranes delivering high-flux, low-energy seawater desalination and industrial water purification.',
         status: 'Pilot Trial',
@@ -122,13 +123,13 @@ const pipelineCategories = [
       },
       {
         id: 'aerowater',
-        name: 'AeroWater',
+        name: 'Aerophenter',
         subtitle: 'Atmospheric Harvesting',
         description: 'Graphene membranes engineered to harvest atmospheric moisture and convert air into potable water efficiently.',
         status: 'Pilot Trial',
         type: 'Pilot',
         icon: Wind,
-        image: null,
+        image: productImages.aerowater,
         specs: ['Moisture Harvesting', 'Air-to-Water', 'Energy Efficient'],
         impact: 'Water Scarcity'
       },
@@ -298,54 +299,46 @@ const PipelineCard = ({ item, onClick }) => {
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
-        className="group relative h-[420px] rounded-2xl overflow-hidden cursor-pointer border border-neutral-200 bg-white hover:border-blue-300 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-500"
+        className="group relative h-full aspect-square rounded-3xl overflow-hidden cursor-pointer border border-neutral-200 bg-white hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-500 flex flex-col"
         whileHover={{ y: -5 }}
       >
-        {/* Card Image Area (Top Half) */}
-        <motion.div className="h-[240px] relative bg-neutral-900 group-hover:h-[220px] transition-all duration-500" layoutId={`image-container-${item.id}`}>
+        {/* Full Card Image Background with gradient overlay */}
+        <div className="absolute inset-0 bg-neutral-100">
           {item.image ? (
-            <img
+            <motion.img
+              layoutId={`image-container-${item.id}`}
               src={item.image}
               alt={item.name}
-              className="w-full h-full object-cover opacity-80 group-hover:opacity-60 transition-opacity duration-700 group-hover:scale-105 transform"
+              className="w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-neutral-800">
-              <item.icon size={64} className="text-neutral-700" />
+            <div className="w-full h-full flex items-center justify-center bg-neutral-100">
+              <item.icon size={64} className="text-neutral-300" />
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent opacity-60"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+        </div>
 
+        {/* Content Overlay */}
+        <div className="relative z-10 h-full flex flex-col justify-end p-8">
           {/* Status Badge */}
-          <div className="absolute top-4 left-4">
-            <motion.div layoutId={`status-${item.id}`} className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border backdrop-blur-md ${isPilot ? 'bg-purple-500/20 border-purple-500/30 text-purple-200' : 'bg-blue-500/20 border-blue-500/30 text-blue-200'
+          <div className="absolute top-6 left-6">
+            <motion.div layoutId={`status-${item.id}`} className={`px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border backdrop-blur-md ${isPilot ? 'bg-purple-500/80 border-purple-400 text-white' : 'bg-blue-600/80 border-blue-400 text-white'
               }`}>
               {item.status}
             </motion.div>
           </div>
-        </motion.div>
 
-        {/* Content Area (Bottom Half) */}
-        <div className="p-6 relative">
-          <div className="flex justify-between items-start mb-2">
-            <motion.h3 layoutId={`title-${item.id}`} className="text-2xl font-display font-medium text-neutral-900 group-hover:text-blue-700 transition-colors">{item.name}</motion.h3>
-            <ArrowRight className="text-neutral-300 group-hover:text-blue-500 transition-colors transform group-hover:translate-x-1" size={20} />
+          <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <motion.p layoutId={`subtitle-${item.id}`} className="text-xs font-mono text-neutral-300 uppercase tracking-wide mb-2">{item.subtitle}</motion.p>
+            <div className="flex justify-between items-end">
+              <motion.h3 layoutId={`title-${item.id}`} className="text-3xl font-display font-medium text-white mb-2">{item.name}</motion.h3>
+              <div className="bg-white/10 backdrop-blur-md p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-4 group-hover:translate-x-0">
+                <ArrowRight className="text-white" size={20} />
+              </div>
+            </div>
           </div>
 
-          <motion.p layoutId={`subtitle-${item.id}`} className="text-sm font-mono text-neutral-500 uppercase tracking-wide mb-4">{item.subtitle}</motion.p>
-
-          <p className="text-sm text-neutral-600 line-clamp-2 leading-relaxed mb-4 font-light">
-            {item.description}
-          </p>
-
-          {/* Tech Tags */}
-          <div className="flex flex-wrap gap-2 mt-auto">
-            {item.specs.slice(0, 2).map((spec, i) => (
-              <span key={i} className="text-[10px] font-medium text-neutral-600 bg-neutral-100 px-2 py-1 rounded border border-neutral-200 group-hover:border-blue-200 group-hover:bg-blue-50 transition-colors">
-                {spec}
-              </span>
-            ))}
-          </div>
         </div>
       </motion.div>
     </Link>
