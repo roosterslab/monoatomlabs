@@ -1,91 +1,244 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Thermometer, Zap, ChevronRight } from 'lucide-react';
-import PageHeader from '../../../components/ui/PageHeader';
+import { Thermometer, Zap, Wind, Shirt, Activity, Battery, Flame } from 'lucide-react';
 import Button from '../../../components/ui/Button';
+import ProductHero from '../../../components/ui/ProductHero';
 import BackNavigation from '../../../components/ui/BackNavigation';
+import SectionHeading from '../../../components/ui/SectionHeading';
+import BentoGrid, { BentoItem } from '../../../components/ui/BentoGrid';
+import Card from '../../../components/ui/Card';
+import StatCard from '../../../components/ui/StatCard';
+import Timeline from '../../../components/ui/Timeline';
+import ProcessFlow from '../../../components/ui/ProcessFlow';
 
 const Thermaphene = () => {
-  const features = [
-    'Graphene-based heating technology',
-    'Lightweight design',
-    'High-performance thermal regulation',
-    'Energy-efficient heating',
-    'Comfortable winter wear'
+  const processSteps = [
+    {
+      icon: <Activity className="w-6 h-6" />,
+      title: "Dispersion",
+      description: "Graphene is dispersed into a conductive ink or coating."
+    },
+    {
+      icon: <Shirt className="w-6 h-6" />,
+      title: "Integration",
+      description: "The coating is printed or applied onto textiles or surfaces."
+    },
+    {
+      icon: <Zap className="w-6 h-6" />,
+      title: "Activation",
+      description: "Low-voltage current passes through the graphene network."
+    },
+    {
+      icon: <Flame className="w-6 h-6" />,
+      title: "Radiation",
+      description: "Efficient far-infrared heat is radiated evenly."
+    }
+  ];
+
+  const timelineEvents = [
+    {
+      phase: "Phase 1: Lab",
+      title: "Ink Formulation",
+      description: "Creating a stable, washable graphene ink for textiles.",
+      status: "completed",
+      date: "Q1 2024"
+    },
+    {
+      phase: "Phase 2: Prototype",
+      title: "Heated Jacket Prototype",
+      description: "Demonstrating uniform heating with a 5V battery pack.",
+      status: "current",
+      date: "Q4 2025"
+    },
+    {
+      phase: "Phase 3: Commercial",
+      title: "Apparel Partnerships",
+      description: "Collaborating with outdoor brands for winter 2026 collections.",
+      status: "upcoming",
+      date: "2026"
+    }
   ];
 
   const applications = [
-    'Winter clothing and apparel',
-    'Outdoor sports gear',
-    'Military cold-weather equipment',
-    'Thermal comfort textiles',
-    'Wearable heating systems'
+    {
+      title: "Smart Apparel",
+      description: "Lightweight heated jackets and gloves for extreme cold.",
+      icon: Shirt
+    },
+    {
+      title: "Automotive",
+      description: "Efficient seat and steering wheel heating systems.",
+      icon: Zap
+    },
+    {
+      title: "Aerospace",
+      description: "De-icing solutions for wings and sensors.",
+      icon: Wind
+    },
+    {
+      title: "Healthcare",
+      description: "Therapeutic wearable heat pads for pain relief.",
+      icon: Activity
+    }
   ];
 
   return (
-    <div className="min-h-screen">
-      <PageHeader
-        category="R&D Pipeline"
-        title="Thermaphene"
-        subtitle="Graphene-based heating solution enabling lightweight and high-performance winter wear."
-      />
+    <div className="min-h-screen pt-20 bg-white">
+      <div className="container mx-auto px-6 py-8">
+        <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
-      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
+        <div className="mt-8 mb-24">
+          <ProductHero
+            title="Thermaphene"
+            subtitle="Ultra-thin graphene heating technology delivering lightweight, efficient, and flexible thermal regulation for wearables and industry."
+            category="Prototype"
+            categoryColor="bg-orange-500"
+            images={['/images/thermaphene_hero.png']}
+            className="mb-24"
+          />
 
-      <div className="bg-white border-t border-neutral-200">
-        <section className="py-24 px-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid lg:grid-cols-3 gap-16">
-              {/* Content Column */}
-              <div className="lg:col-span-2">
-                <h2 className="text-2xl font-display font-medium text-neutral-900 mb-8">Core Capabilities</h2>
-                <div className="grid sm:grid-cols-2 gap-6 mb-16">
-                  {features.map((item, i) => (
-                    <div key={i} className="p-6 rounded-2xl bg-neutral-50 border border-neutral-200 hover:border-blue-300 transition-colors group">
-                      <div className="w-10 h-10 bg-white rounded-lg border border-neutral-200 flex items-center justify-center mb-4 text-blue-600 group-hover:scale-110 transition-transform">
-                        <Thermometer className="w-5 h-5" />
-                      </div>
-                      <p className="font-medium text-neutral-900">{item}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <h2 className="text-2xl font-display font-medium text-neutral-900 mb-8">Target Applications</h2>
-                <ul className="grid sm:grid-cols-2 gap-4">
-                  {applications.map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 p-4 rounded-xl border border-neutral-100 hover:border-neutral-300 hover:bg-neutral-50 transition-all">
-                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
-                      <span className="text-neutral-700">{item}</span>
-                    </li>
-                  ))}
-                </ul>
+          {/* 1. Introduction */}
+          <section className="mb-32">
+            <div className="grid md:grid-cols-2 gap-16 items-center">
+              <div>
+                <SectionHeading
+                  number="01"
+                  title="The Challenge"
+                  subtitle="Cold is inevitable. Discomfort shouldn't be."
+                />
+                <p className="text-lg text-neutral-600 leading-relaxed mb-6">
+                  Traditional heating solutions, whether in clothing or machinery, rely on bulky copper wires
+                  that are heavy, prone to breakage, and create uneven "hot spots."
+                </p>
+                <p className="text-lg text-neutral-600 leading-relaxed">
+                  Thermaphene replaces wires with a printable graphene coating.
+                  It covers the entire surface area, providing uniform radiant heat that feels more natural and efficient.
+                  It's washable, flexible, and virtually weightless.
+                </p>
               </div>
-
-              {/* Sticky Sidebar */}
-              <div className="lg:col-start-3">
-                <div className="sticky top-32 p-8 rounded-3xl bg-neutral-50 border border-neutral-200 shadow-sm">
-                  <div className="mb-6">
-                    <span className="inline-flex px-3 py-1 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider">
-                      Development Phase
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-bold text-neutral-900 mb-4">Interested in Thermaphene?</h3>
-                  <p className="text-neutral-600 mb-8 text-sm leading-relaxed">
-                    We are currently validating this technology for industrial applications. Contact our R&D team for partnership opportunities.
-                  </p>
-                  <Link to="/contact">
-                    <Button variant="primary" className="w-full justify-center">Inquire Now</Button>
-                  </Link>
-                  <div className="mt-6 pt-6 border-t border-neutral-200">
-                    <Link to="/products/pipeline" className="flex items-center justify-center gap-2 text-sm text-neutral-500 hover:text-neutral-900 transition-colors">
-                      View Full Pipeline <ChevronRight className="w-4 h-4" />
-                    </Link>
-                  </div>
+              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src="/images/thermaphene_studio.png"
+                  alt="Thermaphene Heating Element"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                <div className="absolute bottom-8 left-8 text-white">
+                  <div className="text-sm font-mono uppercase tracking-widest mb-2">Radiant Heat</div>
+                  <div className="text-2xl font-medium">Printed Warmth</div>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* 2. Process Flow */}
+          <section className="mb-32">
+            <SectionHeading
+              number="02"
+              title="How It Works"
+              subtitle="Electrifying carbon at the atomic level."
+            />
+            <ProcessFlow steps={processSteps} />
+          </section>
+
+          {/* 3. Key Features (Bento Grid) */}
+          <section className="mb-32">
+            <SectionHeading
+              number="03"
+              title="Core Performance"
+              subtitle="Warmth without weight."
+            />
+            <BentoGrid>
+              <BentoItem colSpan={2} rowSpan={2} theme="dark" className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-br from-orange-900 to-black z-0"></div>
+                <div className="relative z-10 flex flex-col justify-between h-full p-6">
+                  <div>
+                    <div className="w-12 h-12 rounded-full bg-orange-500/20 flex items-center justify-center mb-6 text-orange-400">
+                      <Flame className="w-6 h-6" />
+                    </div>
+                    <h3 className="text-3xl font-light mb-4 text-white">Far-Infrared Heating</h3>
+                    <p className="text-neutral-300 text-lg">
+                      Unlike resistive wires that heat the air, Thermaphene emits far-infrared radiation
+                      that penetrates and warms objects directly, mimicking the feeling of sunlight.
+                    </p>
+                  </div>
+                </div>
+              </BentoItem>
+              <BentoItem colSpan={1} className="bg-orange-50 border-orange-100">
+                <div className="h-full flex flex-col justify-center">
+                  <h4 className="text-5xl font-light text-orange-600 mb-2">99%</h4>
+                  <p className="font-medium text-neutral-900">Efficiency</p>
+                  <p className="text-sm text-neutral-600 mt-2">Almost zero energy loss in conversion.</p>
+                </div>
+              </BentoItem>
+              <BentoItem colSpan={1} className="bg-white">
+                <div className="h-full flex flex-col">
+                  <Battery className="w-10 h-10 text-emerald-500 mb-4" />
+                  <h4 className="text-xl font-medium mb-2">Low Power</h4>
+                  <p className="text-sm text-neutral-600">Runs effectively on standard 5V/12V battery packs.</p>
+                </div>
+              </BentoItem>
+              <BentoItem colSpan={3} className="bg-neutral-900 border-neutral-800">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+                  <StatCard value="<1mm" label="Thickness" theme="dark" />
+                  <StatCard value="10s" label="Time to Heat" theme="dark" />
+                  <StatCard value="Yes" label="Machine Washable" theme="dark" />
+                  <StatCard value="Zero" label="Hot Spots" theme="dark" />
+                </div>
+              </BentoItem>
+            </BentoGrid>
+          </section>
+
+          {/* 4. Roadmap */}
+          <section className="mb-32 max-w-4xl mx-auto">
+            <SectionHeading
+              number="04"
+              title="Development Roadmap"
+              subtitle="Heating up the market."
+            />
+            <Timeline items={timelineEvents} />
+          </section>
+
+          {/* 5. Applications */}
+          <section className="mb-32">
+            <SectionHeading
+              number="05"
+              title="Applications"
+              subtitle="Versatile thermal solutions."
+            />
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {applications.map((app, i) => (
+                <Card key={i} className="bg-neutral-50 h-full border-neutral-200">
+                  <div className="w-12 h-12 rounded-xl bg-white border border-neutral-200 flex items-center justify-center mb-6 text-orange-600">
+                    <app.icon className="w-6 h-6" />
+                  </div>
+                  <h3 className="text-lg font-bold text-neutral-900 mb-3">{app.title}</h3>
+                  <p className="text-neutral-600 text-sm">{app.description}</p>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* 6. CTA / Partner */}
+          <section className="bg-neutral-900 rounded-3xl p-12 md:p-24 text-center relative overflow-hidden isolate">
+            <div className="absolute inset-0 bg-gradient-to-b from-orange-900/20 to-black z-0"></div>
+            <div className="relative z-10 max-w-2xl mx-auto">
+              <h2 className="text-3xl md:text-5xl font-medium text-white mb-6">Feel the warmth.</h2>
+              <p className="text-lg text-neutral-400 mb-10">
+                Thermaphene is redefining thermal management. Partner with us to integrate this technology into your next product line.
+              </p>
+              <div className="flex justify-center gap-4">
+                <Link to="/contact">
+                  <Button variant="primary" size="lg" className="px-8">Get Started</Button>
+                </Link>
+                <Link to="/products/pipeline">
+                  <Button variant="outline" theme="dark" size="lg">Back to Pipeline</Button>
+                </Link>
+              </div>
+            </div>
+          </section>
+
+        </div>
       </div>
     </div>
   );

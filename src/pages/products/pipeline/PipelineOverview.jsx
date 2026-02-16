@@ -147,7 +147,7 @@ const pipelineCategories = [
       },
       {
         id: 'voltagraphene',
-        name: 'VoltaGraphene',
+        name: 'Voltaphene',
         subtitle: 'Energy Storage Systems',
         description: 'Graphene-enabled battery storage systems delivering higher power density, faster response, and extended lifecycle.',
         status: 'Pilot Trial',

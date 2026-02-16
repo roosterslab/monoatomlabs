@@ -8,30 +8,31 @@ import { products } from '../../data/content';
 
 const ProductCard = ({ name, subtitle, highlight, icon: Icon, path, image }) => (
   <Link to={path} className="group block h-full">
-    <div className="bg-white border border-neutral-200 overflow-hidden h-full transition-colors hover:border-neutral-300 shadow-sm hover:shadow-md">
+    <div className="bg-white border-2 border-neutral-200 rounded-2xl overflow-hidden h-full transition-all duration-300 hover:border-blue-300 hover:shadow-xl">
       {image && (
-        <div className="w-full h-48 overflow-hidden">
+        <div className="w-full h-64 overflow-hidden bg-neutral-50">
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
           />
         </div>
       )}
       <div className="p-8">
         <div className="flex justify-between items-start mb-6">
-          <div className="w-12 h-12 bg-neutral-50 border border-neutral-200 flex items-center justify-center">
-            <Icon className="w-6 h-6 text-neutral-600" strokeWidth={1.5} />
+          <div className="w-12 h-12 bg-neutral-50 border border-neutral-200 rounded-lg flex items-center justify-center group-hover:bg-blue-50 group-hover:border-blue-200 transition-colors">
+            <Icon className="w-6 h-6 text-neutral-600 group-hover:text-blue-600 transition-colors" strokeWidth={1.5} />
           </div>
-          <div className="px-3 py-1 bg-neutral-100 border border-neutral-200 text-xs text-neutral-600 uppercase tracking-wide">
+          <div className="px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-xs text-blue-700 font-semibold uppercase tracking-wide">
             {highlight}
           </div>
         </div>
-        <h3 className="text-2xl font-display font-medium text-neutral-900 mb-2 group-hover:text-neutral-700 transition-colors">{name}</h3>
-        <p className="text-neutral-600 mb-8">{subtitle}</p>
-        <span className="text-sm font-medium text-neutral-900 flex items-center mt-auto">
-          View Details <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-        </span>
+        <h3 className="text-2xl font-display font-bold text-neutral-900 mb-3 group-hover:text-blue-600 transition-colors">{name}</h3>
+        <p className="text-neutral-600 mb-8 leading-relaxed">{subtitle}</p>
+        <div className="flex items-center text-sm font-semibold text-blue-600 group-hover:text-blue-700 mt-auto">
+          View Details
+          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform duration-300" />
+        </div>
       </div>
     </div>
   </Link>
@@ -52,7 +53,7 @@ const ProductsOverview = () => {
         <div className="max-w-7xl mx-auto">
           <SectionHeading number="01" title="Commercial Solutions" theme="light" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8 mt-12">
             <ProductCard
               name="Graphacrete"
               subtitle="High-Performance Concrete Additive"
@@ -94,7 +95,7 @@ const ProductsOverview = () => {
         <div className="max-w-7xl mx-auto">
           <SectionHeading number="02" title="Performance Matrix" theme="light" subtitle="Verified improvements over standard industry benchmarks." />
 
-          <div className="overflow-x-auto mt-12 bg-white border border-neutral-200 shadow-sm">
+          <div className="overflow-x-auto mt-12 bg-white border-2 border-neutral-200 rounded-xl shadow-sm">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-neutral-200">
@@ -115,7 +116,7 @@ const ProductsOverview = () => {
                   <td className="py-6 px-6 font-medium text-neutral-900">Graffisol</td>
                   <td className="py-6 px-6 text-neutral-600">Solar Energy</td>
                   <td className="py-6 px-6 text-neutral-600">Efficiency Enhancement</td>
-                  <td className="py-6 px-6 text-neutral-900 font-mono">+7-8% Output</td>
+                  <td className="py-6 px-6 text-neutral-900 font-mono">+8-12% Output</td>
                 </tr>
                 <tr>
                   <td className="py-6 px-6 font-medium text-neutral-900">Ceraphene</td>
@@ -127,7 +128,7 @@ const ProductsOverview = () => {
                   <td className="py-6 px-6 font-medium text-neutral-900">HD-G-PE</td>
                   <td className="py-6 px-6 text-neutral-600">Polymers</td>
                   <td className="py-6 px-6 text-neutral-600">Mechanical Properties</td>
-                  <td className="py-6 px-6 text-neutral-900 font-mono">20× Elongation</td>
+                  <td className="py-6 px-6 text-neutral-900 font-mono">+30% Strength</td>
                 </tr>
               </tbody>
             </table>

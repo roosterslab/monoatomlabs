@@ -30,10 +30,10 @@ const ProductsSection = () => {
             category: 'Solar Energy',
             icon: Sun,
             description: 'Next-Generation Solar Panel Coating',
-            features: ['10-12% Energy Output Increase', 'Thermal Dissipation', 'Hydrophobic & Anti-Soiling'],
-            detail: '10-12% increase in solar panel energy output (field & lab validated). Reduced surface reflection for improved light harvesting, better thermal dissipation minimizing heat-induced losses, and long-lasting durability.',
+            features: ['8-12% Energy Output Increase', 'Thermal Dissipation', 'Hydrophobic & Anti-Soiling'],
+            detail: '8-12% increase in solar panel energy output (field & lab validated). Reduced surface reflection for improved light harvesting, better thermal dissipation minimizing heat-induced losses, and long-lasting durability.',
             stats: [
-                { label: 'Energy Output', value: '+10-12%' },
+                { label: 'Energy Output', value: '+8-12%' },
                 { label: 'ROI Period', value: '18mo' }
             ],
             image: productsData.graffisol.image
@@ -58,11 +58,11 @@ const ProductsSection = () => {
             category: 'Industrial Polymers',
             icon: Beaker,
             description: 'Graphene-Reinforced Polymer Enhancer',
-            features: ['+30% Tensile Strength', '20× Elongation Improvement', '+20% Lifespan'],
-            detail: 'Transform HDPE materials with 30% strength improvement and 20× elongation enhancement for pipes, films, and packaging applications.',
+            features: ['+30% Tensile Strength', 'Enhanced Thermal Stability', 'Improved Barrier Properties'],
+            detail: 'Transform HDPE materials with 30% strength improvement, enhanced thermal stability, and improved barrier properties for pipes, films, and packaging applications.',
             stats: [
-                { label: 'Tensile', value: '+30%' },
-                { label: 'Elongation', value: '20×' }
+                { label: 'Strength', value: '+30%' },
+                { label: 'Thermal', value: 'Enhanced' }
             ],
             image: productsData.hdgpe.image
         }

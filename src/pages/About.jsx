@@ -5,6 +5,7 @@ import TrustValidation from '../components/about/TrustValidation';
 import CTAHub from '../components/about/CTAHub';
 import TechnologyCapabilities from '../components/about/TechnologyCapabilities';
 import PartnershipModels from '../components/home/PartnershipModels';
+import HallOfFame from '../components/about/HallOfFame';
 import { Target, Eye, Globe, Zap, Droplets, Wind, Heart, Users, GraduationCap, Award, Briefcase, Microscope, FlaskConical, Settings, ClipboardCheck, Building2, CheckCircle2, Factory, ArrowRight, Sparkles } from 'lucide-react';
 import Button from '../components/ui/Button';
 
@@ -214,6 +215,8 @@ const About = () => {
                     </div>
                 </div>
             </section>
+
+            <HallOfFame />
 
             {/* SECTION 5: FACILITIES (Tech Specs Grid) */}
             <section id="facilities" className="py-24 px-6 bg-white">

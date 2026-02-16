@@ -47,6 +47,18 @@ const Navbar = () => {
         return location.pathname === path || location.pathname.startsWith(path + '/');
     };
 
+    const isLightPage = location.pathname.startsWith('/products/pipeline/') && location.pathname !== '/products/pipeline';
+
+    // Text color logic: Dark text if on a light page AND not scrolled. Otherwise white (default/dark mode).
+    // When scrolled, navbar becomes dark (neutral-950), so text should be white.
+    const textColorClass = (isActive = false) => {
+        if (scrolled) return isActive ? 'text-white' : 'text-neutral-400 hover:text-white';
+        if (isLightPage && !scrolled) return isActive ? 'text-neutral-900' : 'text-neutral-600 hover:text-neutral-900';
+        return isActive ? 'text-white' : 'text-neutral-400 hover:text-white';
+    };
+
+    const logoTheme = (isLightPage && !scrolled) ? 'light' : 'dark'; // 'light' theme for Logo means dark colors
+
     const handleLogoClick = (e) => {
         // If already on home page, scroll to top
         if (location.pathname === '/') {
@@ -69,7 +81,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex items-center justify-between h-16">
                     <Link to="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity">
-                        <Logo size={scrolled ? 15 : 22} theme="dark" className="transition-all duration-300" />
+                        <Logo size={scrolled ? 15 : 22} theme={logoTheme} className="transition-all duration-300" />
                     </Link>
 
                     {/* Desktop Menu */}
@@ -78,8 +90,7 @@ const Navbar = () => {
                             <div key={item} className="relative group">
                                 <button
                                     onClick={(e) => handleDropdownToggle(item, e)}
-                                    className={`flex items-center gap-1 text-sm font-medium transition-colors ${isActiveLink(`/#${item.toLowerCase()}`) ? 'text-white' : 'text-neutral-400 hover:text-white'
-                                        }`}
+                                    className={`flex items-center gap-1 text-sm font-medium transition-colors ${textColorClass(isActiveLink(`/#${item.toLowerCase()}`))}`}
                                 >
                                     {item}
                                     <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === item ? 'rotate-180' : ''}`} />
@@ -123,8 +134,7 @@ const Navbar = () => {
                             <Link
                                 key={link.name}
                                 to={link.path}
-                                className={`text-sm font-medium transition-colors ${isActiveLink(link.path) ? 'text-white' : 'text-neutral-400 hover:text-white'
-                                    }`}
+                                className={`text-sm font-medium transition-colors ${textColorClass(isActiveLink(link.path))}`}
                             >
                                 {link.name}
                             </Link>
@@ -142,7 +152,7 @@ const Navbar = () => {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <button className="md:hidden text-white" onClick={() => setIsOpen(!isOpen)}>
+                    <button className={`md:hidden ${isLightPage && !scrolled ? 'text-neutral-900' : 'text-white'}`} onClick={() => setIsOpen(!isOpen)}>
                         {isOpen ? <X /> : <Menu />}
                     </button>
                 </div>
@@ -151,8 +161,8 @@ const Navbar = () => {
             {/* Mobile Menu */}
             {
                 isOpen && (
-                    <div className="md:hidden bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 absolute top-full left-0 right-0 w-full shadow-xl z-40">
-                        <div className="px-6 py-4 space-y-2">
+                    <div className="md:hidden bg-neutral-950/95 backdrop-blur-md border-b border-neutral-800 absolute top-full left-0 right-0 shadow-xl z-40 overflow-hidden">
+                        <div className="px-4 py-4 space-y-2">
                             {Object.keys(navigationItems).map((item) => (
                                 <div key={item}>
                                     <button

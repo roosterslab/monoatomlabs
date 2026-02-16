@@ -68,7 +68,7 @@ const Footer = () => {
                 </div>
 
                 {/* Quick Links Section */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 md:gap-12 mb-16">
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8 lg:gap-12 mb-16">
                     {/* Company Links */}
                     <div>
                         <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Company</h4>
