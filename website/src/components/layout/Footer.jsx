@@ -1,11 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { MapPin, Mail, Phone } from 'lucide-react';
 import Button from '../ui/Button';
 import MonochromeGrid from '../hero/MonochromeGrid';
 import Logo from '../Logo';
 
 const Footer = () => {
+    const location = useLocation();
+
+    const handleLogoClick = (e) => {
+        // If already on home page, scroll to top
+        if (location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
     return (
         <footer id="contact" className="relative bg-neutral-950 text-white pt-24 pb-12 px-6 border-t border-neutral-900 overflow-hidden">
             {/* Background Animation */}
@@ -118,7 +127,7 @@ const Footer = () => {
                 {/* Bottom Section with Logo */}
                 <div className="pt-8 border-t border-neutral-900">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
-                        <Link to="/" className="hover:opacity-80 transition-opacity">
+                        <Link to="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity">
                             <Logo size={20} theme="dark" />
                         </Link>
                         <div className="flex flex-col sm:flex-row gap-6 text-xs text-neutral-600">

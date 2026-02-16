@@ -47,6 +47,14 @@ const Navbar = () => {
         return location.pathname === path || location.pathname.startsWith(path + '/');
     };
 
+    const handleLogoClick = (e) => {
+        // If already on home page, scroll to top
+        if (location.pathname === '/') {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    };
+
     const handleDropdownToggle = (item, e) => {
         e.stopPropagation();
         setActiveDropdown(activeDropdown === item ? null : item);
@@ -60,7 +68,7 @@ const Navbar = () => {
         <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-neutral-950/90 backdrop-blur-md border-neutral-800 py-6' : 'bg-transparent border-transparent py-8'}`}>
             <div className="max-w-7xl mx-auto px-6">
                 <div className="flex items-center justify-between h-16">
-                    <Link to="/" className="hover:opacity-80 transition-opacity">
+                    <Link to="/" onClick={handleLogoClick} className="hover:opacity-80 transition-opacity">
                         <Logo size={scrolled ? 15 : 22} theme="dark" className="transition-all duration-300" />
                     </Link>
 

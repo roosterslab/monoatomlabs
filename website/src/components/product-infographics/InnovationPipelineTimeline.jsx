@@ -106,7 +106,7 @@ const InnovationPipelineTimeline = () => {
                 <div className="flex flex-col md:flex-row gap-6">
                   {/* Phase Header */}
                   <div className="md:w-1/4 flex-shrink-0">
-                    <div className={`bg-gradient-to-br ${phase.bgGradient} border ${phase.borderColor} p-6 rounded-sm backdrop-blur sticky top-24`}>
+                    <div className={`bg-gradient-to-br ${phase.bgGradient} border ${phase.borderColor} p-6 rounded-sm backdrop-blur sticky top-32`}>
                       <Icon className={`w-12 h-12 ${phase.iconColor} mb-4`} />
                       <h3 className="text-2xl font-display font-bold text-white mb-2">
                         {phase.phase}

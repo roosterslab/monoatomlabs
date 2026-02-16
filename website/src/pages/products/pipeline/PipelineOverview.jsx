@@ -369,7 +369,7 @@ const PipelineOverview = () => {
       />
 
       {/* Floating Filter Bar */}
-      <div className="sticky top-24 z-30 px-6 mb-12">
+      <div className="sticky top-32 z-30 px-6 mb-12">
         <div className="max-w-fit mx-auto bg-white/80 backdrop-blur-xl border border-white/20 shadow-xl shadow-black/5 rounded-full p-1.5 flex items-center gap-1">
           <button
             onClick={() => setFilter('all')}

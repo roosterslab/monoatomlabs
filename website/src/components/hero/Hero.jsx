@@ -7,7 +7,7 @@ import GrapheneLatticeOptimized from './GrapheneLatticeOptimized';
 
 const Hero = () => {
     return (
-        <section className="relative pt-32 pb-24 md:pt-52 md:pb-40 px-6 bg-black overflow-hidden border-b border-neutral-800">
+        <section className="relative pt-40 pb-24 md:pt-56 md:pb-40 px-6 bg-black overflow-hidden border-b border-neutral-800">
             {/* 3D GRAPHENE LATTICE CANVAS - OPTIMIZED */}
             <GrapheneLatticeOptimized />
 
