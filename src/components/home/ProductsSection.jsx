@@ -231,9 +231,6 @@ const ProductsSection = () => {
                                         View Technical Data
                                     </Button>
                                 </Link>
-                                <span className="text-sm text-neutral-400 font-mono">
-                                    ID: {products[activeProduct].id.toUpperCase()}_REV_2.4
-                                </span>
                             </div>
 
                         </div>

@@ -49,14 +49,13 @@ const PartnershipModels = () => {
     return (
         <section className="py-16 md:py-24 lg:py-32 px-6 bg-gradient-to-b from-white via-neutral-50 to-white border-b border-neutral-200">
             <div className="max-w-7xl mx-auto">
-                <div className="text-center mb-20">
-                    <SectionHeading
-                        number="09"
-                        title="Partnership Models"
-                        subtitle="Flexible engagement structures designed for enterprise scalability."
-                        theme="light"
-                    />
-                </div>
+                <SectionHeading
+                    number="09"
+                    title="Partnership Models"
+                    subtitle="Flexible engagement structures designed for enterprise scalability."
+                    theme="light"
+                    align="center"
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
                     <PartnershipCard
