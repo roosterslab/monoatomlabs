@@ -55,7 +55,7 @@ export const products = {
     tagline: 'Ultra-Durable Ceramic Coating',
     description: 'Graphene-enhanced ceramic coating providing industry-leading protection, hardness, and surface performance at 60-70% lower cost than premium alternatives.',
     shortDescription: 'Premium protection at accessible pricing',
-    image: '/images/ceraphene-01.jpg',
+    image: '/images/ceraphene-02.png',
 
     keyMetrics: [
       { label: 'Hardness', value: '9H+' },
@@ -133,7 +133,7 @@ export const products = {
     tagline: 'High-Performance Concrete Additive',
     description: 'Graphene nano-platelet additive that transforms standard concrete grades into high-performance materials with superior strength, durability, and water resistance.',
     shortDescription: 'Transform standard concrete into high-performance material',
-    image: '/images/graphacrete-01.jpg',
+    image: '/images/graphacrete-03.png',
 
     keyMetrics: [
       { label: 'Strength Gain', value: '40-50%' },
@@ -200,7 +200,7 @@ export const products = {
     tagline: 'Solar Panel Efficiency Enhancement',
     description: 'Graphene-based transparent coating that enhances solar panel efficiency through superior light transmission, thermal management, and self-cleaning properties.',
     shortDescription: 'Boost solar panel efficiency and longevity',
-    image: '/images/graffisol-01.jpg',
+    image: '/images/graffisol-02.png',
 
     keyMetrics: [
       { label: 'Efficiency Gain', value: '8-12%' },
@@ -266,7 +266,7 @@ export const products = {
     tagline: 'Graphene-Enhanced Polymer Additive',
     description: 'High-performance graphene additive for polyethylene and other polymers, delivering enhanced mechanical, thermal, and barrier properties.',
     shortDescription: 'Enhance polymer performance with graphene',
-    image: '/images/hd-g-pe-01.jpg',
+    image: '/images/hd-g-pe-02.png',
 
     keyMetrics: [
       { label: 'Strength Increase', value: '30%' },

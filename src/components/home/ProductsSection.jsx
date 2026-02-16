@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layers, Sun, Shield, Beaker, ArrowRight, Zap, Target, Activity, Wind, Droplets, Heart } from 'lucide-react';
+import ProductLightbox from '../ui/ProductLightbox';
 import Button from '../ui/Button';
 import SectionHeading from '../ui/SectionHeading';
+import { products as productsData } from '../../data/content';
 
 const ProductsSection = () => {
     const [activeProduct, setActiveProduct] = useState(0);
@@ -19,7 +21,8 @@ const ProductsSection = () => {
             stats: [
                 { label: 'Strength', value: '+50%' },
                 { label: 'Cement Savings', value: '15-20%' }
-            ]
+            ],
+            image: productsData.graphacrete.image
         },
         {
             id: 'graffisol',
@@ -32,7 +35,8 @@ const ProductsSection = () => {
             stats: [
                 { label: 'Energy Output', value: '+10-12%' },
                 { label: 'ROI Period', value: '18mo' }
-            ]
+            ],
+            image: productsData.graffisol.image
         },
         {
             id: 'ceraphene',
@@ -45,7 +49,8 @@ const ProductsSection = () => {
             stats: [
                 { label: 'Hardness', value: '9H+' },
                 { label: 'Life', value: '3-4yr+' }
-            ]
+            ],
+            image: productsData.ceraphene.image
         },
         {
             id: 'hdgpe',
@@ -58,7 +63,8 @@ const ProductsSection = () => {
             stats: [
                 { label: 'Tensile', value: '+30%' },
                 { label: 'Elongation', value: '20×' }
-            ]
+            ],
+            image: productsData.hdgpe.image
         }
     ];
 
@@ -67,6 +73,10 @@ const ProductsSection = () => {
             {/* Background decoration */}
             <div className="absolute top-20 right-0 w-96 h-96 bg-blue-50 rounded-full blur-3xl opacity-50"></div>
             <div className="absolute bottom-20 left-0 w-96 h-96 bg-neutral-100 rounded-full blur-3xl opacity-50"></div>
+
+            <div className="absolute bottom-20 left-0 w-96 h-96 bg-neutral-100 rounded-full blur-3xl opacity-50"></div>
+
+
 
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Mission Impact Header */}
@@ -176,63 +186,70 @@ const ProductsSection = () => {
 
                     {/* DETAIL VIEW (Right Side - 8 Cols) */}
                     <div className="md:col-span-2 lg:col-span-8 relative">
-                        <div className="h-full bg-white border border-neutral-200 shadow-2xl p-8 md:p-12 flex flex-col justify-between relative overflow-hidden">
+                        <div className="h-full bg-white border border-neutral-200 shadow-2xl p-8 md:p-12 flex flex-col relative overflow-hidden">
                             {/* Decorative HUD Elements */}
-                            <div className="absolute top-0 right-0 p-4 opacity-5">
+                            <div className="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
                                 <Target className="w-24 h-24 text-neutral-900" strokeWidth={0.5} />
                             </div>
 
-                            {/* Content */}
-                            <div className="relative z-10">
-                                <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-xs font-mono text-blue-700 mb-6">
-                                    <Activity size={12} />
-                                    <span>COMMERCIAL READY</span>
-                                </div>
-
-                                <div className="flex items-start justify-between mb-8">
+                            {/* Content Grid */}
+                            <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 h-full">
+                                {/* Left Column: Info */}
+                                <div className="flex flex-col justify-between">
                                     <div>
-                                        <h2 className="text-4xl md:text-6xl font-display font-bold text-neutral-900 mb-4 tracking-tight">
+                                        <div className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-50 border border-blue-100 rounded-full text-xs font-mono text-blue-700 mb-6">
+                                            <Activity size={12} />
+                                            <span>COMMERCIAL READY</span>
+                                        </div>
+
+                                        <h2 className="text-4xl md:text-5xl font-display font-bold text-neutral-900 mb-6 tracking-tight">
                                             {products[activeProduct].title}
                                         </h2>
-                                        <p className="text-xl text-neutral-600 max-w-2xl leading-relaxed">
+                                        <p className="text-lg text-neutral-600 leading-relaxed mb-8">
                                             {products[activeProduct].detail}
                                         </p>
+
+                                        {/* Features List */}
+                                        <div className="space-y-3 mb-8">
+                                            {products[activeProduct].features.map((feat, i) => (
+                                                <div key={i} className="flex items-center space-x-3">
+                                                    <Zap className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                                                    <span className="text-neutral-700 font-medium">{feat}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    {/* Action Area */}
+                                    <div className="pt-8 border-t border-neutral-100">
+                                        <Link to={`/products/${products[activeProduct].id === 'hdgpe' ? 'hd-g-pe' : products[activeProduct].id}`}>
+                                            <Button variant="primary" theme="light" className="shadow-lg hover:shadow-xl transition-shadow w-full sm:w-auto">
+                                                View Technical Data
+                                            </Button>
+                                        </Link>
                                     </div>
                                 </div>
 
-                                {/* Stats & Features Grid */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                                    {/* Stats */}
-                                    <div className="flex space-x-8">
+                                {/* Right Column: Image & Stats */}
+                                <div className="flex flex-col gap-6">
+                                    {/* Product Image */}
+                                    <ProductLightbox
+                                        src={products[activeProduct].image}
+                                        alt={products[activeProduct].title}
+                                        className="aspect-[4/3] w-full"
+                                    />
+
+                                    {/* Stats Grid */}
+                                    <div className="grid grid-cols-2 gap-4">
                                         {products[activeProduct].stats.map((stat, i) => (
-                                            <div key={i}>
-                                                <div className="text-3xl md:text-4xl font-mono text-neutral-900 mb-1">{stat.value}</div>
+                                            <div key={i} className="p-4 bg-neutral-50 rounded-xl border border-neutral-100">
+                                                <div className="text-2xl md:text-3xl font-mono text-neutral-900 mb-1">{stat.value}</div>
                                                 <div className="text-xs uppercase tracking-widest text-neutral-500">{stat.label}</div>
                                             </div>
                                         ))}
                                     </div>
-
-                                    {/* Features */}
-                                    <div className="space-y-3">
-                                        {products[activeProduct].features.map((feat, i) => (
-                                            <div key={i} className="flex items-center space-x-3">
-                                                <Zap className="w-4 h-4 text-blue-600" />
-                                                <span className="text-neutral-700 font-medium">{feat}</span>
-                                            </div>
-                                        ))}
-                                    </div>
                                 </div>
                             </div>
-
-                            {/* Action Area */}
-                            <div className="relative z-10 pt-8 border-t border-neutral-100 flex flex-wrap items-center gap-6">
-                                <Link to={`/products/${products[activeProduct].id === 'hdgpe' ? 'hd-g-pe' : products[activeProduct].id}`}>
-                                    <Button variant="primary" theme="light" className="shadow-lg hover:shadow-xl transition-shadow">
-                                        View Technical Data
-                                    </Button>
-                                </Link>
-                            </div>
-
                         </div>
                     </div>
 

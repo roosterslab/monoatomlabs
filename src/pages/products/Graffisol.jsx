@@ -6,6 +6,7 @@ import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
 import { Sun, Thermometer, Zap, Clock, Check, BarChart3, ShieldCheck, MousePointerClick } from 'lucide-react';
 import { products } from '../../data/content';
+import ProductLightbox from '../../components/ui/ProductLightbox';
 
 // Import all infographic components
 import {
@@ -58,26 +59,27 @@ const Graffisol = () => {
       content: (
         <div className="space-y-24 mt-12">
           {/* Hero Section */}
-          <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white">
-            <div className="absolute inset-0">
-              {products.graffisol.image && (
-                <img
-                  src={products.graffisol.image}
-                  alt="Graffisol Application"
-                  className="w-full h-full object-cover opacity-60"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/80 to-transparent"></div>
+          {/* Hero Section */}
+          <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white isolate">
+            {/* Background Image */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src="/images/graffisol-bg.png"
+                alt="Graffisol Solar Farm Application"
+                className="w-full h-full object-cover opacity-50 mix-blend-overlay"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-neutral-900/40"></div>
             </div>
-            <div className="relative z-10 p-12 md:p-16 max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-medium tracking-wider uppercase mb-6">
-                <span className="w-2 h-2 rounded-full bg-yellow-400"></span>
+
+            <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-4xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 backdrop-blur-md border border-yellow-500/20 text-yellow-500 text-xs font-medium tracking-wider uppercase mb-6">
+                <span className="w-2 h-2 rounded-full bg-yellow-400 animate-pulse"></span>
                 Solar Optimization
               </div>
               <h2 className="text-4xl md:text-5xl font-display font-medium mb-6 leading-tight">
                 Unlock the true potential of your solar assets.
               </h2>
-              <p className="text-lg text-neutral-300 leading-relaxed mb-8 max-w-2xl">
+              <p className="text-lg text-neutral-300 leading-relaxed mb-8 max-w-xl">
                 Graffisol is a transparent graphene nanocoating that boosts energy output by up to 12% through anti-reflective properties, thermal regulation, and self-cleaning capabilities.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -91,20 +93,33 @@ const Graffisol = () => {
             </div>
           </section>
 
-          {/* Key Stats Row */}
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { label: 'Energy Boost', value: '+12%', desc: 'Annual Yield Increase' },
-              { label: 'Temp Reduction', value: '-6°C', desc: 'Panel Cooling Effect' },
-              { label: 'Transmission', value: '99.9%', desc: 'Optical Clarity' },
-              { label: 'Payback', value: '18mo', desc: 'Typical ROI Period' }
-            ].map((stat, i) => (
-              <div key={i} className="p-8 bg-neutral-50 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow">
-                <div className="text-4xl font-display font-medium text-neutral-900 mb-2">{stat.value}</div>
-                <div className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-1">{stat.label}</div>
-                <div className="text-xs text-neutral-500">{stat.desc}</div>
-              </div>
-            ))}
+          {/* Product & Stats Dashboard */}
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Product Box */}
+            {/* Product Box */}
+            <div className="lg:col-span-1 h-full min-h-[300px]">
+              <ProductLightbox
+                src="/images/graffisol-studio.png"
+                alt="Graffisol Studio View"
+                className="h-full"
+              />
+            </div>
+
+            {/* Stats Grid */}
+            <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+              {[
+                { label: 'Energy Boost', value: '+12%', desc: 'Annual Yield Increase' },
+                { label: 'Temp Reduction', value: '-6°C', desc: 'Panel Cooling Effect' },
+                { label: 'Transmission', value: '99.9%', desc: 'Optical Clarity' },
+                { label: 'Payback', value: '18mo', desc: 'Typical ROI Period' }
+              ].map((stat, i) => (
+                <div key={i} className="p-8 bg-neutral-50 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow flex flex-col justify-center">
+                  <div className="text-4xl font-display font-medium text-neutral-900 mb-2">{stat.value}</div>
+                  <div className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-1">{stat.label}</div>
+                  <div className="text-xs text-neutral-500">{stat.desc}</div>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Benefits Bento Grid */}

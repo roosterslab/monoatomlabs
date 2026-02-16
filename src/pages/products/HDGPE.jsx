@@ -5,6 +5,7 @@ import SectionHeading from '../../components/ui/SectionHeading';
 import ProductTabs from '../../components/ui/ProductTabs';
 import Button from '../../components/ui/Button';
 import { Layers, ShieldCheck, Zap, Scale, ArrowUpRight, Hammer, Database, Recycle, BarChart3 } from 'lucide-react';
+import ProductLightbox from '../../components/ui/ProductLightbox';
 import { products } from '../../data/content';
 
 // Import all infographic components
@@ -50,18 +51,17 @@ const HDGPE = () => {
       content: (
         <div className="space-y-24 mt-12">
           {/* Hero Section */}
-          <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white">
-            <div className="absolute inset-0">
-              {products.hdgpe.image && (
-                <img
-                  src={products.hdgpe.image}
-                  alt="HDGPE Material Application"
-                  className="w-full h-full object-cover opacity-50"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/80 to-transparent"></div>
+          <section className="relative overflow-hidden rounded-2xl bg-neutral-900 text-white isolate">
+            <div className="absolute inset-0 z-0">
+              <img
+                src="/images/hdgpe-bg.png"
+                alt="HDGPE Industrial Application"
+                className="w-full h-full object-cover opacity-50 mix-blend-overlay"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-neutral-900 via-neutral-900/90 to-neutral-900/40"></div>
             </div>
-            <div className="relative z-10 p-12 md:p-16 max-w-2xl">
+
+            <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-4xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-medium tracking-wider uppercase mb-6">
                 <span className="w-2 h-2 rounded-full bg-blue-500"></span>
                 Polymer Engineering
@@ -69,7 +69,7 @@ const HDGPE = () => {
               <h2 className="text-4xl md:text-5xl font-display font-medium mb-6 leading-tight">
                 Lighter. Stronger. Infinitely better.
               </h2>
-              <p className="text-lg text-neutral-300 leading-relaxed mb-8">
+              <p className="text-lg text-neutral-300 leading-relaxed mb-8 max-w-xl">
                 High-Density Graphene Polyethylene (HDGPE) redefines plastic performance. By integrating graphene at the molecular level, we achieve steel-like strength with the versatility of thermoplastics.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -83,20 +83,34 @@ const HDGPE = () => {
             </div>
           </section>
 
-          {/* Key Stats Row */}
-          <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { label: 'Tensile Strength', value: '+40%', desc: 'vs Standard HDPE' },
-              { label: 'Weight', value: '-20%', desc: 'Material Reduction' },
-              { label: 'Durability', value: '2.5x', desc: 'Extended Lifespan' },
-              { label: 'Barrier', value: '100x', desc: 'Gas Permeability' }
-            ].map((stat, i) => (
-              <div key={i} className="p-8 bg-neutral-50 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow">
-                <div className="text-4xl font-display font-medium text-neutral-900 mb-2">{stat.value}</div>
-                <div className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-1">{stat.label}</div>
-                <div className="text-xs text-neutral-500">{stat.desc}</div>
-              </div>
-            ))}
+          {/* Product & Stats Dashboard */}
+          <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Product Box */}
+            <div className="lg:col-span-1 h-full min-h-[300px]">
+              <ProductLightbox
+                src="/images/hdgpe-studio.png"
+                alt="HDGPE Studio View"
+                className="h-full"
+                imageFit="object-contain"
+                innerClassName="bg-white p-4"
+              />
+            </div>
+
+            {/* Stats Grid */}
+            <div className="lg:col-span-2 grid grid-cols-2 gap-4">
+              {[
+                { label: 'Tensile Strength', value: '+40%', desc: 'vs Standard HDPE' },
+                { label: 'Weight', value: '-20%', desc: 'Material Reduction' },
+                { label: 'Durability', value: '2.5x', desc: 'Extended Lifespan' },
+                { label: 'Barrier', value: '100x', desc: 'Gas Permeability' }
+              ].map((stat, i) => (
+                <div key={i} className="p-8 bg-neutral-50 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow flex flex-col justify-center">
+                  <div className="text-4xl font-display font-medium text-neutral-900 mb-2">{stat.value}</div>
+                  <div className="text-sm font-bold text-neutral-900 uppercase tracking-wide mb-1">{stat.label}</div>
+                  <div className="text-xs text-neutral-500">{stat.desc}</div>
+                </div>
+              ))}
+            </div>
           </section>
 
           {/* Benefits Bento Grid */}
