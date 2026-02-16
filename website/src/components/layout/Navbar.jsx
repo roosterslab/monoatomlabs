@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Hexagon, Menu, X, ChevronDown, Layers, Shield, Zap, Box, AppWindow } from 'lucide-react';
+import { Menu, X, ChevronDown, Layers, Shield, Zap, Box, AppWindow } from 'lucide-react';
 import Button from '../ui/Button';
+import Logo from '../Logo';
 
 const Navbar = () => {
     const [scrolled, setScrolled] = useState(false);
@@ -56,12 +57,11 @@ const Navbar = () => {
     };
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-neutral-950/90 backdrop-blur-md border-neutral-800 py-4' : 'bg-transparent border-transparent py-6'}`}>
+        <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-neutral-950/90 backdrop-blur-md border-neutral-800 py-6' : 'bg-transparent border-transparent py-8'}`}>
             <div className="max-w-7xl mx-auto px-6">
-                <div className="flex items-center justify-between h-12">
-                    <Link to="/" className="flex items-center gap-2">
-                        <Hexagon className="w-8 h-8 text-white fill-white/10" strokeWidth={1.5} />
-                        <span className="text-xl font-bold tracking-tight text-white">MONOATOM<span className="font-light text-neutral-500">LABS</span></span>
+                <div className="flex items-center justify-between h-16">
+                    <Link to="/" className="hover:opacity-80 transition-opacity">
+                        <Logo size={scrolled ? 15 : 22} theme="dark" className="transition-all duration-300" />
                     </Link>
 
                     {/* Desktop Menu */}
@@ -141,70 +141,72 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Menu */}
-            {isOpen && (
-                <div className="md:hidden bg-neutral-950 border-b border-neutral-800 absolute w-full shadow-xl">
-                    <div className="px-6 py-4 space-y-2">
-                        {Object.keys(navigationItems).map((item) => (
-                            <div key={item}>
-                                <button
-                                    onClick={() => handleMobileDropdownToggle(item)}
-                                    className="flex items-center justify-between w-full text-sm font-medium text-neutral-400 hover:text-white py-2"
+            {
+                isOpen && (
+                    <div className="md:hidden bg-neutral-950 border-b border-neutral-800 absolute w-full shadow-xl">
+                        <div className="px-6 py-4 space-y-2">
+                            {Object.keys(navigationItems).map((item) => (
+                                <div key={item}>
+                                    <button
+                                        onClick={() => handleMobileDropdownToggle(item)}
+                                        className="flex items-center justify-between w-full text-sm font-medium text-neutral-400 hover:text-white py-2"
+                                    >
+                                        {item}
+                                        <ChevronDown className={`w-4 h-4 transition-transform ${mobileDropdown === item ? 'rotate-180' : ''}`} />
+                                    </button>
+
+                                    {mobileDropdown === item && (
+                                        <div className="pl-4 space-y-2 pb-2">
+                                            {navigationItems[item].map((subItem) => (
+                                                <Link
+                                                    key={subItem.path}
+                                                    to={subItem.path}
+                                                    className={`flex items-center gap-3 py-2 ${isActiveLink(subItem.path) ? 'text-white' : 'text-neutral-400'
+                                                        }`}
+                                                    onClick={() => {
+                                                        setIsOpen(false);
+                                                        setMobileDropdown(null);
+                                                    }}
+                                                >
+                                                    <subItem.icon size={16} />
+                                                    <span className="text-sm font-medium">{subItem.name}</span>
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+
+                            {directLinks.map((link) => (
+                                <Link
+                                    key={link.name}
+                                    to={link.path}
+                                    className={`block text-sm font-medium py-2 transition-colors ${isActiveLink(link.path) ? 'text-white' : 'text-neutral-400 hover:text-white'
+                                        }`}
+                                    onClick={() => setIsOpen(false)}
                                 >
-                                    {item}
-                                    <ChevronDown className={`w-4 h-4 transition-transform ${mobileDropdown === item ? 'rotate-180' : ''}`} />
-                                </button>
+                                    {link.name}
+                                </Link>
+                            ))}
 
-                                {mobileDropdown === item && (
-                                    <div className="pl-4 space-y-2 pb-2">
-                                        {navigationItems[item].map((subItem) => (
-                                            <Link
-                                                key={subItem.path}
-                                                to={subItem.path}
-                                                className={`flex items-center gap-3 py-2 ${isActiveLink(subItem.path) ? 'text-white' : 'text-neutral-400'
-                                                    }`}
-                                                onClick={() => {
-                                                    setIsOpen(false);
-                                                    setMobileDropdown(null);
-                                                }}
-                                            >
-                                                <subItem.icon size={16} />
-                                                <span className="text-sm font-medium">{subItem.name}</span>
-                                            </Link>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-
-                        {directLinks.map((link) => (
                             <Link
-                                key={link.name}
-                                to={link.path}
-                                className={`block text-sm font-medium py-2 transition-colors ${isActiveLink(link.path) ? 'text-white' : 'text-neutral-400 hover:text-white'
-                                    }`}
+                                to="/contact"
+                                className="block pt-2"
                                 onClick={() => setIsOpen(false)}
                             >
-                                {link.name}
+                                <Button
+                                    variant="primary"
+                                    theme="dark"
+                                    className="h-9 px-4 text-xs shadow-none w-full"
+                                >
+                                    Contact Us
+                                </Button>
                             </Link>
-                        ))}
-
-                        <Link
-                            to="/contact"
-                            className="block pt-2"
-                            onClick={() => setIsOpen(false)}
-                        >
-                            <Button
-                                variant="primary"
-                                theme="dark"
-                                className="h-9 px-4 text-xs shadow-none w-full"
-                            >
-                                Contact Us
-                            </Button>
-                        </Link>
+                        </div>
                     </div>
-                </div>
-            )}
-        </nav>
+                )
+            }
+        </nav >
     );
 };
 

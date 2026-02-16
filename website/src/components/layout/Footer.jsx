@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Hexagon, MapPin, Mail, Phone } from 'lucide-react';
+import { MapPin, Mail, Phone } from 'lucide-react';
 import Button from '../ui/Button';
 import MonochromeGrid from '../hero/MonochromeGrid';
+import Logo from '../Logo';
 
 const Footer = () => {
     return (
@@ -15,7 +16,7 @@ const Footer = () => {
             <div className="relative z-10 max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
                     <div>
-                        <Hexagon className="w-12 h-12 text-white mb-8" strokeWidth={1} />
+                        <Logo size={20} showText={false} theme="dark" className="mb-8" />
                         <h2 className="text-5xl md:text-6xl font-medium tracking-tight mb-8">
                             Ready to enable Industry 4.0?
                         </h2>
@@ -114,11 +115,19 @@ const Footer = () => {
                     </div>
                 </div>
 
-                <div className="pt-8 border-t border-neutral-900 flex flex-col md:flex-row justify-between items-center text-xs text-neutral-600">
-                    <p>&copy; {new Date().getFullYear()} Monoatom Labs. All rights reserved.</p>
-                    <div className="flex space-x-8 mt-4 md:mt-0">
-                        <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                {/* Bottom Section with Logo */}
+                <div className="pt-8 border-t border-neutral-900">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 mb-8">
+                        <Link to="/" className="hover:opacity-80 transition-opacity">
+                            <Logo size={20} theme="dark" />
+                        </Link>
+                        <div className="flex flex-col sm:flex-row gap-6 text-xs text-neutral-600">
+                            <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                            <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+                        </div>
+                    </div>
+                    <div className="text-xs text-neutral-600 text-center md:text-left">
+                        <p>&copy; {new Date().getFullYear()} Monoatom Labs. All rights reserved.</p>
                     </div>
                 </div>
             </div>

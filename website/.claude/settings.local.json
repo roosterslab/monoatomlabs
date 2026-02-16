@@ -11,7 +11,8 @@
       "Bash(OPTIMIZATION_SUMMARY.md:*)",
       "Bash(for file in src/pages/products/*.jsx src/pages/products/pipeline/*.jsx)",
       "Bash(do sed -i 's/min-h-screen pb-24/min-h-screen/g' \"$file\")",
-      "Bash(done)"
+      "Bash(done)",
+      "Bash(npm install:*)"
     ]
   }
 }
