@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, CheckCircle2, ChevronRight, Anchor, Truck, Construction } from 'lucide-react';
+import { Shield, CheckCircle2, ChevronRight, Anchor, Truck, Construction, ShieldCheck } from 'lucide-react';
 import Button from '../../../components/ui/Button';
 import ProductHero from '../../../components/ui/ProductHero';
 import BackNavigation from '../../../components/ui/BackNavigation';
@@ -10,6 +10,9 @@ import Card from '../../../components/ui/Card';
 import StatCard from '../../../components/ui/StatCard';
 import Timeline from '../../../components/ui/Timeline';
 import ProcessFlow from '../../../components/ui/ProcessFlow';
+
+// ... imports
+import ImageCarousel from '../../../components/ui/ImageCarousel';
 
 const Rustene = () => {
   const processSteps = [
@@ -83,9 +86,9 @@ const Rustene = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20 bg-white">
+    <div className="min-h-screen pt-36 bg-white">
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
       <div className="container mx-auto px-6 py-8">
-        <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
         <div className="mt-8 mb-24">
           <ProductHero
@@ -116,17 +119,12 @@ const Rustene = () => {
                   from reaching the metal surface, extending asset lifespan by up to 5x.
                 </p>
               </div>
-              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="/images/rustene_studio.png"
+              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white border border-neutral-100">
+                <ImageCarousel
+                  images={['/images/pipeline/studio/Rustene.png']}
                   alt="Rustene Application"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-8 left-8 text-white">
-                  <div className="text-sm font-mono uppercase tracking-widest mb-2">Advanced Protection</div>
-                  <div className="text-2xl font-medium">Molecular Barrier</div>
-                </div>
               </div>
             </div>
           </section>
@@ -180,16 +178,48 @@ const Rustene = () => {
               </BentoItem>
               <BentoItem colSpan={3} className="bg-neutral-900 border-neutral-800">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                  <StatCard value="5000h+" label="Salt Spray Test" theme="dark" />
-                  <StatCard value="<15μm" label="Coating Thickness" theme="dark" />
-                  <StatCard value="100%" label="UV Stable" theme="dark" />
-                  <StatCard value="Low VOC" label="Eco-Friendly" theme="dark" />
+                  <StatCard value="5000h+" label="Salt Spray Test" theme="dark" valueClassName="text-white" labelClassName="text-blue-500" />
+                  <StatCard value="<15μm" label="Coating Thickness" theme="dark" valueClassName="text-white" labelClassName="text-blue-500" />
+                  <StatCard value="100%" label="UV Stable" theme="dark" valueClassName="text-white" labelClassName="text-blue-500" />
+                  <StatCard value="Low VOC" label="Eco-Friendly" theme="dark" valueClassName="text-white" labelClassName="text-blue-500" />
                 </div>
               </BentoItem>
             </BentoGrid>
           </section>
 
-          {/* 4. Roadmap */}
+          {/* 4. Product Gallery (New) */}
+          <section className="mb-32">
+            <SectionHeading
+              number="04"
+              title="Product Gallery"
+              subtitle="Visualizing the future of corrosion protection."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-[500px]">
+              <div className="relative rounded-3xl overflow-hidden shadow-lg group">
+                <div className="absolute inset-0 bg-neutral-100">
+                  <ImageCarousel
+                    images={['/images/pipeline/studio/Rustene.png']}
+                    alt="Studio View"
+                    className="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-neutral-200">
+                  Studio Module
+                </div>
+              </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-lg group">
+                <div className="absolute inset-0">
+                  <img src="/images/rustene_hero.png" alt="Contextual View" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                </div>
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-neutral-200">
+                  Applied Coating
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Roadmap */}
           <section className="mb-32 max-w-4xl mx-auto">
             <SectionHeading
               number="04"

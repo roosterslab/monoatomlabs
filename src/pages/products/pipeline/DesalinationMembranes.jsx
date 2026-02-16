@@ -83,14 +83,14 @@ const DesalinationMembranes = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20 bg-white">
+    <div className="min-h-screen pt-36 bg-white">
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
       <div className="container mx-auto px-6 py-8">
-        <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
         <div className="mt-8 mb-24">
           <ProductHero
-            title="Desalination Membranes"
-            subtitle="Solving the global water crisis with ultra-permeable graphene membranes that desalinate seawater at a fraction of the energy cost."
+            title="Mariphene"
+            subtitle="Desalination Membranes | Solving the global water crisis with ultra-permeable graphene membranes that desalinate seawater at a fraction of the energy cost."
             category="Pilot Trials"
             categoryColor="bg-cyan-600"
             images={['/images/desalination_hero.png']}
@@ -113,17 +113,12 @@ const DesalinationMembranes = () => {
                   Our graphene membranes are just one atom thick. This extreme thinness offers minimal resistance to water flow while perfectly blocking salt ions, reducing energy consumption by up to 40%.
                 </p>
               </div>
-              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="/images/desalination_membrane_studio.png"
+              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white border border-neutral-100">
+                <ImageCarousel
+                  images={['/images/pipeline/studio/DesalinationMembranes.png']}
                   alt="Desalination Module"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-8 left-8 text-white">
-                  <div className="text-sm font-mono uppercase tracking-widest mb-2">Clean Water</div>
-                  <div className="text-2xl font-medium">Global Impact</div>
-                </div>
               </div>
             </div>
           </section>
@@ -177,29 +172,57 @@ const DesalinationMembranes = () => {
               </BentoItem>
               <BentoItem colSpan={3} className="bg-neutral-900 border-neutral-800">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                  <StatCard value="99.7%" label="Salt Rejection" theme="dark" />
-                  <StatCard value="High" label="Flow Rate" theme="dark" />
-                  <StatCard value="Low" label="Pressure Req" theme="dark" />
-                  <StatCard value="Long" label="Lifespan" theme="dark" />
+                  <StatCard value="99.7%" label="Salt Rejection" theme="dark" valueClassName="text-white" labelClassName="text-cyan-400" />
+                  <StatCard value="High" label="Flow Rate" theme="dark" valueClassName="text-white" labelClassName="text-cyan-400" />
+                  <StatCard value="Low" label="Pressure Req" theme="dark" valueClassName="text-white" labelClassName="text-cyan-400" />
+                  <StatCard value="Long" label="Lifespan" theme="dark" valueClassName="text-white" labelClassName="text-cyan-400" />
                 </div>
               </BentoItem>
             </BentoGrid>
           </section>
 
-          {/* 4. Roadmap */}
-          <section className="mb-32 max-w-4xl mx-auto">
+          {/* 4. Product Gallery (New) */}
+          <section className="mb-32">
             <SectionHeading
               number="04"
+              title="Product Gallery"
+              subtitle="Visualizing the future of desalination."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-[500px]">
+              <div className="relative rounded-3xl overflow-hidden shadow-lg group">
+                <div className="absolute inset-0 bg-neutral-100">
+                  <img src="/images/pipeline/studio/DesalinationMembranes.png" alt="Studio View" className="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-700" />
+                </div>
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-neutral-200">
+                  Studio Module
+                </div>
+              </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-lg group">
+                <div className="absolute inset-0">
+                  <img src="/images/desalination_hero.png" alt="Contextual View" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                </div>
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-neutral-200">
+                  Operational Environment
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Roadmap */}
+          <section className="mb-32 max-w-4xl mx-auto">
+            <SectionHeading
+              number="05"
               title="Development Roadmap"
               subtitle="Flowing towards the future."
             />
             <Timeline items={timelineEvents} />
           </section>
 
-          {/* 5. Applications */}
+          {/* 6. Applications */}
           <section className="mb-32">
             <SectionHeading
-              number="05"
+              number="06"
               title="Applications"
               subtitle="Water for a thirsty world."
             />
@@ -216,7 +239,7 @@ const DesalinationMembranes = () => {
             </div>
           </section>
 
-          {/* 6. CTA / Partner */}
+          {/* 7. CTA / Partner */}
           <section className="bg-neutral-900 rounded-3xl p-12 md:p-24 text-center relative overflow-hidden isolate">
             <div className="absolute inset-0 bg-gradient-to-b from-cyan-900/20 to-black z-0"></div>
             <div className="relative z-10 max-w-2xl mx-auto">

@@ -10,11 +10,11 @@ const ProductCard = ({ name, subtitle, highlight, icon: Icon, path, image }) => 
   <Link to={path} className="group block h-full">
     <div className="bg-white border-2 border-neutral-200 rounded-2xl overflow-hidden h-full transition-all duration-300 hover:border-blue-300 hover:shadow-xl">
       {image && (
-        <div className="w-full h-64 overflow-hidden bg-neutral-50">
+        <div className="w-full h-80 overflow-hidden bg-neutral-50 p-8 flex items-center justify-center">
           <img
             src={image}
             alt={name}
-            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
           />
         </div>
       )}
@@ -137,20 +137,92 @@ const ProductsOverview = () => {
       </section>
 
       {/* Pipeline Teaser */}
-      <section className="py-24 px-6 bg-gradient-to-br from-neutral-50 via-blue-50 to-purple-50 border-t border-neutral-200">
-        <div className="max-w-4xl mx-auto text-center">
-          <FlaskConical className="w-12 h-12 text-neutral-900 mx-auto mb-6" strokeWidth={1} />
-          <h2 className="text-3xl font-display font-medium text-neutral-900 mb-6">Innovation Pipeline</h2>
-          <p className="text-lg text-neutral-600 mb-10">
-            We're continuously advancing the frontiers of graphene technology. Explore our next-generation products currently in development.
-          </p>
-          <Link to="/products/pipeline">
-            <Button variant="secondary" theme="light" className="h-12 px-8">
-              View Innovation Pipeline <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </Link>
+      <section className="py-24 px-6 bg-gradient-to-br from-neutral-50 via-blue-50 to-purple-50 border-t border-neutral-200 overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Left Content */}
+            <div className="text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-neutral-200 text-neutral-600 text-xs font-mono font-medium tracking-wider uppercase mb-8 shadow-sm">
+                <FlaskConical className="w-4 h-4 text-blue-600" />
+                <span>R&D Pipeline</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-display font-medium text-neutral-900 mb-6">
+                Redefining What's Possible
+              </h2>
+              <p className="text-xl text-neutral-600 mb-10 font-light leading-relaxed">
+                From graphene-enhanced ballistics to atmospheric water harvesting, we are engineering the materials of tomorrow. Explore our active development pipeline.
+              </p>
+              <Link to="/products/pipeline">
+                <Button variant="primary" className="h-14 px-8 text-lg">
+                  Explore Pipeline <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </Link>
+            </div>
+
+            {/* Right Image Slideshow */}
+            <div className="relative aspect-[4/3] bg-white rounded-3xl overflow-hidden shadow-2xl border border-neutral-100 group">
+              <PipelineSlideshow />
+            </div>
+          </div>
         </div>
       </section>
+    </div>
+  );
+};
+
+const PipelineSlideshow = () => {
+  const slides = [
+    { src: '/images/pipeline/studio/Armophene.png', caption: 'Armophene: Next-Gen Ballistics' },
+    { src: '/images/pipeline/studio/Graphyre.png', caption: 'Graphyre: Advanced Composites' },
+    { src: '/images/pipeline/studio/Graphosite.png', caption: 'Graphosite: Structural Reinforcement' },
+    { src: '/images/pipeline/studio/Rustene.png', caption: 'Rustene: Anti-Corrosion Shield' },
+    { src: '/images/pipeline/studio/Thermophene.png', caption: 'Thermaphene: Thermal Management' },
+    { src: '/images/pipeline/studio/Gryogen.png', caption: 'Gryogen: Hydrogen Separation' },
+    { src: '/images/pipeline/studio/DesalinationMembranes.png', caption: 'Mariphene: Water Desalination' },
+    { src: '/images/pipeline/studio/Glasephene.png', caption: 'GlassPhen: Reinforced Fibres' },
+    { src: '/images/pipeline/studio/Voltaphene.png', caption: 'Voltaphene: Energy Storage' },
+  ];
+
+  const [currentIndex, setCurrentIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 bg-neutral-50">
+      {/* Image */}
+      <div className="absolute inset-0 flex items-center justify-center p-12">
+        {slides.map((slide, idx) => (
+          <img
+            key={idx}
+            src={slide.src}
+            alt={slide.caption}
+            className={`absolute max-w-full max-h-full object-contain transition-all duration-700 ease-in-out transform ${idx === currentIndex ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+              }`}
+          />
+        ))}
+      </div>
+
+      {/* Caption Overlay */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+        <div className="text-white font-medium text-lg tracking-wide text-center">
+          {slides[currentIndex].caption}
+        </div>
+        {/* Indicators */}
+        <div className="flex justify-center gap-2 mt-3">
+          {slides.map((_, idx) => (
+            <div
+              key={idx}
+              className={`h-1 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-8 bg-white' : 'w-2 bg-white/40'
+                }`}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

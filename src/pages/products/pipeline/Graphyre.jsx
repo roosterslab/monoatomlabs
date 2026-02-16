@@ -11,6 +11,9 @@ import StatCard from '../../../components/ui/StatCard';
 import Timeline from '../../../components/ui/Timeline';
 import ProcessFlow from '../../../components/ui/ProcessFlow';
 
+// ... imports
+import ImageCarousel from '../../../components/ui/ImageCarousel';
+
 const Graphyre = () => {
   const processSteps = [
     {
@@ -83,9 +86,9 @@ const Graphyre = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-20 bg-white">
+    <div className="min-h-screen pt-36 bg-white">
+      <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
       <div className="container mx-auto px-6 py-8">
-        <BackNavigation to="/products/pipeline" label="Back to Innovation Pipeline" />
 
         <div className="mt-8 mb-24">
           <ProductHero
@@ -116,17 +119,12 @@ const Graphyre = () => {
                   This results in a tyre that lasts longer, grips better, and saves fuel.
                 </p>
               </div>
-              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  src="/images/graphyre_studio.png"
+              <div className="relative h-[400px] rounded-3xl overflow-hidden shadow-2xl bg-white border border-neutral-100">
+                <ImageCarousel
+                  images={['/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png']}
                   alt="Graphyre Tyre Technology"
-                  className="absolute inset-0 w-full h-full object-cover"
+                  className="absolute inset-0 w-full h-full"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <div className="absolute bottom-8 left-8 text-white">
-                  <div className="text-sm font-mono uppercase tracking-widest mb-2">Smart Compounds</div>
-                  <div className="text-2xl font-medium">Intelligent Rubber</div>
-                </div>
               </div>
             </div>
           </section>
@@ -138,7 +136,7 @@ const Graphyre = () => {
               title="How It Works"
               subtitle="Reinforcing rubber at the molecular level."
             />
-            <ProcessFlow steps={processSteps} />
+            <ProcessFlow steps={processSteps} accentColor="amber" />
           </section>
 
           {/* 3. Key Features (Bento Grid) */}
@@ -180,19 +178,51 @@ const Graphyre = () => {
               </BentoItem>
               <BentoItem colSpan={3} className="bg-neutral-900 border-neutral-800">
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-                  <StatCard value="A+" label="Wet Grip Rating" theme="dark" />
-                  <StatCard value="-10%" label="Rolling Resistance" theme="dark" />
-                  <StatCard value="Real-time" label="Wear Monitoring" theme="dark" />
-                  <StatCard value="High" label="Heat Dissipation" theme="dark" />
+                  <StatCard value="A+" label="Wet Grip Rating" theme="dark" valueClassName="text-white" labelClassName="text-amber-500" />
+                  <StatCard value="-10%" label="Rolling Resistance" theme="dark" valueClassName="text-white" labelClassName="text-amber-500" />
+                  <StatCard value="Real-time" label="Wear Monitoring" theme="dark" valueClassName="text-white" labelClassName="text-amber-500" />
+                  <StatCard value="High" label="Heat Dissipation" theme="dark" valueClassName="text-white" labelClassName="text-amber-500" />
                 </div>
               </BentoItem>
             </BentoGrid>
           </section>
 
-          {/* 4. Roadmap */}
-          <section className="mb-32 max-w-4xl mx-auto">
+          {/* 4. Product Gallery (New) */}
+          <section className="mb-32">
             <SectionHeading
               number="04"
+              title="Product Gallery"
+              subtitle="Visualizing the future of tire technology."
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-[500px]">
+              <div className="relative rounded-3xl overflow-hidden shadow-lg group">
+                <div className="absolute inset-0 bg-neutral-100">
+                  <ImageCarousel
+                    images={['/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png']}
+                    alt="Studio View"
+                    className="w-full h-full object-contain p-8 group-hover:scale-105 transition-transform duration-700"
+                  />
+                </div>
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-neutral-200">
+                  Studio Module
+                </div>
+              </div>
+              <div className="relative rounded-3xl overflow-hidden shadow-lg group">
+                <div className="absolute inset-0">
+                  <img src="/images/graphyre_hero.png" alt="Contextual View" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                  <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors"></div>
+                </div>
+                <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur px-4 py-2 rounded-full text-sm font-medium border border-neutral-200">
+                  Performance Test
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* 5. Roadmap */}
+          <section className="mb-32 max-w-4xl mx-auto">
+            <SectionHeading
+              number="05"
               title="Development Roadmap"
               subtitle="Rolling out the future."
             />

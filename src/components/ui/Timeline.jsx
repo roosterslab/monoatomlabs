@@ -1,8 +1,17 @@
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 
-const Timeline = ({ items = [], theme = 'light' }) => {
+const Timeline = ({ items = [], theme = 'light', accentColor = 'blue' }) => {
     const isDark = theme === 'dark';
+
+    const colorMap = {
+        blue: { dot: 'bg-blue-600', ring: 'ring-blue-100' },
+        emerald: { dot: 'bg-emerald-500', ring: 'ring-emerald-100' },
+        purple: { dot: 'bg-purple-600', ring: 'ring-purple-100' },
+        slate: { dot: 'bg-slate-700', ring: 'ring-slate-200' },
+    };
+
+    const colors = colorMap[accentColor] || colorMap.blue;
 
     return (
         <div className="relative pl-8 border-l border-neutral-200 dark:border-neutral-800 space-y-12">
@@ -14,7 +23,7 @@ const Timeline = ({ items = [], theme = 'light' }) => {
                         ${item.status === 'completed'
                             ? 'bg-emerald-500 border-white ring-2 ring-emerald-100'
                             : item.status === 'current'
-                                ? 'bg-blue-600 border-white ring-2 ring-blue-100 animate-pulse'
+                                ? `${colors.dot} border-white ring-2 ${colors.ring} animate-pulse`
                                 : 'bg-neutral-300 border-white'
                         }
                     `}></div>

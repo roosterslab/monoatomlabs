@@ -54,7 +54,7 @@ const HDGPE = () => {
           {/* Hero Section */}
           <ProductHero
             title="Lighter. Stronger. Infinitely better."
-            subtitle="High-Density Graphene Polyethylene (HDGPE) redefines plastic performance. By integrating graphene at the molecular level, we achieve steel-like strength with the versatility of thermoplastics."
+            subtitle="High-Density Graphene Polyethylene (HD-G-PE) redefines plastic performance. By integrating graphene at the molecular level, we achieve steel-like strength with the versatility of thermoplastics."
             category="Polymer Engineering"
             categoryColor="bg-blue-500"
             images={[
@@ -182,7 +182,7 @@ const HDGPE = () => {
                 <div>
                   <h3 className="text-2xl font-display font-medium mb-4">Sustainability at Scale</h3>
                   <p className="text-neutral-400 leading-relaxed mb-8">
-                    By reducing material usage and extending product lifecycles, HDGPE represents a massive shift towards sustainable industrial design.
+                    By reducing material usage and extending product lifecycles, HD-G-PE represents a massive shift towards sustainable industrial design.
                   </p>
                   <Button variant="secondary" theme="dark">View Sustainability Report</Button>
                 </div>
@@ -213,7 +213,7 @@ const HDGPE = () => {
               <div className="md:pr-8">
                 <h3 className="text-2xl font-display font-medium mb-2">The Economics of Longevity</h3>
                 <p className="text-neutral-400 text-sm leading-relaxed">
-                  HDGPE redefines infrastructure economics by enabling thinner walls without sacrificing strength, and extending asset lifecycles by decades.
+                  HD-G-PE redefines infrastructure economics by enabling thinner walls without sacrificing strength, and extending asset lifecycles by decades.
                 </p>
               </div>
               <div className="flex flex-col justify-center px-4">
@@ -329,7 +329,7 @@ const HDGPE = () => {
             <div className="mb-12">
               <SectionHeading number="01" title="Manufacturing Process" theme="light" />
             </div>
-            <HowItWorks steps={howItWorksSteps} title="HDGPE Production" theme="light" />
+            <HowItWorks steps={howItWorksSteps} title="HD-G-PE Production" theme="light" />
           </section>
 
           {/* Pilot Program */}
@@ -479,7 +479,7 @@ const HDGPE = () => {
     <div className="min-h-screen">
       <PageHeader
         category="Material Science"
-        title="HDGPE"
+        title="HD-G-PE"
         subtitle="High-Density Graphene Polyethylene. The next evolution in thermoplastic performance."
       />
 

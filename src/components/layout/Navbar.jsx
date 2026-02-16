@@ -47,7 +47,7 @@ const Navbar = () => {
         return location.pathname === path || location.pathname.startsWith(path + '/');
     };
 
-    const isLightPage = location.pathname.startsWith('/products/pipeline/') && location.pathname !== '/products/pipeline';
+    const isLightPage = (location.pathname.startsWith('/products/pipeline/') && location.pathname !== '/products/pipeline') || location.pathname.includes('desalination');
 
     // Text color logic: Dark text if on a light page AND not scrolled. Otherwise white (default/dark mode).
     // When scrolled, navbar becomes dark (neutral-950), so text should be white.

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -12,16 +12,16 @@ import PilotTechnologies from '../../../components/pipeline/PilotTechnologies';
 // --- DATA SOURCE ---
 // Product Images (Using generated "White Studio" assets)
 const productImages = {
-  rustene: '/images/rustene_studio.png',
-  graphyre: '/images/graphyre_studio.png',
-  graphosite: '/images/graphosite_studio.png',
-  thermaphene: '/images/thermaphene_studio.png',
-  armophene: '/images/armophene_studio.png',
-  hydrogen: '/images/hydrogen_membrane_studio.png',
-  desalination: '/images/desalination_membrane_studio.png',
-  glass: '/images/graphene_glass_fibres_studio.png',
-  battery: '/images/battery_storage_studio.png',
-  aerowater: '/images/atmospheric_harvesting_studio.png' // Added missing image key
+  rustene: ['/images/pipeline/studio/Rustene.png'],
+  graphyre: ['/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png'],
+  graphosite: ['/images/pipeline/studio/Graphosite.png'],
+  thermaphene: ['/images/pipeline/studio/Thermophene.png'],
+  armophene: ['/images/pipeline/studio/Armophene.png', '/images/pipeline/studio/Armophene-2.png'],
+  hydrogen: ['/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png'],
+  desalination: ['/images/pipeline/studio/DesalinationMembranes.png'],
+  glass: ['/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png'],
+  battery: ['/images/pipeline/studio/Voltaphene.png'],
+  aerowater: ['/images/pipeline/studio/AtmosphericHarvesting.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
 };
 
 const pipelineCategories = [
@@ -186,6 +186,21 @@ const getProductRoute = (id) => {
 const DetailModal = ({ item, onClose }) => {
   if (!item) return null;
 
+  // slideshow logic
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const images = Array.isArray(item.image) ? item.image : (item.image ? [item.image] : []);
+  const hasMultipleImages = images.length > 1;
+
+  useEffect(() => {
+    let interval;
+    if (hasMultipleImages) {
+      interval = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }, 3000);
+    }
+    return () => clearInterval(interval);
+  }, [hasMultipleImages, images.length]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -203,14 +218,37 @@ const DetailModal = ({ item, onClose }) => {
         {/* Left/Top: Visuals */}
         <div className="w-full md:w-2/5 relative h-64 md:h-auto bg-neutral-900 overflow-hidden">
           <motion.div className="absolute inset-0" layoutId={`image-container-${item.id}`}>
-            {item.image ? (
-              <img src={item.image} alt={item.name} className="w-full h-full object-cover opacity-80" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-neutral-800">
-                <item.icon size={64} className="text-neutral-700" />
+            <AnimatePresence mode="wait">
+              {images.length > 0 ? (
+                <motion.img
+                  key={currentImageIndex}
+                  src={images[currentImageIndex]}
+                  alt={item.name}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 w-full h-full object-cover opacity-80"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-neutral-800">
+                  <item.icon size={64} className="text-neutral-700" />
+                </div>
+              )}
+            </AnimatePresence>
+            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
+
+            {/* Dots for slideshow */}
+            {hasMultipleImages && (
+              <div className="absolute top-4 left-4 flex gap-1 z-20">
+                {images.map((_, idx) => (
+                  <div
+                    key={idx}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/30'}`}
+                  />
+                ))}
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-transparent to-transparent"></div>
           </motion.div>
 
           <div className="absolute bottom-0 left-0 p-8 w-full z-10">
@@ -291,6 +329,22 @@ const PipelineCard = ({ item, onClick }) => {
   const isPilot = item.type === 'Pilot';
   const productRoute = getProductRoute(item.id);
 
+  // slideshow logic
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Ensure images is always an array
+  const images = Array.isArray(item.image) ? item.image : (item.image ? [item.image] : []);
+  const hasMultipleImages = images.length > 1;
+
+  useEffect(() => {
+    let interval;
+    if (hasMultipleImages) {
+      interval = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % images.length);
+      }, 3000); // 3 seconds slide
+    }
+    return () => clearInterval(interval);
+  }, [hasMultipleImages, images.length]);
+
   return (
     <Link to={productRoute} className="block h-full">
       <motion.div
@@ -304,19 +358,38 @@ const PipelineCard = ({ item, onClick }) => {
       >
         {/* Full Card Image Background with gradient overlay */}
         <div className="absolute inset-0 bg-neutral-100">
-          {item.image ? (
-            <motion.img
-              layoutId={`image-container-${item.id}`}
-              src={item.image}
-              alt={item.name}
-              className="w-full h-full object-cover opacity-100 group-hover:scale-105 transition-transform duration-700"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-neutral-100">
-              <item.icon size={64} className="text-neutral-300" />
+          <AnimatePresence mode="wait">
+            {images.length > 0 ? (
+              <motion.img
+                key={currentImageIndex}
+                src={images[currentImageIndex]}
+                alt={item.name}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0 w-full h-full object-cover p-8 group-hover:scale-105 transition-transform duration-700"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-neutral-100">
+                <item.icon size={64} className="text-neutral-300" />
+              </div>
+            )}
+          </AnimatePresence>
+
+          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+
+          {/* Dots for slideshow */}
+          {hasMultipleImages && (
+            <div className="absolute top-4 right-4 flex gap-1 z-20">
+              {images.map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`w-1.5 h-1.5 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/30'}`}
+                />
+              ))}
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
         </div>
 
         {/* Content Overlay */}
