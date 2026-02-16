@@ -53,10 +53,10 @@ export const pipelineProducts = {
         { icon: Zap, title: 'Low Energy', description: 'Passive separation process requires no heat or phase change.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
       ],
       metrics: [
-        { value: '>1000', label: 'Selectivity (H2/CO2)', labelColor: 'text-indigo-300' },
-        { value: 'High', label: 'Permeance', labelColor: 'text-indigo-300' },
-        { value: '500°C', label: 'Thermal Stability', labelColor: 'text-indigo-300' },
-        { value: 'Compact', label: 'Footprint', labelColor: 'text-indigo-300' }
+        { value: '>1000', label: 'Selectivity (H2/CO2)', labelColor: 'text-indigo-200' },
+        { value: 'High', label: 'Permeance', labelColor: 'text-indigo-200' },
+        { value: '500°C', label: 'Thermal Stability', labelColor: 'text-indigo-200' },
+        { value: 'Compact', label: 'Footprint', labelColor: 'text-indigo-200' }
       ]
     },
 

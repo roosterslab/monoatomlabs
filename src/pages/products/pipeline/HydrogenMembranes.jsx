@@ -70,77 +70,81 @@ const HydrogenMembranes = () => {
         {/* Two Column Layout: Setup + Analysis */}
         <div className="grid lg:grid-cols-2 gap-12 mb-12">
           {/* Experimental Setup */}
-          <Card className="bg-neutral-50 border-neutral-200 p-8">
+          <Card className="bg-gradient-to-br from-white to-indigo-50/30 border-indigo-200/50 p-8 shadow-lg">
             <div className="flex items-center gap-3 mb-6">
-              <FlaskConical className="w-6 h-6 text-indigo-600" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                <FlaskConical className="w-5 h-5 text-white" />
+              </div>
               <h4 className="text-xl font-bold text-neutral-900">Experimental Setup</h4>
             </div>
             <div className="space-y-4">
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">System Type</div>
-                <div className="text-sm text-neutral-600">Multi-cell stacked seawater electrolyzer with parallel cell assembly, transparent acrylic plates, and stainless-steel bolts</div>
+              <div className="p-3 bg-white/70 rounded-lg border border-indigo-100">
+                <div className="text-sm font-bold text-indigo-900 mb-2">System Type</div>
+                <div className="text-sm text-neutral-700 leading-relaxed">Multi-cell stacked seawater electrolyzer with parallel cell assembly, transparent acrylic plates, and stainless-steel bolts</div>
               </div>
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">Feedstock</div>
-                <div className="text-sm text-neutral-600">Raw seawater (unfiltered, untreated)</div>
+              <div className="p-3 bg-white/70 rounded-lg border border-indigo-100">
+                <div className="text-sm font-bold text-indigo-900 mb-2">Feedstock</div>
+                <div className="text-sm text-neutral-700 leading-relaxed">Raw seawater (unfiltered, untreated)</div>
               </div>
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">Power Source</div>
-                <div className="text-sm text-neutral-600">DC regulated power supply connected to electrode stack</div>
+              <div className="p-3 bg-white/70 rounded-lg border border-indigo-100">
+                <div className="text-sm font-bold text-indigo-900 mb-2">Power Source</div>
+                <div className="text-sm text-neutral-700 leading-relaxed">DC regulated power supply connected to electrode stack</div>
               </div>
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">Gas Collection</div>
-                <div className="text-sm text-neutral-600">Blue pneumatic tubing for H₂ and O₂ segregation and collection</div>
+              <div className="p-3 bg-white/70 rounded-lg border border-indigo-100">
+                <div className="text-sm font-bold text-indigo-900 mb-2">Gas Collection</div>
+                <div className="text-sm text-neutral-700 leading-relaxed">Blue pneumatic tubing for H₂ and O₂ segregation and collection</div>
               </div>
             </div>
           </Card>
 
           {/* GC Analysis */}
-          <Card className="bg-neutral-50 border-neutral-200 p-8">
+          <Card className="bg-gradient-to-br from-white to-emerald-50/30 border-emerald-200/50 p-8 shadow-lg">
             <div className="flex items-center gap-3 mb-6">
-              <Activity className="w-6 h-6 text-indigo-600" />
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                <Activity className="w-5 h-5 text-white" />
+              </div>
               <h4 className="text-xl font-bold text-neutral-900">GC Analysis Results</h4>
             </div>
-            <div className="space-y-4 mb-6">
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">Technique</div>
-                <div className="text-sm text-neutral-600">Gas Chromatography (GC) with Flame Ionization Detector (FID)</div>
+            <div className="space-y-3 mb-6">
+              <div className="p-3 bg-white/70 rounded-lg border border-emerald-100">
+                <div className="text-sm font-bold text-emerald-900 mb-2">Technique</div>
+                <div className="text-sm text-neutral-700">Gas Chromatography (GC) with Flame Ionization Detector (FID)</div>
               </div>
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">Analysis Date</div>
-                <div className="text-sm text-neutral-600">25 August 2025</div>
+              <div className="p-3 bg-white/70 rounded-lg border border-emerald-100">
+                <div className="text-sm font-bold text-emerald-900 mb-2">Analysis Date</div>
+                <div className="text-sm text-neutral-700">25 August 2025</div>
               </div>
-              <div>
-                <div className="text-sm font-semibold text-neutral-700 mb-1">Sample Source</div>
-                <div className="text-sm text-neutral-600">Hydrogen gas directly from electrolyzer outlet (no post-purification)</div>
+              <div className="p-3 bg-white/70 rounded-lg border border-emerald-100">
+                <div className="text-sm font-bold text-emerald-900 mb-2">Sample Source</div>
+                <div className="text-sm text-neutral-700">Hydrogen gas directly from electrolyzer outlet (no post-purification)</div>
               </div>
             </div>
 
             {/* GC Data Table */}
-            <div className="bg-white border border-neutral-200 rounded-lg overflow-hidden">
+            <div className="bg-white border-2 border-emerald-200 rounded-xl overflow-hidden shadow-sm">
               <table className="w-full text-sm">
-                <thead className="bg-neutral-100 border-b border-neutral-200">
+                <thead className="bg-gradient-to-r from-emerald-500 to-emerald-600 border-b border-emerald-600">
                   <tr>
-                    <th className="py-2 px-4 text-left font-semibold text-neutral-700">Parameter</th>
-                    <th className="py-2 px-4 text-left font-semibold text-neutral-700">Peak 1</th>
-                    <th className="py-2 px-4 text-left font-semibold text-neutral-700">Peak 2</th>
+                    <th className="py-3 px-4 text-left font-bold text-white">Parameter</th>
+                    <th className="py-3 px-4 text-left font-bold text-white">Peak 1</th>
+                    <th className="py-3 px-4 text-left font-bold text-white">Peak 2</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-200">
-                  <tr>
-                    <td className="py-2 px-4 text-neutral-600">Retention Time</td>
-                    <td className="py-2 px-4 font-mono text-neutral-900">0.49 min</td>
-                    <td className="py-2 px-4 font-mono text-neutral-900">1.42 min</td>
+                <tbody className="divide-y divide-emerald-100">
+                  <tr className="hover:bg-emerald-50/50 transition-colors">
+                    <td className="py-3 px-4 font-semibold text-neutral-700">Retention Time</td>
+                    <td className="py-3 px-4 font-mono text-neutral-900 font-medium">0.49 min</td>
+                    <td className="py-3 px-4 font-mono text-neutral-900 font-medium">1.42 min</td>
                   </tr>
-                  <tr>
-                    <td className="py-2 px-4 text-neutral-600">Area (%)</td>
-                    <td className="py-2 px-4 font-mono font-bold text-indigo-600">99.51%</td>
-                    <td className="py-2 px-4 font-mono text-neutral-900">0.49%</td>
+                  <tr className="hover:bg-emerald-50/50 transition-colors">
+                    <td className="py-3 px-4 font-semibold text-neutral-700">Area (%)</td>
+                    <td className="py-3 px-4 font-mono font-bold text-emerald-700 text-base">99.51%</td>
+                    <td className="py-3 px-4 font-mono text-neutral-900 font-medium">0.49%</td>
                   </tr>
-                  <tr>
-                    <td className="py-2 px-4 text-neutral-600">Interpretation</td>
-                    <td className="py-2 px-4 text-neutral-900 font-semibold">Hydrogen (H₂)</td>
-                    <td className="py-2 px-4 text-neutral-600">Minor impurity</td>
+                  <tr className="hover:bg-emerald-50/50 transition-colors">
+                    <td className="py-3 px-4 font-semibold text-neutral-700">Interpretation</td>
+                    <td className="py-3 px-4 text-neutral-900 font-bold">Hydrogen (H₂)</td>
+                    <td className="py-3 px-4 text-neutral-600 font-medium">Minor impurity</td>
                   </tr>
                 </tbody>
               </table>
