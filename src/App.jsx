@@ -38,8 +38,6 @@ const AtmosphericHarvesting = lazy(() => import('./pages/products/pipeline/Atmos
 const GrapheneGlassFibres = lazy(() => import('./pages/products/pipeline/GrapheneGlassFibres'));
 const BatteryStorage = lazy(() => import('./pages/products/pipeline/BatteryStorage'));
 
-// Data Submission
-const DataSubmission = lazy(() => import('./pages/DataSubmission'));
 
 function App() {
     return (
@@ -78,7 +76,6 @@ function App() {
 
                     {/* Other Routes */}
                     <Route path="contact" element={<Contact />} />
-                    <Route path="data-submission" element={<DataSubmission />} />
 
                     {/* Placeholder routes - redirect to contact */}
                     <Route path="privacy" element={<Contact />} />
