@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  .gradient-bg {
+    background: linear-gradient(135deg, #0f766e 0%, #134e4a 100%);
+  }
+
+  .data-source-backed {
+    @apply bg-gradient-to-br from-green-50 to-emerald-50 border-l-4 border-green-500;
+  }
+
+  .data-needs-validation {
+    @apply bg-gradient-to-br from-amber-50 to-orange-50 border-l-4 border-amber-500;
+  }
+
+  .data-critical {
+    @apply bg-gradient-to-br from-red-50 to-rose-50 border-l-4 border-red-500;
+  }
+
+  .formula-box {
+    @apply bg-gradient-to-br from-gray-50 to-gray-100 border-l-4 border-purple-500;
+  }
+
+  .product-card {
+    @apply bg-white rounded-xl shadow-md border-2 transition-all hover:shadow-xl;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-brand-600 text-white font-semibold rounded-lg hover:bg-brand-700 transition-all shadow-md;
+  }
+
+  .btn-secondary {
+    @apply px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-all;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
