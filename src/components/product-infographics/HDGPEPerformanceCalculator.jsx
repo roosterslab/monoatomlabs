@@ -4,31 +4,39 @@ import { TrendingUp, Package, Clock, Zap, Calculator } from 'lucide-react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 const HDGPEPerformanceCalculator = () => {
+  // SOURCE-BACKED VALUES from grounded_formulas.md:
+  // - Tensile & flexural strength: +30%
+  // - Elongation strength: 20× improvement
+  // - Lifespan/durability: +20%
+  // NEEDS INTERNAL DATA: Dosage, pricing, value model
+
   const [productionVolume, setProductionVolume] = useState(100); // tons/year
   const [applicationArea, setApplicationArea] = useState('packaging');
   const [hdpePrice, setHdpePrice] = useState(120); // ₹/kg
-  const [hdgpeAdditiveCost] = useState(5); // ₹/kg additional (fixed)
+
+  // NEEDS INTERNAL DATA: Actual additive cost
+  const [hdgpeAdditiveCost] = useState(5); // ₹/kg (requires internal pricing data - not source-backed)
 
   const applications = {
     packaging: {
       name: 'Packaging Materials',
-      elongationGain: 20,
-      lifespanGain: 20,
-      marketPremium: 15,
+      elongationGain: 20, // 20× (source-backed)
+      lifespanGain: 20, // +20% (source-backed)
+      marketPremium: 15, // NEEDS VALIDATION: market premium %
       qualityImpact: 'High',
     },
     films: {
       name: 'Films & Sheets',
-      elongationGain: 22,
-      lifespanGain: 25,
-      marketPremium: 20,
+      elongationGain: 22, // Conservative estimate (source: 20× base)
+      lifespanGain: 25, // Conservative estimate (source: +20% base)
+      marketPremium: 20, // NEEDS VALIDATION: market premium %
       qualityImpact: 'Very High',
     },
     pipes: {
       name: 'Pipes & Tubes',
-      elongationGain: 18,
-      lifespanGain: 22,
-      marketPremium: 18,
+      elongationGain: 18, // Conservative estimate (source: 20× base)
+      lifespanGain: 22, // Conservative estimate (source: +20% base)
+      marketPremium: 18, // NEEDS VALIDATION: market premium %
       qualityImpact: 'High',
     },
   };

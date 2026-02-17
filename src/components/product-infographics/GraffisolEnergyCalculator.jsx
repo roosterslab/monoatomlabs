@@ -10,11 +10,17 @@ const GraffisolEnergyCalculator = () => {
   const [locationTemp, setLocationTemp] = useState('hot');
 
   const calculations = useMemo(() => {
-    // Base generation (annual kWh)
-    const annualGeneration = solarCapacity * 1500; // ~1500 kWh/kW/year average in India
+    // SOURCE-BACKED VALUES from grounded_formulas.md:
+    // - Power output gain: 7-8% (field-validated)
+    // - Operating temp reduction: 5-6°C
+    // - Soiling loss reduction: 30-40%
+    // - Typical payback: ~18 months for 1 MW
 
-    // Energy output improvement (10-12% range)
-    const energyGain = 0.11; // 11% average
+    // NEEDS VALIDATION: Base generation rate
+    const annualGeneration = solarCapacity * 1500; // ~1500 kWh/kW/year (requires validation)
+
+    // Using source-backed 7-8% range (conservative estimate: 7.5%)
+    const energyGain = 0.075; // 7.5% (source-backed range: 7-8%)
     const additionalEnergy = annualGeneration * energyGain;
 
     // Soiling impact reduction
@@ -42,7 +48,9 @@ const GraffisolEnergyCalculator = () => {
 
     // Financial calculations
     const annualRevenue = totalAdditionalEnergy * electricityRate;
-    const coatingCost = solarCapacity * 500; // ₹500/kW
+
+    // NEEDS INTERNAL DATA: Installed coating cost per kW
+    const coatingCost = solarCapacity * 500; // ₹500/kW (requires validation - not source-backed)
     const paybackMonths = (coatingCost / (annualRevenue / 12)).toFixed(1);
     const fiveYearRevenue = annualRevenue * 5;
     const netProfit = fiveYearRevenue - coatingCost;
