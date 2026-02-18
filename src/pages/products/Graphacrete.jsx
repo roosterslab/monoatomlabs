@@ -24,6 +24,7 @@ const ProductDataSheet = lazy(() => import('../../components/product-infographic
 const IndustrySolutions = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.IndustrySolutions })));
 const ScienceExplained = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.ScienceExplained })));
 const CompetitiveMatrix = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.CompetitiveMatrix })));
+const GraphacreteLabResults = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.GraphacreteLabResults })));
 
 // Loading fallback for infographics
 const InfographicLoader = () => (
@@ -105,10 +106,10 @@ const Graphacrete = () => {
               {/* Stats Grid */}
               <div className="lg:col-span-2 grid grid-cols-2 gap-4">
                 {[
-                  { label: 'Compressive Strength', value: '+50%', desc: 'Increase vs Control' },
-                  { label: 'Permeability', value: '-45%', desc: 'Water Penetration' },
-                  { label: 'Cement Reduction', value: '20%', desc: 'Lower Carbon Footprint' },
-                  { label: 'Crack Resistance', value: 'High', desc: 'Micro-crack Control' }
+                  { label: 'M-20 Compressive Strength', value: '29 MPa', desc: 'Actual 28-day · NABL certified' },
+                  { label: 'M-30 ACT Equivalent', value: '49.5 MPa', desc: '65% above M-30 min · NABL certified' },
+                  { label: 'Cement Saved (M-20)', value: '10.8%', desc: '40 kg/m³ less vs control mix' },
+                  { label: 'W/C Ratio (M-30)', value: '0.37', desc: 'Denser microstructure · 220 mm slump' }
                 ].map((stat, i) => (
                   <div key={i} className="p-8 bg-neutral-50 border border-neutral-200 rounded-xl hover:shadow-md transition-shadow flex flex-col justify-center">
                     <div className="text-4xl font-display font-medium text-neutral-900 mb-2">{stat.value}</div>
@@ -184,14 +185,14 @@ const Graphacrete = () => {
             <section id="impact" className="py-8">
               <SectionHeading number="02" title="The Economic Edge" theme="light" className="mb-8" />
               <p className="text-neutral-600 leading-relaxed mb-8 max-w-2xl">
-                Graphacrete delivers value beyond performance. By enabling M30 mix designs to achieve M50 performance standards (NABL certified), it unlocks ₹430/m³ in direct material savings.
+                Graphacrete delivers value beyond performance. NABL-certified M-20 tests show <strong>40 kg/m³ cement saved</strong> per cubic metre while achieving higher actual 28-day strength (29 MPa vs 25 MPa control). M-30 tests show the admixture pushing equivalent 28-day strength to 49.5 MPa — enabling significant grade upgrades.
               </p>
-              {/* Key savings stat strip */}
+              {/* Key savings stat strip — grounded in NABL test data */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { label: 'Grade Upgrade Savings', value: '₹430/m³', sub: 'M30 → M50 (NABL certified)' },
-                  { label: 'Cement Reduction', value: '15–20%', sub: '~17.5 kg less per m³' },
-                  { label: 'CO₂ Reduction', value: '~15 kg/m³', sub: '0.85 kg CO₂ per kg cement' }
+                  { label: 'Cement Saved (M-20)', value: '40 kg/m³', sub: '331 vs 371 kg/m³ · NABL BNR-1127 vs BNR-1140' },
+                  { label: 'Strength Advantage (M-20)', value: '+16%', sub: '29 MPa actual vs 25 MPa est. (control)' },
+                  { label: 'M-30 ACT Strength', value: '49.5 MPa', sub: '65% above M-30 min · NABL BNR-1101' }
                 ].map((s, i) => (
                   <div key={i} className="p-6 bg-neutral-50 border border-neutral-200 rounded-xl">
                     <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">{s.label}</div>
@@ -498,10 +499,18 @@ const Graphacrete = () => {
               </div>
             </section>
 
+            {/* NABL Lab Test Results — real data from Global Lab, Bhubaneswar */}
+            <section>
+              <SectionHeading number="03" title="NABL Lab Test Results" theme="light" subtitle="Real-world concrete mix design and compressive strength data from accredited third-party testing." className="mb-8" />
+              <Suspense fallback={<InfographicLoader />}>
+                <GraphacreteLabResults theme="light" />
+              </Suspense>
+            </section>
+
             {/* Certifications & Downloads */}
             <section className="space-y-24">
               <div>
-                <SectionHeading number="03" title="Quality & Standards" theme="light" className="mb-6" />
+                <SectionHeading number="04" title="Quality & Standards" theme="light" className="mb-6" />
                 <CertificationsQuality
                   productName={certificationsData.productName}
                   certifications={certificationsData.certifications}
@@ -511,7 +520,7 @@ const Graphacrete = () => {
                 />
               </div>
               <div>
-                <SectionHeading number="04" title="Downloads" theme="light" className="mb-6" />
+                <SectionHeading number="05" title="Downloads" theme="light" className="mb-6" />
                 <ProductDataSheet
                   productName={dataSheetData.productName}
                   specifications={dataSheetData.specifications}

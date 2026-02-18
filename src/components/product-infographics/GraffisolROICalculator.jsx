@@ -76,6 +76,11 @@ const GraffisolROICalculator = ({
 }) => {
   const isDark = theme === 'dark';
 
+  const sliderBg = (pct) => ({
+    background: `linear-gradient(to right, #eab308 ${pct.toFixed(1)}%, ${isDark ? '#374151' : '#e5e7eb'} ${pct.toFixed(1)}%)`
+  });
+  const sliderCls = 'w-full h-2 rounded-full appearance-none cursor-pointer outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-yellow-500 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[3px] [&::-moz-range-thumb]:border-yellow-500 [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer';
+
   const allCfg = { ...defaultInputs, ...(secCfg || {}) };
   const init = Object.keys(allCfg).reduce((acc, key) => {
     const c = allCfg[key];
@@ -156,7 +161,7 @@ const GraffisolROICalculator = ({
             set('systemSize', v);
             setSizeText(String(v));
           }}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-yellow-500"
+          className={sliderCls} style={sliderBg(sizeToPos(sz))}
         />
         <div className="flex justify-between">
           {SYSTEM_TICKS.map(({ v, num, label }) => (
@@ -185,7 +190,7 @@ const GraffisolROICalculator = ({
         <input
           type="range" min={cfg.min} max={cfg.max} step={cfg.step || 0.5} value={val}
           onChange={(e) => set('electricityRate', Number(e.target.value))}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-yellow-500"
+          className={sliderCls} style={sliderBg(Math.max(0, Math.min(100, ((val - cfg.min) / (cfg.max - cfg.min)) * 100)))}
         />
         <div className="flex justify-between">
           <span className={`text-[10px] ${sub}`}>₹{cfg.min}</span>
@@ -208,7 +213,7 @@ const GraffisolROICalculator = ({
         <input
           type="range" min={cfg.min} max={cfg.max} step={cfg.step || 100} value={val}
           onChange={(e) => set('applicationCostPerKw', Number(e.target.value))}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-yellow-500"
+          className={sliderCls} style={sliderBg(Math.max(0, Math.min(100, ((val - cfg.min) / (cfg.max - cfg.min)) * 100)))}
         />
         <div className="flex justify-between">
           <span className={`text-[10px] ${sub}`}>₹{(cfg.min || 0).toLocaleString()}</span>
@@ -230,7 +235,7 @@ const GraffisolROICalculator = ({
         <input
           type="range" min={cfg.min} max={cfg.max} step={1} value={val}
           onChange={(e) => set('outputGainPct', Number(e.target.value))}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-yellow-500"
+          className={sliderCls} style={sliderBg(Math.max(0, Math.min(100, ((val - cfg.min) / (cfg.max - cfg.min)) * 100)))}
         />
         <div className="flex justify-between">
           <span className={`text-[10px] ${sub}`}>{cfg.min}% conservative</span>

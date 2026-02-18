@@ -545,48 +545,53 @@ export const certificationsData = {
   productName: 'Graphacrete',
   certifications: [
     {
-      name: 'ISO 9001:2015',
-      description: 'Quality management certified',
-      certNumber: 'ISO-9001'
-    },
-    {
-      name: 'Material Safety',
-      description: 'Food-grade polymer compatible',
-      certNumber: 'FDA-COMPATIBLE'
+      name: 'NABL Accredited',
+      description: 'Global Lab, Bhubaneswar — independent third-party testing',
+      certNumber: 'BNR-1127-TR-790403'
     },
     {
       name: 'NABL Accredited',
-      description: 'Lab Tested',
-      certNumber: 'LT-2024'
+      description: 'M-20 without Graphene (control mix)',
+      certNumber: 'BNR-1140-TR-793018'
+    },
+    {
+      name: 'NABL Accredited',
+      description: 'M-30 Graphene admixture — R&D mix',
+      certNumber: 'BNR-1101-TR-823120'
     }
   ],
   testingStandards: [
     {
-      name: 'Tensile Strength',
-      description: 'ASTM D638 testing for tensile properties',
-      code: 'ASTM D638'
+      name: 'Concrete Mix Design',
+      description: 'Standard method for concrete mix proportioning',
+      code: 'IS 10262 : 2019'
     },
     {
-      name: 'Elongation at Break',
-      description: 'Flexibility and toughness measurement',
-      code: 'ASTM D638'
+      name: 'Plain & Reinforced Concrete',
+      description: 'Code of practice for structural concrete',
+      code: 'IS 456 : 2000 (RA 2021 Amd-5)'
     },
     {
-      name: 'UV Stability',
-      description: 'Weathering resistance testing',
-      code: 'ASTM G154'
+      name: 'Accelerated Curing Test',
+      description: 'ACT by boiling water method — equivalent 28-day prediction',
+      code: 'IS 9013 : 1978 (RA 2013)'
     },
     {
-      name: 'Thermal Stability',
-      description: 'Heat resistance and processing stability',
-      code: 'ASTM D648'
+      name: 'Coarse & Fine Aggregates',
+      description: 'Specification for aggregates used in concrete',
+      code: 'IS 383 : 2016'
+    },
+    {
+      name: 'Cube Compression Testing',
+      description: 'Method of tests for strength of concrete',
+      code: 'IS 516 Part-1 Sec-1'
     }
   ],
   qualityMetrics: [
-    { value: '+30%', label: 'Strength' },
-    { value: '20×', label: 'Elongation' },
-    { value: '+20%', label: 'Lifespan' },
-    { value: 'Superior', label: 'UV Stability' }
+    { value: '29 MPa', label: 'M-20 28-Day (actual)' },
+    { value: '49.5 MPa', label: 'M-30 ACT Equiv.' },
+    { value: '10.8%', label: 'Cement Saved (M-20)' },
+    { value: '0.37', label: 'W/C Ratio (M-30)' }
   ]
 };
 
@@ -1043,9 +1048,9 @@ export const scienceExplainedData = {
         }
       ],
       technicalData: {
-        'Test Samples': '500+ cubes tested',
-        'Projects': '40+ field trials',
-        'Success Rate': '98% meet targets'
+        'NABL Reports': 'BNR-1127 · BNR-1140 · BNR-1101',
+        'M-20 Actual 28-Day': '29.0 MPa avg (3 cubes)',
+        'M-30 ACT Equiv.': '49.5 MPa avg (3 cubes)'
       }
     }
   ]
