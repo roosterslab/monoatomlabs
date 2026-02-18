@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Download, FileImage, Printer } from 'lucide-react'
-import { exportPanelAsPNG, exportPanelAsPDF, exportAllPanelsAsSourcePDF } from '../utils/pdfExporter'
+import { exportPanelAsPNG, exportPanelAsPDF, exportAllPanelsAsSourcePDF } from '../../utils/pdfExporter'
 
 const PANEL_ELEMENT_MAP = {
   wrap: 'panel-wrap',

@@ -1,0 +1,18 @@
+# Adding a New Design Variant
+
+## Product
+Monoatom Labs — CERAPHENE Graphene Ceramic Coating box packaging.
+
+## Where files live
+designs/
+  registry.js          <- add your import and entry here
+  wrap/<Name>/index.jsx
+  back/<Name>/index.jsx
+  flaps/<Name>/index.jsx
+  qr/<Name>/index.jsx
+
+Read an existing GrapheneV1/index.jsx to understand the props, dimensions, and how SurfaceBg works.
+
+
+- File path: designs/<panel>/<VariantName>/index.jsx
+

@@ -9,7 +9,10 @@
       "Bash(npm install:*)",
       "Bash(wc:*)",
       "Bash(ls:*)",
-      "Bash(node scripts/audit-navigation.cjs:*)"
+      "Bash(node scripts/audit-navigation.cjs:*)",
+      "Bash(\"C:/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/box-design-dev/maker/src/components/designs/.agent\":*)",
+      "Bash(python3:*)",
+      "Bash(node -e \"\nconst fs = require\\(''fs''\\);\nconst content = \\\\`# Adding a New Design Variant\n\n## Product\nMonoatom Labs — CERAPHENE Graphene Ceramic Coating box packaging.\n\n## Where files live\ndesigns/\n  registry.js          <- add your import and entry here\n  wrap/<Name>/index.jsx\n  back/<Name>/index.jsx\n  flaps/<Name>/index.jsx\n  qr/<Name>/index.jsx\n\nRead an existing GrapheneV1/index.jsx to understand the props, dimensions, and how SurfaceBg works.\n\n## Technical minimums \\(non-negotiable\\)\n\n- File path: designs/<panel>/<VariantName>/index.jsx\n- Imports go up three levels: ../../../studio/SurfaceBg, ../../../brand/Logo\n- Props must match the panel signature exactly \\(check GrapheneV1 for the panel you are working on\\)\n- Every size must scale with the scale prop\n- Register in registry.js — import the component, add { id, label, Component } to the panel array\n\n## Everything else — make it your own.\n\\\\`;\nfs.writeFileSync\\(''C:/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/box-design-dev/maker/src/components/designs/.agent'', content, ''utf8''\\);\nconsole.log\\(''done''\\);\n\")"
     ]
   }
 }
