@@ -69,6 +69,11 @@ const CerapheneROICalculator = ({
 }) => {
   const isDark = theme === 'dark';
 
+  const sliderBg = (pct) => ({
+    background: `linear-gradient(to right, #3b82f6 ${pct.toFixed(1)}%, ${isDark ? '#374151' : '#e5e7eb'} ${pct.toFixed(1)}%)`
+  });
+  const sliderCls = 'w-full h-2 rounded-full appearance-none cursor-pointer outline-none [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-blue-500 [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:transition-transform [&::-webkit-slider-thumb]:hover:scale-110 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-[3px] [&::-moz-range-thumb]:border-blue-500 [&::-moz-range-thumb]:shadow-md [&::-moz-range-thumb]:cursor-pointer';
+
   const allCfg = { ...defaultInputs, ...(secCfg || {}) };
   const init = Object.keys(allCfg).reduce((acc, key) => {
     const c = allCfg[key];
@@ -152,7 +157,7 @@ const CerapheneROICalculator = ({
             set('vehicleCount', n);
             setCountText(String(n));
           }}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-blue-600"
+          className={sliderCls} style={sliderBg(vehiclesToPos(v))}
         />
         <div className="flex justify-between">
           {VEHICLE_TICKS.map(({ v: tv, num, label }) => (
@@ -181,7 +186,7 @@ const CerapheneROICalculator = ({
         <input
           type="range" min={cfg.min} max={cfg.max} step={cfg.step || 1000} value={val}
           onChange={(e) => set('competitorCost', Number(e.target.value))}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-blue-600"
+          className={sliderCls} style={sliderBg(Math.max(0, Math.min(100, ((val - cfg.min) / (cfg.max - cfg.min)) * 100)))}
         />
         <div className="flex justify-between">
           <span className={`text-[10px] ${sub}`}>₹{(cfg.min / 1000).toFixed(0)}k</span>
@@ -204,7 +209,7 @@ const CerapheneROICalculator = ({
         <input
           type="range" min={cfg.min} max={cfg.max} step={cfg.step || 1000} value={val}
           onChange={(e) => set('annualWashCostPerVehicle', Number(e.target.value))}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-blue-600"
+          className={sliderCls} style={sliderBg(Math.max(0, Math.min(100, ((val - cfg.min) / (cfg.max - cfg.min)) * 100)))}
         />
         <div className="flex justify-between">
           <span className={`text-[10px] ${sub}`}>₹{(cfg.min / 1000).toFixed(0)}k</span>
