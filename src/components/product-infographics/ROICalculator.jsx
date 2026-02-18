@@ -509,11 +509,11 @@ const ROICalculator = ({
             </p>
           </div>
 
-          {/* ── Two savings headline cards (spec §11A) ───────────────────── */}
-          <div className="grid grid-cols-2 gap-4">
+          {/* ── Three savings headline cards ─────────────────────────────── */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
 
-            {/* Card 1: Net savings (primary) */}
-            <div className={`p-5 rounded-2xl border-2 ${
+            {/* Card 1: Net savings (ALL-IN) */}
+            <div className={`p-4 rounded-2xl border-2 ${
               netPositive
                 ? isDark ? 'border-green-700 bg-green-900/10' : 'border-green-300 bg-green-50'
                 : isDark ? 'border-amber-700 bg-amber-900/10' : 'border-amber-200 bg-amber-50'
@@ -526,7 +526,7 @@ const ROICalculator = ({
                   isDark ? 'bg-neutral-700 text-neutral-300' : 'bg-neutral-900 text-white'
                 }`}>ALL-IN</span>
               </div>
-              <p className={`text-3xl font-display font-medium tabular-nums ${
+              <p className={`text-2xl font-display font-medium tabular-nums ${
                 netPositive ? 'text-green-700' : isDark ? 'text-amber-400' : 'text-amber-600'
               }`}>
                 {fmt(Math.abs(results.netSavingsTotal || 0))}
@@ -536,29 +536,37 @@ const ROICalculator = ({
                   ₹{Math.abs(results.netSavingsPerM3 || 0)}/m³ · grade + cement − additive
                 </p>
               ) : (
-                <>
-                  <p className={`text-xs mt-1.5 ${isDark ? 'text-amber-500' : 'text-amber-600'}`}>
-                    ₹{Math.abs(results.netSavingsPerM3 || 0)}/m³ quality premium
-                  </p>
-                  <ul className="mt-3 space-y-1">
-                    {[
-                      'Higher density & durability',
-                      'Reduced permeability',
-                      'Lower cracking risk',
-                      'Lower maintenance & longer life'
-                    ].map(b => (
-                      <li key={b} className="flex items-center gap-1.5 text-[10px] text-amber-700">
-                        <CheckCircle className="w-3 h-3 text-amber-500 flex-shrink-0" />
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                <p className={`text-xs mt-1.5 ${isDark ? 'text-amber-500' : 'text-amber-600'}`}>
+                  ₹{Math.abs(results.netSavingsPerM3 || 0)}/m³ quality premium
+                </p>
               )}
             </div>
 
-            {/* Card 2: Grade-only (secondary, brochure method) */}
-            <div className={`p-5 rounded-2xl border ${isDark ? 'border-slate-700 bg-slate-800/30' : 'border-slate-200 bg-slate-50'}`}>
+            {/* Card 2: Cement reduction savings only */}
+            {(results.cementSavingsValuePerM3 > 0) && (
+              <div className={`p-4 rounded-2xl border-2 ${isDark ? 'border-teal-700 bg-teal-900/10' : 'border-teal-300 bg-teal-50'}`}>
+                <div className="flex items-start justify-between mb-2">
+                  <p className={`text-xs font-bold uppercase tracking-widest ${isDark ? 'text-teal-400' : 'text-teal-600'}`}>
+                    Cement Savings
+                  </p>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isDark ? 'bg-teal-800 text-teal-300' : 'bg-teal-200 text-teal-700'}`}>
+                    CEMENT
+                  </span>
+                </div>
+                <p className={`text-2xl font-display font-medium tabular-nums ${isDark ? 'text-teal-300' : 'text-teal-700'}`}>
+                  {fmt((results.cementSavingsValuePerM3 || 0) * (inputs.projectVolume || 0))}
+                </p>
+                <p className={`text-xs mt-1.5 ${isDark ? 'text-teal-500' : 'text-teal-600'}`}>
+                  ₹{Math.abs(results.cementSavingsValuePerM3 || 0)}/m³ · cement reduction only
+                </p>
+                <p className={`text-[10px] font-semibold mt-2 ${isDark ? 'text-teal-400' : 'text-teal-500'}`}>
+                  {inputs.cementReductionPct || 15}% less cement · {(results.cementSavedBags || 0)} bags saved
+                </p>
+              </div>
+            )}
+
+            {/* Card 3: Grade-only (BROCHURE) */}
+            <div className={`p-4 rounded-2xl border ${isDark ? 'border-slate-700 bg-slate-800/30' : 'border-slate-200 bg-slate-50'}`}>
               <div className="flex items-start justify-between mb-2">
                 <p className={`text-xs font-bold uppercase tracking-widest ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
                   Grade-Only {results.gradeOnlyLabel || 'Savings'}
@@ -567,7 +575,7 @@ const ROICalculator = ({
                   isDark ? 'bg-slate-700 text-slate-300' : 'bg-slate-200 text-slate-600'
                 }`}>BROCHURE</span>
               </div>
-              <p className={`text-3xl font-display font-medium tabular-nums ${
+              <p className={`text-2xl font-display font-medium tabular-nums ${
                 gradeOnlyPositive ? isDark ? 'text-slate-200' : 'text-slate-700' : isDark ? 'text-slate-500' : 'text-slate-400'
               }`}>
                 {gradeOnlyPositive ? '' : '−'}{fmt(Math.abs(results.gradeOnlySavingsTotal || 0))}
@@ -577,7 +585,7 @@ const ROICalculator = ({
               </p>
               {results.isNABL && gradeOnlyPositive && (
                 <p className="text-[10px] font-semibold text-indigo-500 mt-2">
-                  ✦ Brochure headline: M30+G ≈ M50 @ ₹430/m³
+                  ✦ M30+G ≈ M50 @ ₹{Math.abs(results.gradeOnlySavingsPerM3 || 0)}/m³
                 </p>
               )}
             </div>
