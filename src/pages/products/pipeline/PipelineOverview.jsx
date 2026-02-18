@@ -7,7 +7,6 @@ import {
 } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
-import PilotTechnologies from '../../../components/pipeline/PilotTechnologies';
 
 // --- DATA SOURCE ---
 // Product Images (Icons + Studio photos for slideshow)
@@ -135,7 +134,7 @@ const pipelineCategories = [
       },
       {
         id: 'glassphen',
-        name: 'GlassPhen',
+        name: 'Glasphene',
         subtitle: 'Reinforced Glass Fibres',
         description: 'Graphene-reinforced glass fibres offering enhanced strength, durability, and multifunctional performance in composites.',
         status: 'Pilot Trial',
@@ -329,21 +328,25 @@ const PipelineCard = ({ item, onClick }) => {
   const isPilot = item.type === 'Pilot';
   const productRoute = getProductRoute(item.id);
 
-  // slideshow logic
+  // slideshow logic — idle on first image, activates on hover
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  // Ensure images is always an array
+  const intervalRef = React.useRef(null);
   const images = Array.isArray(item.image) ? item.image : (item.image ? [item.image] : []);
   const hasMultipleImages = images.length > 1;
 
-  useEffect(() => {
-    let interval;
-    if (hasMultipleImages) {
-      interval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % images.length);
-      }, 3000); // 3 seconds slide
-    }
-    return () => clearInterval(interval);
-  }, [hasMultipleImages, images.length]);
+  const handleMouseEnter = () => {
+    if (!hasMultipleImages) return;
+    intervalRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 1200);
+  };
+
+  const handleMouseLeave = () => {
+    clearInterval(intervalRef.current);
+    setCurrentImageIndex(0);
+  };
+
+  useEffect(() => () => clearInterval(intervalRef.current), []);
 
   return (
     <Link to={productRoute} className="block h-full">
@@ -355,6 +358,8 @@ const PipelineCard = ({ item, onClick }) => {
         exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
         className="group relative h-full aspect-square rounded-3xl overflow-hidden cursor-pointer border border-neutral-200 bg-white hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-500 flex flex-col"
         whileHover={{ y: -5 }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         {/* Full Card Image Background with gradient overlay */}
         <div className="absolute inset-0 bg-neutral-100">
@@ -456,11 +461,6 @@ const PipelineOverview = () => {
             Pilot Trials
           </button>
         </div>
-      </div>
-
-      {/* Pilot Technologies Showcase (Now on White Background) */}
-      <div className="bg-white py-12 relative z-20">
-        <PilotTechnologies />
       </div>
 
       {/* Grid Section */}

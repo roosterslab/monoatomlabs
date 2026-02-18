@@ -3,6 +3,10 @@
 
 // Calculators
 export { default as GraffisolEnergyCalculator } from './GraffisolEnergyCalculator';
+export { default as GraffisolROICalculator } from './GraffisolROICalculator';
+export { default as GraphacreteROICalculator } from './GraphacreteROICalculator';
+export { default as CerapheneROICalculator } from './CerapheneROICalculator';
+export { default as HDGPEROICalculator } from './HDGPEROICalculator';
 export { default as CerapheneCostComparison } from './CerapheneCostComparison';
 export { default as HDGPEPerformanceCalculator } from './HDGPEPerformanceCalculator';
 

@@ -6,84 +6,214 @@ import { Sun, Zap, Droplet, Shield, TrendingUp, Factory, Wind, Sparkles } from '
  */
 
 // ROI Calculator Configuration
+// Two always-visible methods: ALL-IN (full return) + CONSERVATIVE (power boost only)
 export const roiCalculatorConfig = {
   productName: 'Graffisol',
+
+  // Primary inputs — always visible
   defaultInputs: {
     systemSize: {
-      label: 'Solar System Size (kW)',
-      min: 10,
-      max: 1000,
-      step: 10,
+      label: 'System Size',
+      type: 'logslider',   // logarithmic 1–10,000 kW
+      min: 1,
+      max: 10000,
       unit: 'kW',
       default: 100
     },
     electricityRate: {
-      label: 'Electricity Rate (₹/kWh)',
+      label: 'Electricity Rate',
+      type: 'slider',
       min: 4,
       max: 12,
       step: 0.5,
-      unit: '₹',
-      default: 7
+      unit: '₹/kWh',
+      default: 7,
+      note: 'Commercial/industrial rate ₹7/kWh. Adjust for your tariff.'
     },
-    applicationCost: {
-      label: 'Application Cost (₹/kW)',
+    applicationCostPerKw: {
+      label: 'Application Cost',
+      type: 'slider',
       min: 1000,
       max: 3000,
       step: 100,
-      unit: '₹',
-      default: 1800
+      unit: '₹/kW',
+      default: 1800,
+      note: 'Installed cost per kW of panel capacity coated.'
+    },
+    outputGainPct: {
+      label: 'Output Gain',
+      type: 'slider',
+      min: 7,
+      max: 12,
+      step: 1,
+      unit: '%',
+      default: 10,
+      note: 'Field-validated range: 7–12%. Conservative default = 10%.'
     }
   },
+
+  // Secondary inputs — lifecycle accordion
+  secondaryInputs: {
+    analysisPeriod: {
+      label: 'Analysis Period',
+      type: 'buttongroup',
+      default: 20,
+      options: [
+        { value: 10, label: '10 yr' },
+        { value: 20, label: '20 yr' },
+        { value: 25, label: '25 yr' }
+      ]
+    },
+    soilingProfile: {
+      label: 'Soiling Environment',
+      type: 'buttongroup',
+      default: 'moderate',
+      options: [
+        { value: 'low',      label: 'Low'      },
+        { value: 'moderate', label: 'Moderate' },
+        { value: 'high',     label: 'High'     }
+      ]
+    }
+  },
+
   calculations: (inputs) => {
-    const { systemSize, electricityRate, applicationCost } = inputs;
+    const {
+      systemSize         = 100,
+      electricityRate    = 7,
+      applicationCostPerKw = 1800,
+      outputGainPct      = 10,    // 7–12%; 10% = conservative field-validated default
+      soilingProfile     = 'moderate',
+      analysisPeriod     = 20
+    } = inputs;
 
-    // Baseline annual generation (kWh/kW/year) - India average
-    const baselineGeneration = 1500; // kWh/kW/year
+    /**
+     * Source: Graffisol field trials & brochure
+     * - Power output gain: 7–12% (field-validated)
+     * - Operating temp reduction: 5–6°C
+     * - Soiling loss baseline: 8–25% depending on environment
+     * - Soiling recovery rate: 35% (30–40% range, conservative mid-point)
+     * - Maintenance saving: ₹200/kW/yr (reduced cleaning cycles)
+     * - Baseline generation: 1,500 kWh/kW/yr (India average, typical RMC assumption)
+     * - CO₂ factor: 0.82 kg/kWh (India grid, CEA 2023)
+     */
+    const baselineGenPerKw  = 1500;                      // kWh/kW/yr
+    const soilingLossMap    = { low: 0.08, moderate: 0.15, high: 0.25 };
+    const soilingLoss       = soilingLossMap[soilingProfile] || 0.15;
+    const soilingRecovery   = 0.35;                      // 35% of soiling loss recovered
+    const maintenancePerKw  = 200;                       // ₹/kW/yr constant
+    const co2Factor         = 0.82;                      // kg CO₂/kWh
 
-    // Graffisol improvements
-    const powerOutputGain = 0.10; // 10% average
-    const soilingLossReduction = 0.35; // 35% soiling reduction
-    const baselineSoilingLoss = 0.15; // 15% baseline soiling loss
+    // ── Energy calculations ─────────────────────────────────────────────────
+    const baselineAnnualKwh    = systemSize * baselineGenPerKw;
+    const powerBoostKwh        = baselineAnnualKwh * (outputGainPct / 100);
+    const soilingRecoveryKwh   = baselineAnnualKwh * soilingLoss * soilingRecovery;
+    const totalAdditionalKwh   = Math.round(powerBoostKwh + soilingRecoveryKwh);
 
-    // Calculate energy gains
-    const baselineEnergy = systemSize * baselineGeneration;
-    const soilingRecovery = baselineEnergy * (baselineSoilingLoss * soilingLossReduction);
-    const powerOutputIncrease = baselineEnergy * powerOutputGain;
-    const totalAdditionalEnergy = soilingRecovery + powerOutputIncrease;
+    // ── Per-kW annual revenue ───────────────────────────────────────────────
+    const baselineRevenuePerKw    = Math.round(baselineGenPerKw * electricityRate);
+    const powerBoostRevenuePerKw  = Math.round(baselineGenPerKw * (outputGainPct / 100) * electricityRate);
+    const soilingRevenuePerKw     = Math.round(baselineGenPerKw * soilingLoss * soilingRecovery * electricityRate);
+    // maintenancePerKw = 200 (constant above)
+    const fullReturnPerKw         = powerBoostRevenuePerKw + soilingRevenuePerKw + maintenancePerKw;
 
-    // Financial calculations
-    const annualRevenuGain = totalAdditionalEnergy * electricityRate;
-    const applicationCostTotal = systemSize * applicationCost;
-    const paybackPeriod = (applicationCostTotal / annualRevenuGain).toFixed(1);
-    const yearlyROI = ((annualRevenuGain / applicationCostTotal) * 100).toFixed(0);
+    // ── Method A: Power-boost only (CONSERVATIVE — direct output gain, no soiling) ──
+    // At 10%/₹7: 1500 × 0.10 × 7 = ₹1,050/kW/yr
+    const powerOnlySavingsPerKw  = powerBoostRevenuePerKw;
+    const powerOnlySavingsTotal  = Math.round(powerOnlySavingsPerKw * systemSize);
 
-    // 20-year projection
-    const twentyYearGain = annualRevenuGain * 20;
-    const netSavings = twentyYearGain - applicationCostTotal;
+    // ── Method B: Full annual return (ALL-IN — power + soiling + maintenance) ─
+    // At 10%/₹7/moderate: 1,050 + 788 + 200 = ₹2,038/kW/yr (approx)
+    const fullReturnTotal  = Math.round(fullReturnPerKw * systemSize);
+
+    // ── Investment & ROI ────────────────────────────────────────────────────
+    const applicationCostTotal = Math.round(applicationCostPerKw * systemSize);
+    // Annual ROI on full-return basis
+    const roiPercentage  = fullReturnTotal > 0 && applicationCostTotal > 0
+      ? Math.round((fullReturnTotal / applicationCostTotal) * 100)
+      : null;
+    const paybackMonths  = fullReturnTotal > 0
+      ? Math.round((applicationCostTotal / fullReturnTotal) * 12)
+      : null;
+    const paybackLabel   = paybackMonths ? `${paybackMonths} months` : '—';
+
+    // ── Marketing label helpers ─────────────────────────────────────────────
+    const powerOnlyLabel  = 'Power Boost';
+    const fullReturnLabel = 'Full Annual Return';
+
+    // ── CO₂ ────────────────────────────────────────────────────────────────
+    const co2AvoidedKgPerYear = Math.round(totalAdditionalKwh * co2Factor);
+
+    // ── Lifecycle (secondary) ───────────────────────────────────────────────
+    // Panel life extension from reduced thermal stress: ~2% of 25-yr replacement value
+    const panelReplCostPerKw   = applicationCostPerKw * 4;  // ~4× coating cost as panel cost proxy
+    const lifeExtensionValue   = Math.round(systemSize * panelReplCostPerKw * 0.02);
+    const totalSecondary       = lifeExtensionValue;
+
+    // ── Projection ──────────────────────────────────────────────────────────
+    const netProfitProjected = Math.round(fullReturnTotal * analysisPeriod - applicationCostTotal);
 
     return {
-      totalSavings: Math.round(netSavings),
-      savingsPerUnit: {
-        label: 'Annual Revenue Gain',
-        value: Math.round(annualRevenuGain),
-        description: `₹${Math.round(annualRevenuGain / systemSize)}/kW annually`
+      // ── Core ─────────────────────────────────────────────────────────────
+      systemSize,
+      analysisPeriod,
+      baselineAnnualKwh:      Math.round(baselineAnnualKwh),
+      baselineRevenuePerKw,
+      totalAdditionalKwh,
+
+      // ── Per-kW breakdown ─────────────────────────────────────────────────
+      applicationCostPerKw,
+      powerBoostRevenuePerKw,
+      soilingRevenuePerKw,
+      maintenancePerKw,
+      fullReturnPerKw,
+
+      // ── Savings — BOTH methods always returned, always shown ──────────────
+      powerOnlySavingsPerKw,  // ₹/kW/yr power-only (conservative)
+      powerOnlySavingsTotal,  // ₹ project annual
+      powerOnlyLabel,         // 'Power Boost'
+
+      fullReturnPerKw,        // ₹/kW/yr all-in (was fullReturnPerKw)
+      fullReturnTotal,        // ₹ project annual
+      fullReturnLabel,        // 'Full Annual Return'
+
+      // ── Investment & ROI ──────────────────────────────────────────────────
+      applicationCostTotal,
+      roiPercentage,          // % annual ROI (null if not calculable)
+      paybackLabel,           // 'X months'
+      paybackMonths,          // number | null
+
+      // ── CO₂ ──────────────────────────────────────────────────────────────
+      co2AvoidedKgPerYear,
+      co2AvoidedTPerYear: parseFloat((co2AvoidedKgPerYear / 1000).toFixed(2)),
+
+      // ── Lifecycle (estimates) ─────────────────────────────────────────────
+      lifecycle: {
+        lifeExtension: lifeExtensionValue,
+        total:         totalSecondary
       },
-      paybackPeriod: paybackPeriod,
-      roiPercentage: yearlyROI,
-      additionalEnergy: Math.round(totalAdditionalEnergy),
+      netProfitProjected,
+
+      // ── Legacy aliases (other page components) ────────────────────────────
+      additionalEnergy:    totalAdditionalKwh,
       temperatureReduction: '5-6°C',
-      maintenanceSavings: Math.round(systemSize * 200), // ₹200/kW/year saved
+      maintenanceSavings:  Math.round(systemSize * maintenancePerKw),
+      savingsPerUnit: {
+        label: 'Full Annual Return',
+        value: fullReturnTotal,
+        description: `₹${fullReturnPerKw.toLocaleString('en-IN')}/kW annually`
+      },
       summary: [
-        { label: 'Additional Energy', value: `${Math.round(totalAdditionalEnergy).toLocaleString()} kWh/yr` },
+        { label: 'Extra Energy',   value: `${totalAdditionalKwh.toLocaleString()} kWh/yr` },
         { label: 'Temp Reduction', value: '5-6°C' },
-        { label: 'ROI', value: `${yearlyROI}% annually` }
+        { label: 'Annual ROI',     value: roiPercentage ? `${roiPercentage}%` : '—' }
       ]
     };
   },
+
   impactMetrics: [
-    { key: 'additionalEnergy', label: 'Extra Energy', unit: 'kWh/year', trend: 'up', description: '10-12% power output gain' },
-    { key: 'temperatureReduction', label: 'Cooling Effect', unit: '', trend: 'down', description: 'Operating temperature reduction' },
-    { key: 'maintenanceSavings', label: 'Maintenance Saved', unit: '₹/year', trend: 'down', description: 'Reduced cleaning frequency' }
+    { key: 'additionalEnergy',    label: 'Extra Energy',     unit: 'kWh/year', trend: 'up',   description: '10-12% power output gain' },
+    { key: 'temperatureReduction', label: 'Cooling Effect',  unit: '',         trend: 'down', description: 'Operating temperature reduction' },
+    { key: 'maintenanceSavings',  label: 'Maintenance Saved', unit: '₹/year',  trend: 'down', description: 'Reduced cleaning frequency' }
   ]
 };
 

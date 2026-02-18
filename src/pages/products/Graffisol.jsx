@@ -11,7 +11,7 @@ import ProductHero from '../../components/ui/ProductHero';
 
 // Import all infographic components
 import {
-  ROICalculator,
+  GraffisolROICalculator,
   HowItWorks,
   PerformancePilot,
   MarketOpportunityAnalyzer,
@@ -249,11 +249,10 @@ const Graffisol = () => {
               </div>
             </div>
             <div className="p-0">
-              <ROICalculator
-                productName={roiCalculatorConfig.productName}
+              <GraffisolROICalculator
                 defaultInputs={roiCalculatorConfig.defaultInputs}
+                secondaryInputs={roiCalculatorConfig.secondaryInputs}
                 calculations={roiCalculatorConfig.calculations}
-                impactMetrics={roiCalculatorConfig.impactMetrics}
                 theme="light"
               />
             </div>

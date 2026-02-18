@@ -11,7 +11,7 @@ import { products } from '../../data/content';
 
 // Import all infographic components
 import {
-  ROICalculator,
+  CerapheneROICalculator,
   HowItWorks,
   PerformancePilot,
   MarketOpportunityAnalyzer,
@@ -272,11 +272,10 @@ const Ceraphene = () => {
               </div>
             </div>
             <div className="p-0">
-              <ROICalculator
-                productName={roiCalculatorConfig.productName}
+              <CerapheneROICalculator
                 defaultInputs={roiCalculatorConfig.defaultInputs}
+                secondaryInputs={roiCalculatorConfig.secondaryInputs}
                 calculations={roiCalculatorConfig.calculations}
-                impactMetrics={roiCalculatorConfig.impactMetrics}
                 theme="light"
               />
             </div>

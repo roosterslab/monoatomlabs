@@ -10,7 +10,7 @@ import ProductHero from '../../components/ui/ProductHero';
 import { products } from '../../data/content';
 
 // Lazy load infographic components (only loaded when tab is viewed)
-const ROICalculator = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.ROICalculator })));
+const GraphacreteROICalculator = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.GraphacreteROICalculator })));
 const HowItWorks = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.HowItWorks })));
 const PerformancePilot = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.PerformancePilot })));
 const MarketOpportunityAnalyzer = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.MarketOpportunityAnalyzer })));
@@ -182,41 +182,28 @@ const Graphacrete = () => {
 
             {/* Comparison / Cost Section */}
             <section id="impact" className="py-8">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center rounded-3xl bg-neutral-50 border border-neutral-200 p-8 md:p-12">
-                <div>
-                  <SectionHeading number="02" title="The Economic Edge" theme="light" className="mb-6" />
-                  <p className="text-neutral-600 leading-relaxed mb-8">
-                    Graphacrete delivers value beyond performance. By enabling the use of M30 mix designs to achieve M50 performance standards, it unlocks direct material cost savings per cubic meter.
-                  </p>
-
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-4 bg-white rounded-lg border border-neutral-100">
-                      <span className="text-neutral-500 font-medium">Standard M50 Concrete Cost</span>
-                      <span className="text-neutral-900 font-bold">~₹6,500 / m³</span>
-                    </div>
-                    <div className="flex justify-between items-center p-4 bg-green-50 rounded-lg border border-green-100 relative overflow-hidden">
-                      <div className="absolute left-0 top-0 bottom-0 w-1 bg-green-500"></div>
-                      <span className="text-neutral-700 font-medium">With Graphacrete (Optimized)</span>
-                      <span className="text-green-700 font-bold">~₹6,070 / m³</span>
-                    </div>
+              <SectionHeading number="02" title="The Economic Edge" theme="light" className="mb-8" />
+              <p className="text-neutral-600 leading-relaxed mb-8 max-w-2xl">
+                Graphacrete delivers value beyond performance. By enabling M30 mix designs to achieve M50 performance standards (NABL certified), it unlocks ₹430/m³ in direct material savings.
+              </p>
+              {/* Key savings stat strip */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+                {[
+                  { label: 'Grade Upgrade Savings', value: '₹430/m³', sub: 'M30 → M50 (NABL certified)' },
+                  { label: 'Cement Reduction', value: '15–20%', sub: '~17.5 kg less per m³' },
+                  { label: 'CO₂ Reduction', value: '~15 kg/m³', sub: '0.85 kg CO₂ per kg cement' }
+                ].map((s, i) => (
+                  <div key={i} className="p-6 bg-neutral-50 border border-neutral-200 rounded-xl">
+                    <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">{s.label}</div>
+                    <div className="text-3xl font-display font-medium text-neutral-900 mb-1">{s.value}</div>
+                    <div className="text-xs text-neutral-500">{s.sub}</div>
                   </div>
-                </div>
-
-                <div className="bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm text-center">
-                  <div className="inline-block p-3 rounded-full bg-neutral-100 mb-4">
-                    <span className="text-2xl">💰</span>
-                  </div>
-                  <h3 className="text-lg text-neutral-500 font-medium uppercase tracking-wide mb-2">Net Savings</h3>
-                  <div className="text-5xl font-display font-medium text-neutral-900 mb-4">₹430<span className="text-xl text-neutral-400">/m³</span></div>
-                  <p className="text-sm text-neutral-500 max-w-xs mx-auto">
-                    Based on standard market rates. Actual savings may vary by region and mix design optimization.
-                  </p>
-                  <div className="mt-8 pt-6 border-t border-neutral-100">
-                    <Link to="/contact">
-                      <Button variant="secondary" theme="light" className="w-full">Get a Quote</Button>
-                    </Link>
-                  </div>
-                </div>
+                ))}
+              </div>
+              <div className="mt-2 text-center">
+                <Link to="/contact">
+                  <Button variant="secondary" theme="light">Get a Custom Quote</Button>
+                </Link>
               </div>
             </section>
           </div>
@@ -255,6 +242,9 @@ const Graphacrete = () => {
 
             {/* ROI Calculator Wrapper */}
             <section className="border border-neutral-200 rounded-2xl overflow-hidden shadow-sm bg-white">
+              <div className="mb-0">
+                <SectionHeading number="01" title="Cost & ROI Calculator" theme="light" className="px-6 pt-6" />
+              </div>
               <div className="p-6 border-b border-neutral-200 flex justify-between items-center bg-neutral-50/50">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-neutral-900 flex items-center justify-center text-white">
@@ -268,9 +258,10 @@ const Graphacrete = () => {
               </div>
               <div className="p-0">
                 <Suspense fallback={<InfographicLoader />}>
-                  <ROICalculator
+                  <GraphacreteROICalculator
                     productName={roiCalculatorConfig.productName}
                     defaultInputs={roiCalculatorConfig.defaultInputs}
+                    secondaryInputs={roiCalculatorConfig.secondaryInputs}
                     calculations={roiCalculatorConfig.calculations}
                     impactMetrics={roiCalculatorConfig.impactMetrics}
                     theme="light"

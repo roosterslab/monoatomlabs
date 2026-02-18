@@ -5,73 +5,145 @@ import { Package, TrendingUp, Shield, Zap, Factory, Wrench } from 'lucide-react'
  * Graphene-reinforced polymer enhancer - all interactive component data
  */
 
-// ROI Calculator Configuration
+// ROI Calculator Configuration — v3
 export const roiCalculatorConfig = {
   productName: 'HD-G-PE',
   defaultInputs: {
     annualProduction: {
       label: 'Annual Production (Tons)',
+      logSlider: true,
       min: 10,
-      max: 5000,
-      step: 10,
+      max: 10000,
+      default: 500,
       unit: 'tons',
-      default: 500
+      ticks: [10, 100, 500, 2000, 10000]
     },
     dosagePercent: {
-      label: 'Dosage (%)',
-      min: 0.1,
+      label: 'HD-G-PE Dosage',
+      min: 0.5,
       max: 2.0,
       step: 0.1,
       unit: '%',
       default: 0.5
+    },
+    application: {
+      label: 'Application Type',
+      type: 'select',
+      options: [
+        { value: 'pipes', label: 'Pipes & Fittings' },
+        { value: 'packaging', label: 'Films & Packaging' },
+        { value: 'molding', label: 'Injection Molding' }
+      ],
+      default: 'pipes'
+    }
+  },
+  secondaryInputs: {
+    analysisPeriod: {
+      label: 'Analysis Period',
+      type: 'buttongroup',
+      options: [
+        { value: 1, label: '1 yr' },
+        { value: 3, label: '3 yr' },
+        { value: 5, label: '5 yr' }
+      ],
+      default: 3
+    },
+    qualityReturnRate: {
+      label: 'Current Defect / Return Rate',
+      min: 0.5,
+      max: 5.0,
+      step: 0.5,
+      unit: '%',
+      default: 2.0
     }
   },
   calculations: (inputs) => {
-    const { annualProduction, dosagePercent } = inputs;
+    const {
+      annualProduction,
+      dosagePercent,
+      application,
+      analysisPeriod    = 3,
+      qualityReturnRate = 2.0,
+    } = inputs;
 
-    // HD-G-PE cost
-    const hdgpeCostPerKg = 1200; // ₹/kg
-    const dosageKg = (annualProduction * 1000 * dosagePercent) / 100;
-    const annualHDGPECost = dosageKg * hdgpeCostPerKg;
+    const HD_COST_PER_KG = 1200;          // ₹/kg masterbatch
+    const BASE_POLYMER_PER_TON = 100000;  // ₹100/kg × 1000 = ₹100,000/ton HDPE baseline
 
-    // Benefits
-    const strengthGain = 0.30; // 30%
-    const elongationImprovement = 20; // 20× improvement
-    const lifespanIncrease = 0.20; // 20% longer life
+    // --- Additive cost ---
+    const dosageKgPerTon = (dosagePercent / 100) * 1000;
+    const additiveCostPerTon = dosageKgPerTon * HD_COST_PER_KG;
+    const annualAdditiveCost = annualProduction * additiveCostPerTon;
 
-    // Value calculations
-    const productValueIncrease = annualProduction * 50000 * strengthGain; // ₹50k/ton base value
-    const qualityPremium = annualProduction * 15000; // ₹15k/ton premium pricing
-    const lifespanValue = annualProduction * 30000 * lifespanIncrease; // Extended life value
+    // --- Application-specific gross benefits ---
+    // pipes:     sell enhanced pipe at 12% premium over base; no downgauging
+    // packaging: no price premium (commodity), but 15% less material = 15% cost saving
+    // molding:   15% premium for quality-grade resin + 10% material reduction
+    const appMap = {
+      pipes:     { premiumPerTon: 12000, downgaugeFactor: 0.00, label: 'Pipes & Fittings' },
+      packaging: { premiumPerTon:     0, downgaugeFactor: 0.15, label: 'Films & Packaging' },
+      molding:   { premiumPerTon: 15000, downgaugeFactor: 0.10, label: 'Injection Molding' },
+    };
+    const app = appMap[application] || appMap.pipes;
+    const downgaugeSavingsPerTon = BASE_POLYMER_PER_TON * app.downgaugeFactor;
+    const grossBenefitPerTon = app.premiumPerTon + downgaugeSavingsPerTon;
 
-    const totalBenefit = productValueIncrease + qualityPremium + lifespanValue;
-    const netGain = totalBenefit - annualHDGPECost;
-    const roi = ((netGain / annualHDGPECost) * 100).toFixed(0);
+    // --- Method A: NET MARGIN (conservative) ---
+    // Revenue uplift or material savings minus additive cost
+    const netMarginPerTon = grossBenefitPerTon - additiveCostPerTon;
+    const netMarginSavingsTotal = netMarginPerTon * annualProduction;
+
+    // --- Method B: ALL-IN ---
+    // Net margin + quality/returns improvement (HDGPE reduces defects/returns by ~60%)
+    const qualityReturnFraction = qualityReturnRate / 100;
+    const returnsSavingsPerTon = BASE_POLYMER_PER_TON * qualityReturnFraction * 0.60;
+    const annualReturnsSavings = returnsSavingsPerTon * annualProduction;
+    const allInSavingsPerTon = netMarginPerTon + returnsSavingsPerTon;
+    const allInSavingsTotal = netMarginSavingsTotal + annualReturnsSavings;
+
+    // --- ROI & payback on additive investment ---
+    const roiPercentage = netMarginSavingsTotal > 0 && annualAdditiveCost > 0
+      ? Math.round((netMarginSavingsTotal / annualAdditiveCost) * 100)
+      : null;
+    const paybackMonths = netMarginSavingsTotal > 0
+      ? Math.ceil((annualAdditiveCost / netMarginSavingsTotal) * 12)
+      : null;
+    const paybackLabel = paybackMonths !== null
+      ? paybackMonths <= 1 ? '< 1 month' : `${paybackMonths} months`
+      : 'Reduce dosage';
+
+    // --- Projection (cumulative net margin, not capital-investment framing) ---
+    const projectionData = Array.from({ length: analysisPeriod + 1 }, (_, yr) => ({
+      year: yr === 0 ? 'Start' : `Yr ${yr}`,
+      netMargin: Math.round(netMarginSavingsTotal * yr),
+      allIn: Math.round(allInSavingsTotal * yr),
+    }));
+
+    // --- Environmental: CO2 saved via material reduction ---
+    const materialSavedTons = annualProduction * app.downgaugeFactor;
+    const co2SavedTons = Math.round(materialSavedTons * 1.8); // 1.8 kg CO2 per kg HDPE production
 
     return {
-      totalSavings: Math.round(netGain),
-      savingsPerUnit: {
-        label: 'Net Benefit per Ton',
-        value: Math.round(netGain / annualProduction),
-        description: 'Improved product value'
-      },
-      paybackPeriod: '3-6',
-      roiPercentage: roi,
-      strengthGain: '+30%',
-      elongation: '20×',
-      lifespanIncrease: '+20%',
-      summary: [
-        { label: 'Strength Gain', value: '+30%' },
-        { label: 'Elongation', value: '20× better' },
-        { label: 'Lifespan', value: '+20%' }
-      ]
+      additiveCostPerTon:      Math.round(additiveCostPerTon),
+      annualAdditiveCost:      Math.round(annualAdditiveCost),
+      grossBenefitPerTon:      Math.round(grossBenefitPerTon),
+      premiumPerTon:           app.premiumPerTon,
+      downgaugeSavingsPerTon:  Math.round(downgaugeSavingsPerTon),
+      netMarginPerTon:         Math.round(netMarginPerTon),
+      netMarginSavingsTotal:   Math.round(netMarginSavingsTotal),
+      returnsSavingsPerTon:    Math.round(returnsSavingsPerTon),
+      annualReturnsSavings:    Math.round(annualReturnsSavings),
+      allInSavingsPerTon:      Math.round(allInSavingsPerTon),
+      allInSavingsTotal:       Math.round(allInSavingsTotal),
+      roiPercentage,
+      paybackLabel,
+      paybackMonths,
+      projectionData,
+      materialSavedTons:       Math.round(materialSavedTons),
+      co2SavedTons,
+      appLabel:                app.label,
+      analysisPeriod,
     };
   },
-  impactMetrics: [
-    { key: 'strengthGain', label: 'Strength Increase', unit: '', trend: 'up', description: 'Tensile & flexural strength' },
-    { key: 'elongation', label: 'Elongation', unit: '', trend: 'up', description: 'Improved flexibility' },
-    { key: 'lifespanIncrease', label: 'Product Life', unit: '', trend: 'up', description: 'Extended service life' }
-  ]
 };
 
 // How It Works

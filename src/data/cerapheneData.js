@@ -6,62 +6,211 @@ import { Car, Shield, Sparkles, Droplet, TrendingUp, Wrench } from 'lucide-react
  */
 
 // ROI Calculator Configuration
+// Two always-visible methods: ALL-IN (full ownership savings) + DIRECT (upfront cost savings)
 export const roiCalculatorConfig = {
   productName: 'Ceraphene',
+
+  // Primary inputs — always visible
   defaultInputs: {
     vehicleCount: {
-      label: 'Number of Vehicles',
+      label: 'Vehicle Count',
+      type: 'logslider',    // logarithmic 1–1000
       min: 1,
-      max: 100,
-      step: 1,
+      max: 1000,
       unit: 'vehicles',
       default: 5
     },
     competitorCost: {
-      label: 'Competitor Coating Cost (₹)',
+      label: 'Competitor Cost',
+      type: 'slider',
       min: 10000,
       max: 25000,
       step: 1000,
-      unit: '₹',
-      default: 15000
+      unit: '₹/vehicle',
+      default: 15000,
+      note: 'Premium ceramic coating market rate ₹15,000–20,000/vehicle.'
+    },
+    annualWashCostPerVehicle: {
+      label: 'Annual Wash Cost',
+      type: 'slider',
+      min: 3000,
+      max: 30000,
+      step: 1000,
+      unit: '₹/vehicle/yr',
+      default: 12000,
+      note: 'Professional wash cost per vehicle per year without coating.'
+    },
+    washReductionPct: {
+      label: 'Wash Reduction',
+      type: 'slider',
+      min: 40,
+      max: 70,
+      step: 5,
+      unit: '%',
+      default: 60,
+      note: 'Ceraphene hydrophobic effect reduces wash frequency 40–70%.'
     }
   },
+
+  // Secondary inputs — accordion
+  secondaryInputs: {
+    analysisPeriod: {
+      label: 'Analysis Period',
+      type: 'buttongroup',
+      default: 4,
+      options: [
+        { value: 3, label: '3 yr' },
+        { value: 4, label: '4 yr' },
+        { value: 5, label: '5 yr' }
+      ]
+    },
+    cerapheneDurability: {
+      label: 'Ceraphene Durability',
+      type: 'slider',
+      min: 3.0,
+      max: 4.5,
+      step: 0.5,
+      unit: 'yr',
+      default: 3.5,
+      note: 'Field-validated 3–4+ years (3.5 yr conservative).'
+    },
+    competitorDurability: {
+      label: 'Competitor Durability',
+      type: 'slider',
+      min: 1.0,
+      max: 2.5,
+      step: 0.5,
+      unit: 'yr',
+      default: 1.5,
+      note: 'Standard ceramic coating lifespan. Estimate — validate with supplier.'
+    }
+  },
+
   calculations: (inputs) => {
-    const { vehicleCount, competitorCost } = inputs;
+    const {
+      vehicleCount             = 5,
+      competitorCost           = 15000,
+      annualWashCostPerVehicle = 12000,
+      washReductionPct         = 60,
+      analysisPeriod           = 4,
+      cerapheneDurability      = 3.5,   // years
+      competitorDurability     = 1.5    // years (⚠ estimate)
+    } = inputs;
 
-    const cerapheneCost = 5000; // per vehicle
-    const savingsPerVehicle = competitorCost - cerapheneCost;
-    const totalSavings = savingsPerVehicle * vehicleCount;
+    /**
+     * Source: Ceraphene brochure & product data
+     * - Ceraphene price: ₹5,000/vehicle (fixed, brochure)
+     * - Hardness: 9H+ (SGS / ASTM D3363 certified)
+     * - Durability: 3–4+ years (field validated)
+     * - Wash reduction: 40–70% (hydrophobic self-cleaning effect)
+     * - Paint correction avoided: ₹35,000 per vehicle over 4 years (typical fleet)
+     * - Competitor durability: ~1.5 years (market estimate — not certified)
+     */
+    const ceraphenePrice          = 5000;   // ₹/vehicle, fixed from brochure
+    const paintCorrectionPerYear  = 8750;   // ₹/vehicle/yr (₹35k per 4-year cycle avoided)
+    const washReductionFrac       = washReductionPct / 100;
 
-    // Maintenance savings over 4 years
-    const annualWashSavings = 3000; // Less frequent washing needed
-    const protectionValue = 8000; // Paint protection value
-    const lifetimeSavings = (annualWashSavings * 4) + protectionValue;
+    // ── Annual effective cost per vehicle ──────────────────────────────────
+    // Amortised coating + wash cost + paint correction (competitor only)
+    const competitorAnnualEffective = Math.round(
+      (competitorCost / competitorDurability) +   // coating amortized
+      annualWashCostPerVehicle +                   // full wash cost
+      paintCorrectionPerYear                       // correction cost
+    );
+    const cerapheneAnnualEffective = Math.round(
+      (ceraphenePrice / cerapheneDurability) +              // coating amortized
+      annualWashCostPerVehicle * (1 - washReductionFrac)    // reduced washing
+      // no paint correction with Ceraphene
+    );
+    const annualSavingsPerVehicle = competitorAnnualEffective - cerapheneAnnualEffective;
 
-    const totalBenefit = totalSavings + (lifetimeSavings * vehicleCount);
+    // ── Method A: Direct cost savings (BROCHURE — upfront price difference only) ──
+    // Simple: you pay ₹5k instead of ₹15k — no durability or wash adjustments
+    const directSavingsPerVehicle = competitorCost - ceraphenePrice;
+    const directSavingsTotal      = Math.round(directSavingsPerVehicle * vehicleCount);
+    const directSavingsPct        = Math.round((directSavingsPerVehicle / competitorCost) * 100);
+
+    // ── Method B: Full ownership savings (ALL-IN — annual savings × analysis period) ──
+    const fullSavingsPerVehicle = Math.round(annualSavingsPerVehicle * analysisPeriod);
+    const fullSavingsTotal      = Math.round(fullSavingsPerVehicle * vehicleCount);
+
+    // ── Investment & ROI ──────────────────────────────────────────────────
+    const investmentPerVehicle = ceraphenePrice; // first application only
+    const investmentTotal      = Math.round(ceraphenePrice * vehicleCount);
+    // ROI on Ceraphene investment over analysis period
+    const roiPercentage  = fullSavingsTotal > 0 && investmentTotal > 0
+      ? Math.round((fullSavingsTotal / investmentTotal) * 100) : null;
+    // Payback in months (from annual savings)
+    const paybackMonths  = annualSavingsPerVehicle > 0
+      ? Math.round((ceraphenePrice / annualSavingsPerVehicle) * 12) : null;
+    const paybackLabel   = paybackMonths ? `${paybackMonths} months` : 'Immediate';
+
+    // ── Environmental / wash stats ─────────────────────────────────────────
+    const annualWashesWithout   = Math.round(annualWashCostPerVehicle / 500);  // ~₹500/wash
+    const annualWashesWith      = Math.round(annualWashesWithout * (1 - washReductionFrac));
+    const annualWashesSaved     = annualWashesWithout - annualWashesWith;
+    const waterSavedLitresPerVehicle = annualWashesSaved * 100; // ~100L per professional wash
+    const waterSavedTotal       = Math.round(waterSavedLitresPerVehicle * vehicleCount);
 
     return {
-      totalSavings: Math.round(totalBenefit),
-      savingsPerUnit: {
-        label: 'Savings per Vehicle',
-        value: Math.round(savingsPerVehicle + lifetimeSavings),
-        description: `vs. ₹${competitorCost.toLocaleString()} premium coating`
-      },
-      paybackPeriod: 'Immediate',
-      roiPercentage: Math.round((savingsPerVehicle / cerapheneCost) * 100),
-      durability: '3-4+ years',
+      // ── Core ──────────────────────────────────────────────────────────────
+      vehicleCount,
+      analysisPeriod,
+      ceraphenePrice,
+      investmentPerVehicle,
+      investmentTotal,
+
+      // ── Per-vehicle annual cost breakdown ─────────────────────────────────
+      competitorAnnualEffective,
+      cerapheneAnnualEffective,
+      annualSavingsPerVehicle,
+      competitorCostAmortized:    Math.round(competitorCost / competitorDurability),
+      cerapheneCoatAmortized:     Math.round(ceraphenePrice / cerapheneDurability),
+      annualWashWithCoating:      Math.round(annualWashCostPerVehicle * (1 - washReductionFrac)),
+      paintCorrectionPerYear,
+
+      // ── Savings — BOTH methods always returned, always shown ──────────────
+      directSavingsPerVehicle,   // ₹/vehicle upfront brochure price difference
+      directSavingsTotal,        // ₹ project total
+      directSavingsPct,          // % cost advantage (e.g. 67%)
+      directLabel: 'Direct Savings',
+
+      fullSavingsPerVehicle,     // ₹/vehicle over analysis period
+      fullSavingsTotal,          // ₹ total
+      fullLabel: 'Full Ownership Savings',
+
+      // ── ROI ───────────────────────────────────────────────────────────────
+      roiPercentage,             // % on Ceraphene investment (null if not calculable)
+      paybackLabel,              // 'X months'
+      paybackMonths,
+
+      // ── Environmental ─────────────────────────────────────────────────────
+      annualWashesWithout,
+      annualWashesWith,
+      annualWashesSaved,
+      waterSavedLitresPerVehicle,
+      waterSavedTotal,
+
+      // ── Legacy aliases ────────────────────────────────────────────────────
       hardness: '9H+',
-      costSavings: '60-70%',
+      durability: '3-4+ years',
+      costSavings: `${directSavingsPct}%`,
+      savingsPerUnit: {
+        label: 'Full Savings per Vehicle',
+        value: fullSavingsPerVehicle,
+        description: `vs. ₹${competitorCost.toLocaleString()} competitor over ${analysisPeriod} yr`
+      },
       summary: [
-        { label: 'Upfront Savings', value: `₹${savingsPerVehicle.toLocaleString()}` },
-        { label: 'Durability', value: '3-4+ years' },
-        { label: 'Cost Advantage', value: '60-70%' }
+        { label: 'Direct Savings',  value: `₹${directSavingsPerVehicle.toLocaleString()}` },
+        { label: 'Durability',      value: '3-4+ years' },
+        { label: 'Cost Advantage',  value: `${directSavingsPct}%` }
       ]
     };
   },
+
   impactMetrics: [
-    { key: 'durability', label: 'Lifespan', unit: '', trend: 'up', description: '3-4+ years protection' },
-    { key: 'hardness', label: 'Hardness', unit: '', trend: 'up', description: '9H+ scratch resistance' },
+    { key: 'durability',  label: 'Lifespan',      unit: '', trend: 'up',   description: '3-4+ years protection' },
+    { key: 'hardness',    label: 'Hardness',       unit: '', trend: 'up',   description: '9H+ scratch resistance' },
     { key: 'costSavings', label: 'Cost Advantage', unit: '', trend: 'down', description: 'vs. premium competitors' }
   ]
 };

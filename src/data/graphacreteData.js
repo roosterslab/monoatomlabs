@@ -9,135 +9,287 @@ import { Building2, TestTube, TrendingUp, Package, Shield, Truck, Sparkles, Fact
 // Data verified from: Graphacrete-Brochure-01.md & PRODUCT-CATALOG.md
 export const roiCalculatorConfig = {
   productName: 'Graphacrete',
+
+  // Primary inputs — always visible in calculator
   defaultInputs: {
     projectVolume: {
-      label: 'Project Volume (m³)',
-      min: 100,
-      max: 50000,
-      step: 100,
+      label: 'Concrete Volume',
+      type: 'logslider',   // logarithmic 1–10,000 m³
+      min: 1,
+      max: 10000,
       unit: 'm³',
-      default: 1000
+      default: 500
     },
     targetStrength: {
-      label: 'Target Strength Grade (M-Grade)',
-      min: 30,
-      max: 60,
-      step: 10,
+      label: 'Target Grade',
+      type: 'select',
       unit: '',
-      default: 50  // M50 - Most common grade, NABL certified M30+Graphacrete≈M50
+      default: 50,         // M50 — NABL certified sweet spot
+      options: [
+        { value: 20, label: 'M20', description: 'Residential foundations & slabs' },
+        { value: 30, label: 'M30', description: 'General structural — most common' },
+        { value: 40, label: 'M40', description: 'High-load beams & columns' },
+        { value: 50, label: 'M50', description: 'Premium structural', badge: 'NABL Sweet Spot' },
+        { value: 60, label: 'M60', description: 'Bridges & high-rise cores' }
+      ]
+    },
+    cementPrice: {
+      label: 'Cement Price',
+      type: 'slider',
+      min: 280,
+      max: 350,
+      step: 5,
+      unit: '₹/bag',
+      default: 320,
+      note: 'Market rate ₹320/bag (50 kg). Adjust for your region.'
+    },
+    cementReductionPct: {
+      label: 'Cement Reduction',
+      type: 'slider',
+      min: 15,
+      max: 20,
+      step: 1,
+      unit: '%',
+      default: 15,
+      note: 'NABL certified 15–20%. Conservative default = 15%.'
     }
   },
+
+  // Secondary inputs — collapsed accordion, less prominent
+  secondaryInputs: {
+    waterproofing: {
+      label: 'Waterproofing Needed',
+      type: 'toggle',
+      default: false
+    },
+    waterproofingRate: {
+      label: 'Waterproofing Cost',
+      type: 'slider',
+      min: 100,
+      max: 300,
+      step: 10,
+      unit: '₹/m²',
+      default: 150,
+      note: 'Dr. Fixit / equivalent system cost per m²',
+      showWhen: { key: 'waterproofing', value: true }
+    },
+    laborCost: {
+      label: 'Daily Site Labour Cost',
+      type: 'slider',
+      min: 5000,
+      max: 50000,
+      step: 1000,
+      unit: '₹/day',
+      default: 15000
+    },
+    projectType: {
+      label: 'Project Type',
+      type: 'buttongroup',
+      default: 'residential',
+      options: [
+        { value: 'residential', label: 'Residential' },
+        { value: 'commercial', label: 'Commercial' },
+        { value: 'infrastructure', label: 'Infrastructure' }
+      ]
+    },
+    analysisPeriod: {
+      label: 'Analysis Period',
+      type: 'buttongroup',
+      default: 10,
+      options: [
+        { value: 5, label: '5 yr' },
+        { value: 10, label: '10 yr' },
+        { value: 20, label: '20 yr' }
+      ]
+    }
+  },
+
   calculations: (inputs) => {
-    const { projectVolume, targetStrength = 50 } = inputs;
+    const {
+      projectVolume      = 500,
+      targetStrength     = 50,
+      cementPrice        = 320,
+      cementReductionPct = 15,   // 15–20%; 15% = conservative NABL-certified default
+      waterproofing      = false,
+      waterproofingRate  = 150,
+      laborCost          = 15000,
+      projectType        = 'residential',
+      analysisPeriod     = 10
+    } = inputs;
 
     /**
-     * SOURCE DATA (from Graphacrete-Brochure-01.md):
-     * - Product Price: ₹235/L (1000L MOQ)
-     * - Dosage: 2L per m³ = ₹470 per m³
-     * - NABL Report: M30 + Graphacrete ≈ M50 performance
-     * - Cost Benefit: ₹430/m³
-     * - Cement Saving: 15-20%
-     * - Strength Gain: 40-50%
+     * Source: Graphacrete-Brochure-01.md & NABL test report
+     * - Additive: ₹235/L × 2 L/m³ = ₹470/m³ (fixed)
+     * - NABL certified: M30 + Graphacrete ≈ M50
+     * - Cement reduction: 15–20% (15% default = conservative & defensible)
+     * - Grade cost model: gradeCost(G, P) = fixed[G] + bags[G] × P
+     *   (typical Indian RMC market assumptions, not IS 456 citation)
      */
+    const additiveCostPerM3 = 470; // 2 L × ₹235/L
 
-    // Graphacrete cost per m³ (verified from source)
-    const graphacreteCostPerM3 = 470; // 2L × ₹235/L
-
-    // Traditional concrete costs per m³ (market rates)
-    const traditionalCosts = {
-      30: 4050,  // M30 = ₹4,050/m³
-      40: 4450,  // M40 = ₹4,450/m³
-      50: 4950,  // M50 = ₹4,950/m³
-      60: 5550   // M60 = ₹5,550/m³
+    // Typical Indian RMC market cost components (fixed at ₹320/bag baseline)
+    const gradeData = {
+      20: { bags: 5.00, fixed: 2000 }, // 5.00×320+2000 = 3600
+      30: { bags: 6.25, fixed: 2050 }, // 6.25×320+2050 = 4050
+      40: { bags: 7.50, fixed: 2050 }, // 7.50×320+2050 = 4450
+      50: { bags: 8.50, fixed: 2230 }, // 8.50×320+2230 = 4950
+      60: { bags: 10.0, fixed: 2350 }  // 10.0×320+2350 = 5550
     };
 
-    // With Graphacrete: Use lower grade + additive to achieve higher grade
-    // M30 + Graphacrete ≈ M50 (NABL certified)
+    // NABL grade upgrade mapping: base grade used with Graphacrete to reach target
     const baseGradeFor = {
-      30: 30,  // M30 → stay M30 (but with improved properties)
-      40: 30,  // M30 + Graphacrete → M40
-      50: 30,  // M30 + Graphacrete → M50 (NABL certified)
-      60: 40   // M40 + Graphacrete → M60
+      20: 20, // no upgrade; value = cement savings + enhanced durability
+      30: 30, // no upgrade; value = cement savings + enhanced durability
+      40: 30, // M30 + Graphacrete → M40 performance
+      50: 30, // M30 + Graphacrete → M50 (NABL certified sweet spot)
+      60: 40  // M40 + Graphacrete → M60 performance
     };
 
-    const targetCostTraditional = traditionalCosts[targetStrength];
-    const baseGrade = baseGradeFor[targetStrength];
-    const baseCost = traditionalCosts[baseGrade];
-    const costWithGraphacrete = baseCost + graphacreteCostPerM3;
+    const gradeCost = (grade, P) => gradeData[grade].fixed + gradeData[grade].bags * P;
 
-    // Cost savings per m³
-    const savingsPerM3 = targetCostTraditional - costWithGraphacrete;
+    const baseGrade  = baseGradeFor[targetStrength];
+    const targetCost = gradeCost(targetStrength, cementPrice);
+    const baseCost   = gradeCost(baseGrade, cementPrice);
 
-    // Total project costs
-    const productCost = graphacreteCostPerM3 * projectVolume;
-    const traditionalCost = targetCostTraditional * projectVolume;
-    const withProductCost = costWithGraphacrete * projectVolume;
-    const totalSavings = savingsPerM3 * projectVolume;
+    // ── Method 1: Grade-only savings (brochure method — no cement netting) ─────
+    // At M50/₹320: 4950 − (4050 + 470) = ₹430  ← headline brochure figure
+    const gradeOnlySavingsPerM3 = Math.round(targetCost - (baseCost + additiveCostPerM3));
+    const gradeOnlySavingsTotal = Math.round(gradeOnlySavingsPerM3 * projectVolume);
 
-    // Cement calculations (15-20% reduction, using 17.5% average)
-    const cementReductionPercent = 0.175;
-    const avgCementBagsPerM3 = {
-      30: 6.25,
-      40: 7.5,
-      50: 8.5,
-      60: 10.0
-    };
+    // ── Method 2: Net savings / all-in (cement reduction included) ────────────
+    const cementReductionFrac    = cementReductionPct / 100;
+    const baseBags               = gradeData[baseGrade].bags;
+    const cementSavedBagsPerM3   = baseBags * cementReductionFrac;
+    const cementSavingsValuePerM3 = Math.round(cementSavedBagsPerM3 * cementPrice);
 
-    const baseCementBags = avgCementBagsPerM3[baseGrade];
-    const cementSavedPerM3 = baseCementBags * cementReductionPercent;
-    const totalCementSaved = cementSavedPerM3 * projectVolume;
+    // Net cost with Graphacrete: base mix − cement saved + additive
+    // At M50/₹320/15%: 4050 − 300 + 470 = ₹4,220  (vs M50 ₹4,950 → saves ₹730)
+    // At M30/₹320/15%: 4050 − 300 + 470 = ₹4,220  (vs M30 ₹4,050 → premium ₹170)
+    const netCostWithGraphacrete = baseCost - cementSavingsValuePerM3 + additiveCostPerM3;
+    const netSavingsPerM3        = Math.round(targetCost - netCostWithGraphacrete);
+    const netSavingsTotal        = Math.round(netSavingsPerM3 * projectVolume);
 
-    // Environmental impact (0.9 kg CO₂ per kg cement, 50 kg per bag)
-    const co2Reduced = Math.round(totalCementSaved * 50 * 0.9); // kg CO₂
+    // ── Investment & ROI ──────────────────────────────────────────────────────
+    const productCostTotal = Math.round(additiveCostPerM3 * projectVolume);
+    // ROI is null (not shown) when net savings are not positive
+    const roiPercentage    = netSavingsTotal > 0 && productCostTotal > 0
+      ? Math.round((netSavingsTotal / productCostTotal) * 100)
+      : null;
+    const paybackLabel     = netSavingsPerM3 > 0 ? 'Immediate' : 'Quality+';
 
-    // Financial metrics
-    const paybackMonths = totalSavings > 0 ? Math.round((productCost / (totalSavings / 12))) : 0;
-    const roi = productCost > 0 ? Math.round((totalSavings / productCost) * 100) : 0;
+    // ── Marketing presentation labels ─────────────────────────────────────────
+    const gradeOnlyLabel = gradeOnlySavingsPerM3 > 0 ? 'Savings'       : 'Premium';
+    const netLabel       = netSavingsPerM3       > 0 ? 'Net Savings'   : 'Quality Upgrade Premium';
 
-    // Performance improvements (from source data)
-    const strengthGainPercent = targetStrength > baseGrade ?
-      Math.round(((targetStrength - baseGrade) / baseGrade) * 100) : 45;
+    // ── Cement & CO₂ display stats ────────────────────────────────────────────
+    const totalCementBags = Math.round(cementSavedBagsPerM3 * projectVolume);
+    const totalCementKg   = totalCementBags * 50;           // 50 kg/bag
+    const co2AvoidedKg    = Math.round(totalCementKg * 0.9); // 0.9 kg CO₂/kg cement (IPCC)
+
+    // ── Lifecycle savings (optional, shown in accordion, labeled "Estimates") ──
+
+    // C: Waterproofing avoidance (project-dependent, off by default)
+    const waterproofingArea    = Math.round(projectVolume * 0.25);
+    const reapplications       = Math.floor(analysisPeriod / 7);
+    const waterproofingSavings = waterproofing
+      ? waterproofingArea * waterproofingRate * 0.70 * (1 + reapplications)
+      : 0;
+
+    // D: Construction schedule — 17% faster cycles → site overhead saved
+    const constructionSavings = Math.round((projectVolume / 30) * 0.17 * laborCost * 1.5);
+
+    // E: Service life extension — 3% of replacement value (mid of 2–6% defensible range)
+    const structureValue       = projectVolume * 15000;
+    const lifeExtensionSavings = Math.round(structureValue * 0.03);
+
+    // F: Thermal / cooling savings — 7% reduction (residential/commercial only)
+    const coolingRate    = projectType === 'commercial' ? 120 : 60;
+    const thermalSavings = projectType !== 'infrastructure'
+      ? Math.round(projectVolume * 2 * coolingRate * 0.07 * analysisPeriod)
+      : 0;
+
+    // G: Maintenance reduction — 0.4% of structure value/yr saved
+    const maintenanceSavings = Math.round(structureValue * 0.004 * analysisPeriod);
+
+    const totalSecondary = Math.round(
+      waterproofingSavings + constructionSavings +
+      lifeExtensionSavings + thermalSavings + maintenanceSavings
+    );
+    const totalAllInDelta  = Math.round(netSavingsTotal + totalSecondary);
+    const totalAllInRoiPct = productCostTotal > 0 && totalAllInDelta > 0
+      ? Math.round((totalAllInDelta / productCostTotal) * 100)
+      : null;
 
     return {
-      // Financial metrics
-      totalSavings: Math.round(totalSavings),
-      productCost: Math.round(productCost),
-      traditionalCost: Math.round(traditionalCost),
-      withProductCost: Math.round(withProductCost),
-      savingsPerUnit: {
-        label: 'Savings per m³',
-        value: Math.round(savingsPerM3),
-        description: `Using M${baseGrade} + Graphacrete instead of M${targetStrength}`
+      // ── Core costs ────────────────────────────────────────────────────────────
+      baseGrade,
+      targetGrade:                 targetStrength,
+      isNABL:                      targetStrength === 50,
+      baseCostPerM3:               Math.round(baseCost),
+      targetCostPerM3:             Math.round(targetCost),
+      additiveCostPerM3,
+      cementSavingsValuePerM3,
+      netCostWithGraphacretePerM3: Math.round(netCostWithGraphacrete),
+
+      // ── Savings — BOTH methods always returned ────────────────────────────────
+      gradeOnlySavingsPerM3,   // ₹/m³ grade-only (brochure ₹430 at M50/₹320)
+      gradeOnlySavingsTotal,   // ₹ project total
+      netSavingsPerM3,         // ₹/m³ all-in net (+ve = savings, −ve = quality premium)
+      netSavingsTotal,         // ₹ project total
+
+      // ── Marketing presentation helpers ────────────────────────────────────────
+      gradeOnlyLabel,          // 'Savings' | 'Premium'
+      netLabel,                // 'Net Savings' | 'Quality Upgrade Premium'
+      roiPercentage,           // % (null when not positive — never show negative ROI)
+      paybackLabel,            // 'Immediate' | 'Quality+'
+
+      // ── Investment ────────────────────────────────────────────────────────────
+      productCostTotal,
+
+      // ── Cement & CO₂ ─────────────────────────────────────────────────────────
+      cementSavedBags: totalCementBags,
+      cementSavedKg:   totalCementKg,
+      co2AvoidedKg,
+
+      // ── Lifecycle ─────────────────────────────────────────────────────────────
+      lifecycle: {
+        waterproofing:  Math.round(waterproofingSavings),
+        construction:   constructionSavings,
+        lifeExtension:  lifeExtensionSavings,
+        thermal:        thermalSavings,
+        maintenance:    maintenanceSavings,
+        total:          totalSecondary
       },
-      paybackPeriod: Math.max(1, paybackMonths),
-      roiPercentage: Math.max(0, roi),
+      totalAllInDelta,
+      totalAllInRoiPct,
 
-      // Environmental & performance metrics
-      cementReduction: Math.round(totalCementSaved),
-      co2Reduction: co2Reduced,
-      cementSaved: Math.round(totalCementSaved),
-      co2Reduced: co2Reduced,
-      strengthIncrease: `+${strengthGainPercent}%`,
+      // ── Legacy (used by other page components) ────────────────────────────────
+      savingsPerUnit:   { label: 'Net savings per m³', value: netSavingsPerM3 },
+      cementSaved:      totalCementBags,
+      co2Reduced:       co2AvoidedKg,
+      strengthIncrease: targetStrength > baseGrade
+        ? `+${Math.round(((targetStrength - baseGrade) / baseGrade) * 100)}%`
+        : '+45%',
       waterResistance: '+30-45%',
-
-      // Summary metrics
       summary: [
-        { label: 'Base Mix', value: `M${baseGrade} + Graphacrete` },
-        { label: 'Achieves', value: `M${targetStrength} Performance` },
-        { label: 'Cost Benefit', value: `₹${Math.round(savingsPerM3)}/m³` }
+        { label: 'Base Mix',  value: `M${baseGrade} + Graphacrete` },
+        { label: 'Achieves',  value: `M${targetStrength} Performance` },
+        { label: netSavingsPerM3 > 0 ? 'Net Savings' : 'Quality Premium',
+          value: `₹${Math.abs(netSavingsPerM3)}/m³` }
       ]
     };
   },
+
   impactMetrics: [
     {
-      key: 'cementReduction',
+      key: 'cementSaved',
       label: 'Cement Saved',
       unit: 'bags',
       trend: 'down',
-      description: '15-20% cement reduction (NABL certified)'
+      description: '15–20% cement reduction (NABL certified)'
     },
     {
-      key: 'co2Reduction',
+      key: 'co2Avoided',
       label: 'CO₂ Emissions Avoided',
       unit: 'kg',
       trend: 'down',
@@ -148,14 +300,14 @@ export const roiCalculatorConfig = {
       label: 'Strength Gain',
       unit: '',
       trend: 'up',
-      description: '40-50% compressive strength increase'
+      description: '40–50% compressive strength increase'
     },
     {
       key: 'waterResistance',
       label: 'Water Resistance',
       unit: '',
       trend: 'up',
-      description: '30-45% permeability reduction'
+      description: '30–45% permeability reduction'
     }
   ]
 };
