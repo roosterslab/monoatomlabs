@@ -1,24 +1,11 @@
 import React from 'react'
 import SurfaceBg from '../../../studio/SurfaceBg'
+import QRCodeImage from '../../../studio/QRCodeImage'
 import { Scan, Smartphone, ChevronRight } from 'lucide-react'
 
 const C_TEAL = '#64748B'
 const C_DARK = '#050505'
 const DEFAULT_SURF = { time: 3200, bg: 'wave' }
-
-function QRCodeImage({ url, size }) {
-  const encoded = encodeURIComponent(url || 'https://monoatomlabs.com')
-  const src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encoded}&format=png&color=ffffff&bgcolor=000000&ecc=M`
-  return (
-    <img
-      src={src}
-      alt="QR Code"
-      width={size}
-      height={size}
-      style={{ imageRendering: 'pixelated', border: `1px solid ${C_TEAL}`, padding: 6, background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(4px)' }}
-    />
-  )
-}
 
 const WEBSITE_URL = 'https://www.monoatomlabs.com/products/ceraphene'
 

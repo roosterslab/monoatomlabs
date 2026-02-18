@@ -30,7 +30,7 @@ export default function FlapsPanel({ scale = 1, hideLabels = false, contentsFlap
   const fs = scale
 
   return (
-    <div style={{ display: 'flex', gap: Math.round(24 * fs), flexWrap: 'wrap' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: Math.round(24 * fs) }}>
 
       {/* Contents Flap */}
       <div>

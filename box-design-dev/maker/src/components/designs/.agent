@@ -1,18 +1,214 @@
-# Adding a New Design Variant
+# Box Design Agent — CERAPHENE Packaging Spec
 
 ## Product
-Monoatom Labs — CERAPHENE Graphene Ceramic Coating box packaging.
+Monoatom Labs — CERAPHENE Graphene Ceramic Coating
+Box style: Rigid sleeve / wrap-around carton
 
-## Where files live
+---
+
+## Physical Print Specifications
+
+### 1. Wrap Panel  (flat-lay — wraps around the full box)
+Total size:  15.567" × 6.65"
+Pixel size:  1494 × 638 px  (at scale=1, 96 dpi)
+
+Sections left → right when laid flat:
+
+  ┌──────────┬────────┬──────────┬────────┬────────┐
+  │ Back     │ Left   │ Front    │ Right  │  Glue  │
+  │ Face     │ Spine  │ Face     │ Spine  │  Tab   │
+  │  5.2"    │ 2.13"  │  5.2"    │ 2.13"  │ 0.907" │
+  └──────────┴────────┴──────────┴────────┴────────┘
+  All sections share height: 6.65"
+
+  Pixel widths at scale=1:
+    Back face  : 499 px    Left spine : 204 px
+    Front face : 499 px    Right spine: 204 px
+    Glue tab   : 87 px
+
+  Geometry constants — copy exactly:
+    const BOX = { face: 5.2, side: 2.13, total: 15.567, height: 6.65 }
+    const TAB_W = BOX.total - 2 * BOX.face - 2 * BOX.side  // 0.907"
+    const px = i => Math.round(i * 96 * scale)
+
+    const W = px(BOX.total)      const H = px(BOX.height)
+    backW  = px(BOX.face)        side1W = px(BOX.side)
+    frontW = px(BOX.face)        side2W = px(BOX.side)
+    tabW   = px(TAB_W)
+
+### 2. Back Panel  (separate flat artwork, same sheet size as wrap)
+Size:  15.567" × 6.65"
+Pixel: 1494 × 638 px  (scale=1)
+
+  const W = Math.round(1494 * scale)
+  const H = Math.round(638 * scale)
+
+### 3. Flap Panels  (two top/bottom closure flaps, printed separately)
+Each flap:  5.2" × 2.13"
+Each pixel: 499 × 204 px  (scale=1)
+
+  const W = Math.round(499 * scale)
+  const H = Math.round(204 * scale)
+
+Two flaps rendered stacked vertically (column) in one component:
+  Contents Flap — lists what is in the box
+  Logo Flap     — brand logo + tagline
+
+Export IDs (hardcoded by ExportAllView — your root divs must accept these):
+  Contents flap root:  id={contentsFlapId}   export value: "export-flap-contents"
+  Logo flap root:      id={logoFlapId}        export value: "export-flap-logo"
+
+hideLabels prop: when true, suppress any dev-only label text above flaps.
+
+### 4. QR Panel  (inside-lid insert or authentication card)
+Size:  6.303" × 5.123"
+Pixel: 605 × 492 px  (scale=1)
+
+  const W = Math.round(605 * scale)
+  const H = Math.round(492 * scale)
+
+Product URL to encode in QR:
+  https://www.monoatomlabs.com/products/ceraphene
+
+---
+
+## Resolution & Scale
+
+Base: 96 dpi at scale=1
+Preview scales passed by BoxPreview:
+  wrap: 0.72    back: 0.72    flaps: 1.4    qr: 1.1
+Export scale passed by ExportAllView: 1.0 (all panels)
+html2canvas captures at 3–4× → 288–384 dpi, print-ready
+
+All pixel values must multiply by scale. Alias: const fs = scale
+
+---
+
+## Root container rules (every panel's outermost div)
+
+  position: 'relative'
+  overflow:  'hidden'
+  flexShrink: 0          // prevents squishing in flex layouts
+  userSelect: 'none'     // no text selection on artwork
+  backgroundColor: '#050505'
+
+Wrap root also needs: display: 'flex'
+Each wrap section also needs: flexShrink: 0
+
+---
+
+## Surf keys passed by App (what each surf prop is named in state)
+
+  wrap  → surfBack=surfs.wrapBack, surfLeft=surfs.wrapLeft,
+           surfFront=surfs.wrapFront, surfRight=surfs.wrapRight
+  back  → surf=surfs.back
+  flaps → surfContents=surfs.flapsContents, surfLogo=surfs.flapsLogo
+  qr    → surf=surfs.qr
+
+Surf object shape:
+  { time: number, bg: 'wave'|'dark'|'lattice',
+    latticeSize: number, latticeBright: number, latticeDepth: number }
+
+Default: const DEFAULT_SURF = { time: 3200, bg: 'wave' }
+
+---
+
+## Panel props (full signatures)
+
+  wrap  : { scale=1, surfBack=DEFAULT_SURF, surfLeft=DEFAULT_SURF,
+             surfFront=DEFAULT_SURF, surfRight=DEFAULT_SURF }
+
+  back  : { scale=1, surf=DEFAULT_SURF }
+
+  flaps : { scale=1, hideLabels=false, contentsFlapId, logoFlapId,
+             surfContents=DEFAULT_SURF, surfLogo=DEFAULT_SURF }
+
+  qr    : { scale=1, surf=DEFAULT_SURF }
+
+---
+
+## Starting a new design
+
+Base components live at designs/base/ — one per panel type:
+
+  designs/base/back.jsx    BackBase({ scale, surf, children })
+  designs/base/wrap.jsx    WrapBase({ scale, surf*, backContent, leftContent, frontContent, rightContent })
+  designs/base/flaps.jsx   FlapsBase({ scale, hideLabels, contentsFlapId, logoFlapId, surf*, contentsChildren, logoChildren })
+  designs/base/qr.jsx      QRBase({ scale, surf, children })
+
+  * wrap surf props: surfBack, surfLeft, surfFront, surfRight
+  * flaps surf props: surfContents, surfLogo
+
+Import path from your design file (2 levels up to designs/):
+  import BackBase  from '../../base/back'
+  import WrapBase  from '../../base/wrap'
+  import FlapsBase from '../../base/flaps'
+  import QRBase    from '../../base/qr'
+
+Each Base handles: correct dimensions, backgroundColor, position:relative,
+overflow:hidden, flexShrink:0, userSelect:none, and SurfaceBg.
+Your content goes into the slots at zIndex ≥ 3 — that is all you write.
+
+See back/GrapheneV1 for a complete working example of this pattern.
+
+Register your new variant in registry.js when done (see Registry section).
+
+---
+
+## Folder structure & imports
+
 designs/
-  registry.js          <- add your import and entry here
+  registry.js               <- register every new variant here
   wrap/<Name>/index.jsx
   back/<Name>/index.jsx
   flaps/<Name>/index.jsx
   qr/<Name>/index.jsx
 
-Read an existing GrapheneV1/index.jsx to understand the props, dimensions, and how SurfaceBg works.
+Imports from a design file go up 3 levels (../../../):
+  import SurfaceBg   from '../../../studio/SurfaceBg'
+  import QRCodeImage from '../../../studio/QRCodeImage'
+  import Logo        from '../../../brand/Logo'
 
+---
 
-- File path: designs/<panel>/<VariantName>/index.jsx
+## Studio components — import, never reimplement
 
+### SurfaceBg  →  ../../../studio/SurfaceBg
+Renders hex wave / dark / lattice background.
+Must be the first child of any section container.
+Container: position relative, overflow hidden.
+SurfaceBg is absolute inset 0, zIndex 0.
+Your content: position relative, zIndex 3 or higher.
+
+  <SurfaceBg surf={surf} />
+
+### QRCodeImage  →  ../../../studio/QRCodeImage
+All QR generation lives here. Never generate QR inline in a design.
+
+  <QRCodeImage url={WEBSITE_URL} size={qrSize} fgColor="#ffffff" bgColor="#000000" />
+
+### Logo  →  ../../../brand/Logo
+  <Logo size={42 * fs} theme="dark" />
+  theme="dark" = white logo on dark background
+
+---
+
+## zIndex layers
+
+  0  SurfaceBg canvas (internal)
+  1  Decorative SVG / pattern overlays on background
+  2  Subtle grid lines, vignette gradients
+  3  Main content — text, icons, logo
+  4  Top-layer overlays — badges, floating spec panels
+
+---
+
+## Registry
+
+Open registry.js, add import and push entry:
+  import YourComponent from './<panel>/<Name>'
+  { id: '<Name>', label: '<Label>', Component: YourComponent }
+
+---
+
+## Everything else — make it your own.

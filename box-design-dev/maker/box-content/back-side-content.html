@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CERAPHENE™ | Technical User Manual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent-primary: #ffffff;
+            --accent-dim: rgba(255, 255, 255, 0.1);
+            --bg-dark: #050505;
+            --panel-bg: rgba(20, 20, 20, 0.6);
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: #e5e5e5;
+            background-image: 
+                radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Glass Panel */
+        .glass-panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(16px);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.8);
+            border-radius: 4px; /* Sharper corners for industrial feel */
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+        
+        /* Section Label */
+        .panel-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #737373;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 0.75rem;
+            font-weight: 700;
+        }
+        .panel-label svg { opacity: 1; color: white; }
+
+        /* Hex Grid */
+        .hex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        .hex-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2));
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            transition: border-color 0.3s;
+        }
+        .hex-card:hover {
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        /* SOP Timeline */
+        .timeline-container {
+            position: relative;
+            padding-left: 2.5rem;
+        }
+        .timeline-line {
+            position: absolute;
+            left: 19px;
+            top: 24px;
+            bottom: 24px;
+            width: 1px;
+            background: linear-gradient(to bottom, #fff, #333);
+            z-index: 0;
+        }
+        .timeline-step {
+            position: relative;
+            margin-bottom: 2.5rem;
+            z-index: 1;
+        }
+        .timeline-marker {
+            position: absolute;
+            left: -2.5rem;
+            width: 40px;
+            height: 40px;
+            background: #000;
+            border: 1px solid #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-family: 'JetBrains Mono', monospace;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Comparison Table */
+        .comp-table th {
+            text-transform: uppercase;
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            color: #737373;
+            padding: 1rem;
+            background: rgba(255,255,255,0.02);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .comp-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.8rem;
+            vertical-align: middle;
+        }
+        .winner-col {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 1px solid rgba(255,255,255,0.3);
+            border-right: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* Instrument Cluster (Dashboard) */
+        .instrument-panel {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+        .gauge-box {
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .gauge-bar {
+            height: 2px;
+            width: 100%;
+            background: #222;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .gauge-fill {
+            height: 100%;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+        
+        /* Spec Card */
+        .spec-card {
+            border: 1px solid #333;
+            background: rgba(255,255,255,0.01);
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        
+        /* Status Boxes */
+        .status-box {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 4px;
+        }
+
+    </style>
+</head>
+<body class="p-4 md:p-8 lg:p-12">
+
+    <div class="max-w-6xl mx-auto">
+
+        <!-- HEADER BLOCK -->
+        <header class="mb-12 flex flex-col md:flex-row justify-between items-end border-b border-white/10 pb-8">
+            <div class="flex items-center gap-6">
+                <!-- Abstract Graphene Logo (Monochrome) -->
+                <svg viewBox="0 0 100 100" class="w-20 h-20 text-white fill-current opacity-100">
+                    <path d="M50 5L85 25V65L50 85L15 65V25L50 5Z" fill="none" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M50 25L70 37V63L50 75L30 63V37L50 25Z" fill="white" opacity="0.1"/>
+                    <circle cx="50" cy="50" r="3" fill="white"/>
+                    <circle cx="20" cy="20" r="2" fill="white"/>
+                    <circle cx="80" cy="80" r="2" fill="white"/>
+                </svg>
+                <div>
+                    <h1 class="text-4xl md:text-5xl font-black italic text-white uppercase tracking-tighter leading-none">Technical<br>Manual</h1>
+                    <div class="flex items-center gap-3 mt-3">
+                         <span class="flex items-center gap-1.5 text-[10px] font-bold bg-white text-black px-2.5 py-1 rounded border border-white uppercase tracking-wide">
+                             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                             Professional Series
+                         </span>
+                         <span class="text-[10px] mono text-neutral-500">REV 2.2 | 2026</span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-6 md:mt-0">
+                 <p class="text-neutral-500 text-[10px] mono mb-1">MONOATOM LABS / INDIA</p>
+                 <div class="flex items-center gap-2 text-xs font-bold text-white uppercase tracking-widest bg-neutral-900 px-3 py-1.5 rounded border border-neutral-800">
+                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                     Applicator Guide
+                 </div>
+            </div>
+        </header>
+
+        <!-- 01 | THE SCIENCE -->
+        <section class="glass-panel">
+            <span class="panel-label">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                01 | Molecular Architecture
+            </span>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                
+                <div class="lg:col-span-4">
+                    <h2 class="text-2xl font-bold text-white mb-4 leading-tight">Graphene Matrix<br><span class="text-neutral-400">Reinforcement</span></h2>
+                    <p class="text-xs text-neutral-400 leading-relaxed mb-6">
+                        Standard ceramics rely on SiO2. Ceraphene embeds <strong>Graphene Nano-Platelets</strong> into the lattice. This creates a denser, less porous surface structure that physically blocks contaminants.
+                    </p>
+                    <div class="p-3 bg-white/5 border border-white/10 rounded">
+                        <div class="flex items-center gap-2 mb-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-[10px] font-bold text-white uppercase">Core Benefit</span>
+                        </div>
+                        <p class="text-[10px] text-neutral-400">Drastically reduced surface porosity = Superior Stain Resistance.</p>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 hex-grid">
+                    <!-- Feature 1 -->
+                    <div class="hex-card group">
+                        <div class="flex justify-between items-start">
+                            <div class="w-8 h-8 rounded bg-white text-black flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                            </div>
+                            <span class="text-[9px] mono text-neutral-500">BOND</span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-xs uppercase mb-1">Covalent Bonding</h4>
+                            <p class="text-[10px] text-neutral-400 leading-snug">Permanent adhesion to clear coat substrate.</p>
+                        </div>
+                    </div>
+                    <!-- Feature 2 -->
+                    <div class="hex-card group">
+                        <div class="flex justify-between items-start">
+                            <div class="w-8 h-8 rounded bg-white text-black flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <span class="text-[9px] mono text-neutral-500">HEAT</span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-xs uppercase mb-1">Heat Dissipation</h4>
+                            <p class="text-[10px] text-neutral-400 leading-snug">Lowers surface temp to minimize water spotting.</p>
+                        </div>
+                    </div>
+                    <!-- Feature 3 -->
+                    <div class="hex-card group">
+                        <div class="flex justify-between items-start">
+                            <div class="w-8 h-8 rounded bg-white text-black flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <span class="text-[9px] mono text-neutral-500">STR</span>
+                        </div>
+                        <div>
+                            <h4 class="text-white font-bold text-xs uppercase mb-1">Tensile Strength</h4>
+                            <p class="text-[10px] text-neutral-400 leading-snug">Resists micro-marring and wash-induced swirls.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 02 | COMPETITIVE BENCHMARK -->
+        <section class="glass-panel mb-8">
+            <span class="panel-label">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                02 | Market Benchmark
+            </span>
+            <div class="overflow-x-auto rounded border border-white/5 bg-neutral-900/30">
+                <table class="w-full comp-table text-left">
+                    <thead>
+                        <tr>
+                            <th class="w-1/4 pl-6">Metric</th>
+                            <th class="w-1/4 winner-col text-white text-center">Ceraphene™</th>
+                            <th class="w-1/6 text-center">Gtechniq CSL</th>
+                            <th class="w-1/6 text-center">CarPro CQuartz</th>
+                            <th class="w-1/6 text-center">Ceramic Pro 9H</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Row 1 -->
+                        <tr class="hover:bg-white/5">
+                            <td class="font-bold text-white pl-6 flex items-center gap-3">
+                                <div class="w-6 h-6 rounded bg-neutral-800 flex items-center justify-center text-neutral-400">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                </div>
+                                Graphene Matrix
+                            </td>
+                            <td class="winner-col text-center">
+                                <span class="text-xs font-bold bg-white text-black px-2 py-0.5 rounded">YES</span>
+                            </td>
+                            <td class="text-center text-neutral-600">No</td>
+                            <td class="text-center text-neutral-600">No</td>
+                            <td class="text-center text-neutral-600">No</td>
+                        </tr>
+                        <!-- Row 2 -->
+                        <tr class="hover:bg-white/5">
+                            <td class="font-bold text-white pl-6 flex items-center gap-3">
+                                <div class="w-6 h-6 rounded bg-neutral-800 flex items-center justify-center text-neutral-400">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                                Real Durability
+                            </td>
+                            <td class="winner-col text-center font-bold text-white">3–4+ Years</td>
+                            <td class="text-center">2–3+ Years</td>
+                            <td class="text-center">1.5–2.5 Years</td>
+                            <td class="text-center">Up to 5 Years</td>
+                        </tr>
+                        <!-- Row 3 -->
+                        <tr class="hover:bg-white/5">
+                            <td class="font-bold text-white pl-6 flex items-center gap-3">
+                                <div class="w-6 h-6 rounded bg-neutral-800 flex items-center justify-center text-neutral-400">
+                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                                Cost Value
+                            </td>
+                            <td class="winner-col text-center font-bold text-white">High ROI</td>
+                            <td class="text-center">Medium</td>
+                            <td class="text-center">Medium</td>
+                            <td class="text-center">Low-Medium</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SPLIT LAYOUT: SOP + DASHBOARD -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- 03 | SOP TIMELINE -->
+            <div class="lg:col-span-8 glass-panel">
+                <span class="panel-label">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
+                    03 | Standard Operating Procedure
+                </span>
+                
+                <div class="timeline-container mt-8">
+                    <div class="timeline-line"></div>
+                    
+                    <!-- Step 1 -->
+                    <div class="timeline-step">
+                        <div class="timeline-marker">01</div>
+                        <div class="ml-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-white font-bold uppercase text-sm">Preparation Phase</h4>
+                                <div class="flex gap-2 text-neutral-500">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <div class="flex items-center gap-2 mb-3 text-[10px] text-white font-bold uppercase tracking-wide border-b border-white/10 pb-2">
+                                    <span>Tools:</span>
+                                    <span class="text-neutral-400">Iron Remover</span> •
+                                    <span class="text-neutral-400">Clay Bar</span> •
+                                    <span class="text-neutral-400">Polisher</span> •
+                                    <span class="text-neutral-400">IPA</span>
+                                </div>
+                                <ul class="text-[11px] text-neutral-300 space-y-1 list-disc ml-4">
+                                    <li>Chemical Decon (Iron Remover).</li>
+                                    <li>Clay Bar Treatment.</li>
+                                    <li><strong>Machine Polish</strong> (Mandatory for bonding).</li>
+                                    <li><strong>IPA Wipe</strong> (15-20%) to strip all oils.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="timeline-step">
+                        <div class="timeline-marker">02</div>
+                        <div class="ml-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-white font-bold uppercase text-sm">Application</h4>
+                                <div class="flex gap-2 text-neutral-500">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <div class="flex items-center gap-2 mb-3 text-[10px] text-white font-bold uppercase tracking-wide border-b border-white/10 pb-2">
+                                    <span>Tools:</span>
+                                    <span class="text-neutral-400">Suede Block</span> •
+                                    <span class="text-neutral-400">Coating</span>
+                                </div>
+                                <p class="text-[11px] text-neutral-300 mb-2">Prime with 8-10 drops. Reload 3-4 drops per section.</p>
+                                <div class="flex gap-4 text-[10px] mono text-white">
+                                    <span class="bg-black px-2 py-1 rounded border border-neutral-700">2x2 FT GRID</span>
+                                    <span class="bg-black px-2 py-1 rounded border border-neutral-700">CROSS-HATCH</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="timeline-step">
+                        <div class="timeline-marker">03</div>
+                        <div class="ml-6">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4 class="text-white font-bold uppercase text-sm">Flash & Level</h4>
+                                <div class="flex gap-2 text-neutral-500">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                            </div>
+                            <div class="bg-white/5 p-4 rounded-lg border border-white/10">
+                                <div class="flex items-center gap-2 mb-3 text-[10px] text-white font-bold uppercase tracking-wide border-b border-white/10 pb-2">
+                                    <span>Tools:</span>
+                                    <span class="text-neutral-400">Low-Pile Towel</span> •
+                                    <span class="text-neutral-400">Plush Towel</span>
+                                </div>
+                                <p class="text-[11px] text-neutral-300 mb-2">Wait for "Rainbow Effect" (2-4 mins).</p>
+                                <ul class="text-[11px] text-neutral-300 space-y-1 ml-0">
+                                    <li class="flex gap-2 items-center"><span class="w-4 h-4 bg-white text-black flex items-center justify-center rounded-full text-[9px] font-bold">1</span> Level high spots.</li>
+                                    <li class="flex gap-2 items-center"><span class="w-4 h-4 bg-white text-black flex items-center justify-center rounded-full text-[9px] font-bold">2</span> Buff to high gloss.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- 04 | DASHBOARD & VARIABLES -->
+            <div class="lg:col-span-4 flex flex-col gap-6">
+                
+                <section class="glass-panel flex-grow">
+                    <span class="panel-label">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        04 | Flight Deck
+                    </span>
+                    
+                    <div class="instrument-panel">
+                        <!-- Temp Gauge -->
+                        <div class="gauge-box">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-[9px] uppercase text-neutral-500 font-bold">Temp</span>
+                                <svg class="w-3 h-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                            </div>
+                            <div class="text-xl font-black text-white mono">20°C</div>
+                            <div class="text-[9px] text-neutral-500">Range: 15-25°C</div>
+                            <div class="gauge-bar"><div class="gauge-fill" style="width: 60%"></div></div>
+                        </div>
+
+                        <!-- Humidity Gauge -->
+                        <div class="gauge-box">
+                            <div class="flex justify-between items-start mb-1">
+                                <span class="text-[9px] uppercase text-neutral-500 font-bold">Humidity</span>
+                                <svg class="w-3 h-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                            </div>
+                            <div class="text-xl font-black text-white mono">&lt;70%</div>
+                            <div class="text-[9px] text-neutral-500">Max Limit</div>
+                            <div class="gauge-bar"><div class="gauge-fill bg-white" style="width: 70%"></div></div>
+                        </div>
+
+                        <!-- Cure Timer -->
+                        <div class="gauge-box col-span-2">
+                             <div class="flex justify-between items-start mb-1">
+                                <span class="text-[9px] uppercase text-neutral-500 font-bold">Cure Time (Dry)</span>
+                                <svg class="w-3 h-3 text-neutral-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div class="text-2xl font-black text-white mono tracking-wider">24:00 HRS</div>
+                            <div class="gauge-bar"><div class="gauge-fill bg-white" style="width: 100%"></div></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-panel border-l-4 border-l-white">
+                    <span class="panel-label text-white">Troubleshooting</span>
+                    <ul class="space-y-3">
+                        <li class="bg-white/5 p-2 rounded border border-white/10">
+                            <strong class="text-white text-xs block mb-1">High Spots</strong>
+                            <p class="text-[10px] text-neutral-400 leading-tight">Dark patches. Level immediately. If cured >1hr, polish off.</p>
+                        </li>
+                        <li class="bg-white/5 p-2 rounded border border-white/10">
+                            <strong class="text-white text-xs block mb-1">Hazing</strong>
+                            <p class="text-[10px] text-neutral-400 leading-tight">Humidity too high. Buff with damp towel, then dry.</p>
+                        </li>
+                    </ul>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- 05 | ADVANCED PROTOCOLS -->
+         <section class="glass-panel mt-8">
+            <span class="panel-label">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                05 | Advanced Protocols
+            </span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- IR Lamps -->
+                <div class="spec-card">
+                    <h4 class="text-white font-bold uppercase text-xs mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                        IR Lamp Specs
+                    </h4>
+                    <div class="flex justify-between items-center text-[10px] mono text-neutral-400 border-b border-white/10 pb-2 mb-2">
+                        <span>TEMP</span> <span class="text-white">60-70°C</span>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] mono text-neutral-400 border-b border-white/10 pb-2 mb-2">
+                        <span>DIST</span> <span class="text-white">60-80cm</span>
+                    </div>
+                    <div class="flex justify-between items-center text-[10px] mono text-neutral-400">
+                        <span>TIME</span> <span class="text-white">15-20 Min</span>
+                    </div>
+                </div>
+
+                <!-- Layering -->
+                <div class="spec-card">
+                    <h4 class="text-white font-bold uppercase text-xs mb-3 flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Stacking Strategy
+                    </h4>
+                    <div class="flex gap-4">
+                        <div class="flex-1">
+                            <span class="block text-[9px] text-neutral-500 font-bold uppercase mb-1">Base</span>
+                            <div class="h-2 w-full bg-white/40 rounded"></div>
+                            <span class="text-[9px] text-neutral-400">Chemical Bond</span>
+                        </div>
+                        <div class="flex items-end pb-1 text-neutral-600 text-[9px] font-bold">> 1 HR ></div>
+                        <div class="flex-1">
+                            <span class="block text-[9px] text-neutral-500 font-bold uppercase mb-1">Top</span>
+                            <div class="h-2 w-full bg-white rounded"></div>
+                            <span class="text-[9px] text-neutral-400">Gloss & Slickness</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 06 | MAINTENANCE -->
+        <section class="glass-panel mt-8">
+            <span class="panel-label">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                06 | Care Regime
+            </span>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- DOS -->
+                <div class="status-box">
+                    <h4 class="flex items-center gap-2 text-white font-bold uppercase text-sm mb-4">
+                        <div class="w-5 h-5 bg-white text-black rounded flex items-center justify-center"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                        Approved Methods
+                    </h4>
+                    <ul class="space-y-3">
+                        <li class="flex gap-3 text-xs text-neutral-300">
+                             <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center bg-white/10 rounded-full text-white">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                             </div>
+                            <span class="mt-0.5">Use pH Neutral Shampoos Only.</span>
+                        </li>
+                        <li class="flex gap-3 text-xs text-neutral-300">
+                             <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center bg-white/10 rounded-full text-white">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                             </div>
+                            <span class="mt-0.5">Two-Bucket Wash Method (Grit Guards).</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- DONTS -->
+                <div class="status-box">
+                    <h4 class="flex items-center gap-2 text-white font-bold uppercase text-sm mb-4">
+                        <div class="w-5 h-5 bg-neutral-800 text-white border border-white rounded flex items-center justify-center"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></div>
+                        Prohibited
+                    </h4>
+                    <ul class="space-y-3">
+                        <li class="flex gap-3 text-xs text-neutral-300">
+                            <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center bg-white/10 rounded-full text-white">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+                            </div>
+                            <span class="mt-0.5">Automatic Car Washes.</span>
+                        </li>
+                        <li class="flex gap-3 text-xs text-neutral-300">
+                             <div class="w-4 h-4 flex-shrink-0 flex items-center justify-center bg-white/10 rounded-full text-white">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                             </div>
+                            <span class="mt-0.5">Direct Sunlight Washing.</span>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 07 | SAFETY GRID -->
+        <section class="glass-panel border-l-4 border-l-white mt-8">
+             <span class="panel-label text-white flex items-center gap-2">
+                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                 07 | Safety Protocols
+             </span>
+             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                 <div class="bg-white/5 p-4 rounded border border-white/10 flex flex-col items-center text-center">
+                     <div class="text-white mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></div>
+                     <strong class="text-white text-[10px] uppercase mb-1">Eye Contact</strong>
+                     <p class="text-[9px] text-neutral-400">Flush 15m. Seek help.</p>
+                 </div>
+                 <div class="bg-white/5 p-4 rounded border border-white/10 flex flex-col items-center text-center">
+                     <div class="text-white mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11"></path></svg></div>
+                     <strong class="text-white text-[10px] uppercase mb-1">Skin Contact</strong>
+                     <p class="text-[9px] text-neutral-400">Wash w/ soap immediately.</p>
+                 </div>
+                 <div class="bg-white/5 p-4 rounded border border-white/10 flex flex-col items-center text-center">
+                     <div class="text-white mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg></div>
+                     <strong class="text-white text-[10px] uppercase mb-1">Inhalation</strong>
+                     <p class="text-[9px] text-neutral-400">Move to fresh air.</p>
+                 </div>
+                 <div class="bg-white/5 p-4 rounded border border-white/10 flex flex-col items-center text-center">
+                     <div class="text-white mb-2"><svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></div>
+                     <strong class="text-white text-[10px] uppercase mb-1">Ingestion</strong>
+                     <p class="text-[9px] text-neutral-400">Do NOT vomit. Drink water.</p>
+                 </div>
+             </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="mt-12 pt-8 border-t border-neutral-800 text-center">
+            <div class="inline-flex items-center gap-4 mb-4">
+                <span class="flex items-center gap-1 text-[10px] font-bold text-neutral-500 border border-neutral-700 px-2 py-1 rounded">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    ISO 9001:2015
+                </span>
+                <span class="flex items-center gap-1 text-[10px] font-bold text-neutral-500 border border-neutral-700 px-2 py-1 rounded">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"></path></svg>
+                    ASTM Compliant
+                </span>
+            </div>
+            <p class="text-xs text-neutral-500 mb-1">Technical Support: <strong>support@monoatomlabs.com</strong></p>
+            <p class="text-[10px] text-neutral-700">© 2026 Monoatom Labs. All rights reserved. Engineered in India.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

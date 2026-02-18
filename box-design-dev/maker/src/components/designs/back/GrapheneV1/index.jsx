@@ -1,21 +1,13 @@
 import React from 'react'
-import SurfaceBg from '../../../studio/SurfaceBg'
+import BackBase from '../../base/back'
 import { Shield, Thermometer, Zap, Activity } from 'lucide-react'
 
 const DEFAULT_SURF = { time: 3200, bg: 'wave' }
 
-// Sports car side-profile SVG
 function SportsCar({ width, height, color = '#777' }) {
   const sw = 1.8
   return (
-    <svg
-      viewBox="0 0 700 260"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={width}
-      height={height}
-      style={{ filter: 'drop-shadow(0 0 10px rgba(45, 226, 200, 0.2))' }}
-    >
+    <svg viewBox="0 0 700 260" fill="none" xmlns="http://www.w3.org/2000/svg" width={width} height={height} style={{ filter: 'drop-shadow(0 0 10px rgba(45, 226, 200, 0.2))' }}>
       <defs>
         <linearGradient id="scanGradient" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="#64748B" stopOpacity="0" />
@@ -67,8 +59,7 @@ export default function BackPanel({ scale = 1, surf = DEFAULT_SURF }) {
   const fs = scale
 
   return (
-    <div style={{ width: W, height: H, backgroundColor: '#050505', position: 'relative', overflow: 'hidden', flexShrink: 0, userSelect: 'none' }}>
-      <SurfaceBg surf={surf} />
+    <BackBase scale={scale} surf={surf}>
 
       <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
         <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 1, background: 'rgba(255,255,255,0.05)' }} />
@@ -111,6 +102,7 @@ export default function BackPanel({ scale = 1, surf = DEFAULT_SURF }) {
           <TechSpec icon={Zap} title="Bonding Tech" val="Covalent Si-O Bond" desc="Molecularly fuses with clear coat for permanent protection." align="right" scale={scale} />
         </div>
       </div>
-    </div>
+
+    </BackBase>
   )
 }

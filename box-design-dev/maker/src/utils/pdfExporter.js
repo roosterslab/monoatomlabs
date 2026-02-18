@@ -1,4 +1,4 @@
-import html2canvas from 'html2canvas'
+import rasterizeHTML from 'rasterizehtml'
 import jsPDF from 'jspdf'
 
 // ─── Source PDF exact dimensions (inches) ──────────────────────────────────
@@ -10,10 +10,10 @@ const DIM = {
 }
 
 // Layout constants (inches)
-const MARGIN  = 0.87   // page margin all sides
-const GAP     = 0.38   // vertical gap between sections
-const LABEL_H = 0.26   // height reserved for a dimension label row
-const FLAP_GAP = 0.25  // horizontal gap between the two flap panels
+const MARGIN   = 0.87   // page margin all sides
+const GAP      = 0.38   // vertical gap between sections
+const LABEL_H  = 0.26   // height reserved for a dimension label row
+const FLAP_GAP = 0.25   // horizontal gap between the two flap panels
 
 // Derived page width — same for both pages so they are identical width
 const PAGE_W = MARGIN + DIM.wrap.w + MARGIN  // 17.307"
@@ -21,7 +21,7 @@ const PAGE_W = MARGIN + DIM.wrap.w + MARGIN  // 17.307"
 // ─── Helpers ───────────────────────────────────────────────────────────────
 
 async function waitForResources() {
-  await document.fonts.ready
+  if (document.fonts && document.fonts.ready) await document.fonts.ready
   const imgs = Array.from(document.images)
   await Promise.all(
     imgs.map(img =>
@@ -30,25 +30,71 @@ async function waitForResources() {
         : new Promise(res => { img.onload = res; img.onerror = res })
     )
   )
-  await new Promise(res => setTimeout(res, 400))
+  await new Promise(res => setTimeout(res, 500))
 }
 
 /**
- * Capture a DOM element as a data URL.
- * pixelRatio=3 gives ~288 dpi at 96-dpi screen rendering.
+ * Collect all document stylesheet rules into a single CSS string.
  */
-async function captureElement(id, pixelRatio = 3) {
-  const el = document.getElementById(id)
-  if (!el) throw new Error(`Export element #${id} not found in DOM`)
-  const canvas = await html2canvas(el, {
-    scale: pixelRatio,
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: '#0c0c0c',
-    logging: false,
-    imageTimeout: 12000,
+function collectStyles() {
+  let css = ''
+  for (let i = 0; i < document.styleSheets.length; i++) {
+    try {
+      const sheet = document.styleSheets[i]
+      if (sheet.cssRules) {
+        for (let j = 0; j < sheet.cssRules.length; j++) {
+          css += sheet.cssRules[j].cssText + '\n'
+        }
+      }
+    } catch {
+      // skip cross-origin sheets
+    }
+  }
+  return css
+}
+
+/**
+ * Render a DOM element to a canvas using rasterizeHTML.
+ * scale=3 → ~288 dpi at 96 dpi screen; scale=4 → ~384 dpi.
+ */
+async function renderToCanvas(element, scale = 3) {
+  const width  = element.offsetWidth
+  const height = element.offsetHeight
+
+  const canvas  = document.createElement('canvas')
+  canvas.width  = width  * scale
+  canvas.height = height * scale
+
+  // Clone and replace any <canvas> children with <img> snapshots
+  const clone = element.cloneNode(true)
+  const origCanvases   = element.querySelectorAll('canvas')
+  const clonedCanvases = clone.querySelectorAll('canvas')
+  origCanvases.forEach((orig, idx) => {
+    if (!clonedCanvases[idx]) return
+    const img       = document.createElement('img')
+    img.src         = orig.toDataURL('image/png')
+    const cs        = window.getComputedStyle(orig)
+    img.style.cssText  = orig.style.cssText
+    img.style.position = cs.position
+    img.style.top      = cs.top
+    img.style.left     = cs.left
+    img.style.width    = cs.width
+    img.style.height   = cs.height
+    img.style.zIndex   = cs.zIndex
+    img.style.opacity  = cs.opacity
+    clonedCanvases[idx].parentNode.replaceChild(img, clonedCanvases[idx])
   })
-  return canvas.toDataURL('image/png')
+
+  const fullHtml = `<!DOCTYPE html>
+<html>
+  <head><style>${collectStyles()}</style></head>
+  <body style="margin:0;padding:0;width:${width}px;height:${height}px;">
+    ${clone.outerHTML}
+  </body>
+</html>`
+
+  await rasterizeHTML.drawHTML(fullHtml, canvas, { width, height, zoom: scale })
+  return canvas
 }
 
 // ─── Single panel exports ──────────────────────────────────────────────────
@@ -57,13 +103,7 @@ export async function exportPanelAsPNG(elementId, filename, pixelRatio = 4) {
   const el = document.getElementById(elementId)
   if (!el) throw new Error(`#${elementId} not found`)
   await waitForResources()
-  const canvas = await html2canvas(el, {
-    scale: pixelRatio,
-    useCORS: true,
-    allowTaint: true,
-    backgroundColor: '#0c0c0c',
-    logging: false,
-  })
+  const canvas = await renderToCanvas(el, pixelRatio)
   const link = document.createElement('a')
   link.download = filename || 'panel.png'
   link.href = canvas.toDataURL('image/png')
@@ -74,11 +114,16 @@ export async function exportPanelAsPDF(elementId, panelId, filename) {
   const el = document.getElementById(elementId)
   if (!el) throw new Error(`#${elementId} not found`)
 
-  const dimMap = { wrap: DIM.wrap, back: DIM.back, flaps: { w: DIM.flap.w * 2 + FLAP_GAP, h: DIM.flap.h }, qr: DIM.qr }
+  const dimMap = {
+    wrap:  DIM.wrap,
+    back:  DIM.back,
+    flaps: { w: DIM.flap.w * 2 + FLAP_GAP, h: DIM.flap.h },
+    qr:    DIM.qr,
+  }
   const { w: pW, h: pH } = dimMap[panelId] || DIM.wrap
 
   await waitForResources()
-  const canvas = await html2canvas(el, { scale: 3, useCORS: true, allowTaint: true, backgroundColor: '#0c0c0c', logging: false })
+  const canvas = await renderToCanvas(el, 3)
   const pdf = new jsPDF({ orientation: pW > pH ? 'landscape' : 'portrait', unit: 'in', format: [pW, pH] })
   pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, pW, pH)
   pdf.save(filename || `${panelId}-panel.pdf`)
@@ -86,10 +131,17 @@ export async function exportPanelAsPDF(elementId, panelId, filename) {
 
 // ─── Export All — exact source PDF layout ──────────────────────────────────
 
+async function captureElement(id, pixelRatio = 3) {
+  const el = document.getElementById(id)
+  if (!el) throw new Error(`Export element #${id} not found in DOM`)
+  const canvas = await renderToCanvas(el, pixelRatio)
+  return canvas.toDataURL('image/png')
+}
+
 /**
  * Generates a 2-page PDF that exactly matches the source PDF layout:
  *
- * PAGE 1 (identical page width as page 2):
+ * PAGE 1:
  *   [label: 15.567" x 6.65"]
  *   [Wrap panel  — exactly 15.567" × 6.65"]
  *   [label: 5.2" X 2.13"]
@@ -99,14 +151,10 @@ export async function exportPanelAsPDF(elementId, panelId, filename) {
  *   [Back panel  — exactly 15.567" × 6.65"]
  *   [label: 15.567" x 6.65" (left)]   [label: 6.303"X5.123" (right)]
  *                                      [QR panel — 6.303" × 5.123" (right)]
- *
- * All panel images are embedded at their exact labeled inch dimensions
- * so render sizes are consistent regardless of the source pixel count.
  */
 export async function exportAllPanelsAsSourcePDF() {
   await waitForResources()
 
-  // Capture all panels individually at 3× (288 dpi)
   const [imgWrap, imgBack, imgFlapC, imgFlapL, imgQR] = await Promise.all([
     captureElement('export-wrap-panel'),
     captureElement('export-back-panel'),
@@ -115,8 +163,7 @@ export async function exportAllPanelsAsSourcePDF() {
     captureElement('export-qr-panel'),
   ])
 
-  // ── Page 1 height ──────────────────────────────────────────────────────
-  //   margin + label + gap + wrap.h + gap + label + gap + flap.h + margin
+  // ── Page 1 height ──
   const P1_H =
     MARGIN +
     LABEL_H + GAP * 0.4 +
@@ -126,8 +173,7 @@ export async function exportAllPanelsAsSourcePDF() {
     DIM.flap.h +
     MARGIN
 
-  // ── Page 2 height ──────────────────────────────────────────────────────
-  //   margin + back.h + gap + label row + gap + qr.h + margin
+  // ── Page 2 height ──
   const P2_H =
     MARGIN +
     DIM.back.h +
@@ -136,7 +182,6 @@ export async function exportAllPanelsAsSourcePDF() {
     DIM.qr.h +
     MARGIN
 
-  // Label style helper
   const label = (pdf, text, x, y, align = 'left') => {
     pdf.setFont('helvetica', 'normal')
     pdf.setFontSize(13)
@@ -144,7 +189,7 @@ export async function exportAllPanelsAsSourcePDF() {
     pdf.text(text, x, y, { align })
   }
 
-  // ── Build Page 1 ───────────────────────────────────────────────────────
+  // ── Build Page 1 ──
   const pdf = new jsPDF({
     orientation: PAGE_W > P1_H ? 'landscape' : 'portrait',
     unit: 'in',
@@ -153,38 +198,28 @@ export async function exportAllPanelsAsSourcePDF() {
 
   let y = MARGIN
 
-  // Dimension label — centered
   label(pdf, '15.567" x 6.65"', PAGE_W / 2, y + LABEL_H * 0.75, 'center')
   y += LABEL_H + GAP * 0.4
 
-  // Wrap panel at exact dimensions
   pdf.addImage(imgWrap, 'PNG', MARGIN, y, DIM.wrap.w, DIM.wrap.h)
   y += DIM.wrap.h + GAP
 
-  // Flap dimension label
   label(pdf, '5.2" X 2.13"', MARGIN, y + LABEL_H * 0.75)
   y += LABEL_H + GAP * 0.4
 
-  // Two flap panels side-by-side at exact dimensions
   pdf.addImage(imgFlapC, 'PNG', MARGIN, y, DIM.flap.w, DIM.flap.h)
   pdf.addImage(imgFlapL, 'PNG', MARGIN + DIM.flap.w + FLAP_GAP, y, DIM.flap.w, DIM.flap.h)
 
-  // ── Build Page 2 ───────────────────────────────────────────────────────
-  pdf.addPage(
-    [PAGE_W, P2_H],
-    PAGE_W > P2_H ? 'landscape' : 'portrait'
-  )
+  // ── Build Page 2 ──
+  pdf.addPage([PAGE_W, P2_H], PAGE_W > P2_H ? 'landscape' : 'portrait')
 
   y = MARGIN
 
-  // Back panel at exact dimensions
   pdf.addImage(imgBack, 'PNG', MARGIN, y, DIM.back.w, DIM.back.h)
   y += DIM.back.h + GAP
 
-  // Bottom-left: back panel dimension label
   label(pdf, '15.567" x 6.65"', MARGIN, y + LABEL_H * 0.75)
 
-  // Bottom-right: QR label + QR panel
   const qrX = PAGE_W - MARGIN - DIM.qr.w
   label(pdf, '6.303"X5.123"', qrX, y + LABEL_H * 0.75)
   y += LABEL_H + GAP * 0.4
