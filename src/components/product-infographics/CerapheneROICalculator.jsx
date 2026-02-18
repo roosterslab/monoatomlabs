@@ -231,7 +231,7 @@ const CerapheneROICalculator = ({
         <input
           type="range" min={cfg.min} max={cfg.max} step={cfg.step || 5} value={val}
           onChange={(e) => set('washReductionPct', Number(e.target.value))}
-          className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-blue-600"
+          className={sliderCls} style={sliderBg(Math.max(0, Math.min(100, ((val - cfg.min) / (cfg.max - cfg.min)) * 100)))}
         />
         <div className="flex justify-between">
           <span className={`text-[10px] ${sub}`}>{cfg.min}% conservative</span>
@@ -260,7 +260,9 @@ const CerapheneROICalculator = ({
     </div>
   );
 
-  const SecSlider = (key, cfg) => (
+  const SecSlider = (key, cfg) => {
+    const secPct = Math.max(0, Math.min(100, ((inputs[key] - cfg.min) / (cfg.max - cfg.min)) * 100));
+    return (
     <div className="space-y-2">
       <div className="flex items-baseline justify-between">
         <label className={`text-sm font-medium ${text}`}>{cfg.label}</label>
@@ -269,7 +271,7 @@ const CerapheneROICalculator = ({
       <input
         type="range" min={cfg.min} max={cfg.max} step={cfg.step || 0.5} value={inputs[key]}
         onChange={(e) => set(key, Number(e.target.value))}
-        className="w-full h-1.5 appearance-none rounded-full cursor-pointer accent-blue-600"
+        className={sliderCls} style={sliderBg(secPct)}
       />
       <div className="flex justify-between">
         <span className={`text-[10px] ${sub}`}>{cfg.min} {cfg.unit}</span>
@@ -278,6 +280,7 @@ const CerapheneROICalculator = ({
       {cfg.note && <p className={`text-[11px] ${sub}`}>{cfg.note}</p>}
     </div>
   );
+  };
 
   const renderSecInput = (key, cfg) => {
     switch (cfg.type) {
