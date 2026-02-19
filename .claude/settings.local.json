@@ -25,7 +25,9 @@
       "Bash(python:*)",
       "Bash(dir:*)",
       "Bash(xargs:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(cmd.exe /c \"dir C:\\\\Users\\\\globql-ws\\\\Documents\"\")",
+      "Bash(1:*)"
     ]
   }
 }
