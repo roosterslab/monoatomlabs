@@ -61,8 +61,9 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of hydrogen.',
       images: [
-        '/images/pipeline/studio/HydrogenMembranes.png',
-        '/images/pipeline/studio/Gryogen.png',
+        { image: '/images/pipeline/studio/HydrogenMembranes.png', label: 'Hydrogen Membrane' },
+        { image: '/images/pipeline/studio/Gryogen.png', label: 'Gryogen Studio' },
+        { image: '/images/hydrogen_hero.png', label: 'Field Application' },
         {
           type: 'video',
           url: 'https://www.youtube.com/embed/jo5_zAQJozQ',
@@ -137,7 +138,7 @@ export const pipelineProducts = {
         'Current desalination technologies require immense amounts of energy to force water through thick polymer membranes. This makes desalinated water expensive and environmentally taxing.',
         'Our graphene membranes are just one atom thick. This extreme thinness offers minimal resistance to water flow while perfectly blocking salt ions, reducing energy consumption by up to 40%.'
       ],
-      images: ['/images/pipeline/studio/DesalinationMembranes.png', '/images/pipeline/studio/mariphene.png']
+      images: ['/images/pipeline/studio/mariphene.png', '/images/desalination_hero.png']
     },
 
     processFlow: {
@@ -178,7 +179,7 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of desalination.',
       images: [
-        { image: '/images/pipeline/studio/DesalinationMembranes.png', label: 'Desalination Module' },
+        { image: '/images/pipeline/application-icon/mariphene.png', label: 'Mariphene Module' },
         { image: '/images/pipeline/studio/mariphene.png', label: 'Mariphene' },
         { image: '/images/desalination_hero.png', label: 'Operational Environment' }
       ]
@@ -271,8 +272,9 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of water security.',
       images: [
-        '/images/pipeline/studio/aerophenter_studio.png',
-        '/images/pipeline/studio/AtmosphericHarvesting-2.png',
+        { image: '/images/pipeline/studio/aerophenter_studio.png', label: 'Aerophenter Studio' },
+        { image: '/images/pipeline/studio/AtmosphericHarvesting-2.png', label: 'Studio View 2' },
+        { image: '/images/atmospheric_hero.png', label: 'Field Deployment' },
         {
           type: 'video',
           url: 'https://www.youtube.com/embed/P25aS8s4ar0',
@@ -983,6 +985,103 @@ export const pipelineProducts = {
       primaryButton: { text: 'Get Started', link: '/contact' },
       secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
       gradient: 'from-orange-900/30 via-orange-950/20 to-black'
+    }
+  },
+
+  graphenode: {
+    id: 'graphenode',
+    title: 'Graphenode',
+    subtitle: 'Graphene Nanoplatelet Electrode Material | High-purity, multi-grade graphene nanoplatelets engineered as superior anode materials for lithium-ion batteries and advanced energy storage systems.',
+    category: 'R&D Pipeline',
+    categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
+    heroImages: ['/images/pipeline/studio/Graphenode.png'],
+    accentColor: 'teal',
+
+    introduction: {
+      title: 'The Challenge',
+      subtitle: 'Conventional graphite anodes are holding batteries back.',
+      description: [
+        'Standard graphite anodes in lithium-ion batteries have a theoretical capacity ceiling of 372 mAh/g. As the demand for longer-range EVs, faster-charging devices, and grid-scale storage grows, this limitation becomes a critical bottleneck.',
+        'Graphenode NRG-series graphene nanoplatelets address this at the atomic level. With surface areas up to 500 m²/g and carbon purity exceeding 95%, our platelet morphology creates a superior electrode matrix — enabling higher charge capacity, faster ion transport, and dramatically extended cycle life.'
+      ],
+      images: [
+        '/images/pipeline/studio/Graphenode.png',
+        '/images/pipeline/studio/graphenodes.png',
+        '/images/pipeline/studio/Graphenodes-2.png'
+      ]
+    },
+
+    processFlow: {
+      title: 'How It Works',
+      subtitle: 'From nanoplatelet to high-performance electrode.',
+      steps: [
+        { icon: FlaskConical, title: 'Dispersion', description: 'NRG nanoplatelets are dispersed in NMP solvent via ultrasonication for 30–60 minutes to achieve uniform distribution.' },
+        { icon: Layers, title: 'Slurry Preparation', description: 'Graphene (5%), graphite (85%), and PVDF binder (10%) are mixed for 12 hours to form a homogeneous electrode slurry.' },
+        { icon: Activity, title: 'Electrode Coating', description: 'Slurry is doctor-blade coated onto copper foil at ~100 µm wet thickness and vacuum-dried at 80°C for 12 hours.' },
+        { icon: Zap, title: 'Formation Cycling', description: 'Assembled cells undergo 0.1C formation cycling for 3–5 cycles, then performance-tested at up to 5C fast-charge rates.' }
+      ]
+    },
+
+    features: {
+      title: 'Core Performance',
+      subtitle: 'Two grades. One mission.',
+      hero: {
+        icon: Battery,
+        title: 'Multi-Grade NRG Platform',
+        description: 'The NRG series offers two precision-engineered grades: NRG-150 with 130–140 m²/g surface area and ~10 graphene layers for high-conductivity applications, and NRG-70 with 70–75 m²/g and ~20–25 layers for balanced performance — both with >99% purity validated by Raman spectroscopy, XRD, and FE-SEM.',
+        gradient: 'from-emerald-900 via-emerald-950 to-black',
+        iconBg: 'bg-emerald-500/20 border border-emerald-400/30',
+        iconColor: 'text-emerald-300'
+      },
+      stats: [
+        { value: '>99%', label: 'Purity', description: 'Consistent across all NRG grades for reliable electrochemical performance.', bg: 'bg-gradient-to-br from-emerald-50 to-emerald-100/50', border: 'border-emerald-200', color: 'text-emerald-700' },
+        { icon: Zap, title: '5,000 Cycles', description: 'Accelerated simulation projects durability over 5,000 charge-discharge cycles for lifetime reliability.', iconColor: 'text-emerald-600', iconBg: 'bg-emerald-50 border border-emerald-100' }
+      ],
+      metrics: [
+        { value: '500 m²/g', label: 'Max Surface Area' },
+        { value: '95%', label: 'Carbon Purity (Li-PO)' },
+        { value: '3–5C', label: 'Fast Charge Capability' },
+        { value: 'Neutral pH', label: 'Safe Handling' }
+      ]
+    },
+
+    gallery: {
+      title: 'Product Gallery',
+      subtitle: 'Visualizing graphene nanoplatelet electrode materials.',
+      images: [
+        { image: '/images/pipeline/studio/Graphenode.png', label: 'Graphenode Studio' },
+        { image: '/images/pipeline/studio/graphenodes.png', label: 'NRG Nanoplatelets' },
+        { image: '/images/pipeline/studio/Graphenodes-2.png', label: 'Electrode Coating' }
+      ]
+    },
+
+    timeline: {
+      title: 'Development Roadmap',
+      subtitle: 'From lab synthesis to battery cell integration.',
+      events: [
+        { phase: 'Phase 1: Material R&D', title: 'NRG Grade Development', description: 'Synthesising and characterising NRG-70 and NRG-150 grades with validated Raman spectroscopy, XRD, and FE-SEM data.', status: 'completed', date: 'Q2 2024' },
+        { phase: 'Phase 2: Electrode Prototype', title: '200 mAh Cell Validation', description: 'Graphene electrode coating on 200 mAh coin/pouch cells. Formation cycling at 0.1C, rate capability testing up to 5C, and 500-cycle life assessment.', status: 'current', date: 'Q1 2026' },
+        { phase: 'Phase 3: Scale-Up', title: 'Commercial Cell Integration', description: 'Partnering with battery manufacturers for full-scale cell production using NRG anode materials with projected 5,000-cycle durability.', status: 'upcoming', date: '2027' }
+      ]
+    },
+
+    applications: {
+      title: 'Applications',
+      subtitle: 'Energy storage across every scale.',
+      items: [
+        { title: 'Li-ion Battery Anodes', description: 'Superior anode material for EV, consumer electronics, and grid-scale battery cells.', icon: Battery },
+        { title: 'Supercapacitors', description: 'High surface area nanoplatelets for ultra-fast charge/discharge energy storage devices.', icon: Zap },
+        { title: 'Conductive Inks & Coatings', description: 'Compatible with most polymers for electrically and thermally conductive ink formulations.', icon: Layers },
+        { title: 'Thermal Interface Materials', description: 'Heat spreader and thermal management applications leveraging graphene conductivity.', icon: Activity }
+      ]
+    },
+
+    cta: {
+      title: 'Power the next generation.',
+      description: 'We are seeking battery manufacturers and R&D partners to integrate Graphenode NRG electrodes into next-generation cell development.',
+      primaryButton: { text: 'Request Material Sample', link: '/contact' },
+      secondaryButton: { text: 'Back to Pipeline', link: '/products/pipeline' },
+      gradient: 'from-emerald-900/30 via-emerald-950/20 to-black'
     }
   }
 };

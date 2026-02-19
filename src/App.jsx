@@ -37,6 +37,7 @@ const DesalinationMembranes = lazy(() => import('./pages/products/pipeline/Desal
 const AtmosphericHarvesting = lazy(() => import('./pages/products/pipeline/AtmosphericHarvesting'));
 const GrapheneGlassFibres = lazy(() => import('./pages/products/pipeline/GrapheneGlassFibres'));
 const BatteryStorage = lazy(() => import('./pages/products/pipeline/BatteryStorage'));
+const Graphenode = lazy(() => import('./pages/products/pipeline/Graphenode'));
 
 
 function App() {
@@ -73,6 +74,7 @@ function App() {
                     <Route path="products/pipeline/atmospheric-harvesting" element={<AtmosphericHarvesting />} />
                     <Route path="products/pipeline/graphene-glass-fibres" element={<GrapheneGlassFibres />} />
                     <Route path="products/pipeline/battery-storage" element={<BatteryStorage />} />
+                    <Route path="products/pipeline/graphenode" element={<Graphenode />} />
 
                     {/* Other Routes */}
                     <Route path="contact" element={<Contact />} />

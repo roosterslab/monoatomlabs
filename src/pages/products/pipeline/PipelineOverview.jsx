@@ -11,13 +11,14 @@ import Button from '../../../components/ui/Button';
 // --- DATA SOURCE ---
 // Product Images (Icons + Studio photos for slideshow)
 const productImages = {
+  graphenode: ['/images/pipeline/application-icon/graphenode-icon.png', '/images/pipeline/studio/Graphenode.png', '/images/pipeline/studio/graphenodes.png', '/images/pipeline/studio/Graphenodes-2.png'],
   rustene: ['/images/pipeline/application-icon/rustene_studio.png', '/images/pipeline/application-icon/rustene_hero.png', '/images/pipeline/studio/Rustene.png'],
   graphyre: ['/images/pipeline/application-icon/graphyre_studio.png', '/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png'],
   graphosite: ['/images/pipeline/application-icon/graphosite_studio.png', '/images/pipeline/studio/Graphosite.png'],
   thermaphene: ['/images/pipeline/application-icon/thermaphene-icon.png', '/images/pipeline/application-icon/thermaphene_hero.png', '/images/pipeline/studio/thermophene.png', '/images/pipeline/studio/thermophene-2.png'],
   armophene: ['/images/pipeline/application-icon/armophene_studio.png', '/images/pipeline/studio/Armophene.png', '/images/pipeline/studio/Armophene-2.png'],
   hydrogen: ['/images/pipeline/application-icon/hydrogen_membrane_studio.png', '/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png'],
-  desalination: ['/images/pipeline/application-icon/desalination_membrane_studio.png', '/images/pipeline/studio/DesalinationMembranes.png', '/images/pipeline/studio/mariphene.png'],
+  desalination: ['/images/pipeline/application-icon/mariphene.png', '/images/pipeline/studio/mariphene.png', '/images/desalination_hero.png'],
   glass: ['/images/pipeline/application-icon/graphene_glass_fibres_studio.png', '/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png', '/images/pipeline/studio/Glasephene-3.png'],
   battery: ['/images/pipeline/application-icon/battery_storage_studio.png', '/images/pipeline/studio/Voltaphene.png'],
   aerowater: ['/images/pipeline/application-icon/atmospheric_harvesting_studio.png', '/images/pipeline/studio/aerophenter_studio.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
@@ -88,6 +89,18 @@ const pipelineCategories = [
         image: productImages.armophene,
         specs: ['High Kinetic Dissipation', 'Superior to Kevlar', 'Flexible Armor'],
         impact: 'Defense & Security'
+      },
+      {
+        id: 'graphenode',
+        name: 'Graphenode',
+        subtitle: 'Nanoplatelet Electrode Material',
+        description: 'High-purity graphene nanoplatelet material (NRG series) engineered as a superior anode for lithium-ion batteries, supercapacitors, and conductive inks.',
+        status: 'Development',
+        type: 'R&D',
+        icon: Battery,
+        image: productImages.graphenode,
+        specs: ['>99% Purity', 'NRG-70 & NRG-150 Grades', '5,000-Cycle Durability'],
+        impact: 'Energy Storage'
       }
     ]
   },
@@ -166,6 +179,7 @@ const allItems = [...pipelineCategories[0].items, ...pipelineCategories[1].items
 // Map product IDs to routes
 const getProductRoute = (id) => {
   const routeMap = {
+    'graphenode': '/products/pipeline/graphenode',
     'rustene': '/products/pipeline/rustene',
     'graphyre': '/products/pipeline/graphyre',
     'graphosite': '/products/pipeline/graphosite',
