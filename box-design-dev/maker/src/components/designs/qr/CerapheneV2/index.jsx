@@ -2,149 +2,158 @@ import React from 'react'
 import QRBase from '../../base/qr'
 import QRCodeImage from '../../../studio/QRCodeImage'
 import Logo from '../../../brand/Logo'
-import { Shield, Globe, CheckCircle2 } from 'lucide-react'
+import { ShieldCheck, Globe, Layers } from 'lucide-react'
 
-const PRODUCT_URL = 'https://www.monoatomlabs.com/products/ceraphene'
+const SITE_URL  = 'https://monoatomlabs.com'
+const SITE_DISP = 'monoatomlabs.com'
 
-const BLUE       = '#3b82f6'
-const BLUE_LIGHT = '#60a5fa'
-const GREEN      = '#34d399'
-
-// ── Thin horizontal rule with centered label ──────────────────────────────────
-const Divider = ({ label, fs }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 * fs, width: '100%' }}>
-        <div style={{ flex: 1, height: 1, background: 'linear-gradient(to right, transparent, #475569)' }} />
-        <span style={{
-            color: '#64748b', fontSize: 6.5 * fs, fontWeight: 700,
-            letterSpacing: '0.22em', fontFamily: "'JetBrains Mono', monospace",
-            textTransform: 'uppercase', whiteSpace: 'nowrap'
-        }}>
-            {label}
-        </span>
-        <div style={{ flex: 1, height: 1, background: 'linear-gradient(to left, transparent, #475569)' }} />
-    </div>
-)
-
-// ── Corner accent for the QR frame ───────────────────────────────────────────
-const Corner = ({ pos, fs }) => {
-    const size = 14 * fs
-    const offset = -1
-    const base = { position: 'absolute', width: size, height: size }
-    const borders = {
-        tl: { top: offset, left: offset, borderTop: `2px solid ${BLUE}`, borderLeft: `2px solid ${BLUE}`, borderTopLeftRadius: 10 * fs },
-        tr: { top: offset, right: offset, borderTop: `2px solid ${BLUE}`, borderRight: `2px solid ${BLUE}`, borderTopRightRadius: 10 * fs },
-        bl: { bottom: offset, left: offset, borderBottom: `2px solid ${BLUE}`, borderLeft: `2px solid ${BLUE}`, borderBottomLeftRadius: 10 * fs },
-        br: { bottom: offset, right: offset, borderBottom: `2px solid ${BLUE}`, borderRight: `2px solid ${BLUE}`, borderBottomRightRadius: 10 * fs },
-    }
-    return <div style={{ ...base, ...borders[pos] }} />
-}
+const FEATURES = [
+    { Icon: ShieldCheck, label: 'NABL\nCertified'  },
+    { Icon: Globe,       label: 'Global\nExport'    },
+    { Icon: Layers,      label: 'Industry\n4.0'     },
+]
 
 export default function QRCerapheneV2({ scale = 1, surf }) {
     const fs = scale
 
     return (
         <QRBase scale={scale} surf={surf}>
+
+            {/* Suppress hex-wave bg → pure black, matching template */}
+            <div style={{
+                position: 'absolute', inset: 0, zIndex: 2,
+                background: 'rgba(0,0,0,0.90)',
+            }} />
+
+            {/* ── Page ── */}
             <div style={{
                 position: 'absolute', inset: 0, zIndex: 3,
                 display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'space-between',
-                padding: `${30 * fs}px ${36 * fs}px`
+                alignItems: 'center', justifyContent: 'center',
+                padding: `${20 * fs}px ${56 * fs}px`,
+                fontFamily: "'Inter','Helvetica Neue',Arial,sans-serif",
+                gap: 0,
             }}>
 
-                {/* ── HEADER: Logo + product divider ── */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 * fs, width: '100%' }}>
-                    <Logo theme="dark" showText={true} size={26 * fs} />
-                    <Divider label="Ceraphene™ · Authentication" fs={fs} />
-                </div>
+                {/* ── BRAND HEADER ── */}
+                <div style={{ textAlign: 'center', marginBottom: 10 * fs, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7 * fs }}>
+                    <Logo theme="dark" showText size={21 * fs} />
 
-                {/* ── CENTER: Premium QR frame ── */}
-                <div style={{ position: 'relative' }}>
-                    {/* Subtle outer glow ring */}
+                    {/* thin rule */}
                     <div style={{
-                        position: 'absolute', inset: -4 * fs,
-                        borderRadius: 16 * fs,
-                        background: `radial-gradient(ellipse at center, ${BLUE}18 0%, transparent 70%)`,
-                        pointerEvents: 'none'
+                        height: 1, width: 44 * fs,
+                        background: '#374151',
                     }} />
 
-                    {/* Frame card */}
-                    <div style={{
-                        position: 'relative',
-                        background: 'rgba(8, 15, 32, 0.80)',
-                        border: '1px solid #334155',
-                        borderRadius: 12 * fs,
-                        padding: `${16 * fs}px ${20 * fs}px`,
-                        display: 'flex', flexDirection: 'column', alignItems: 'center',
-                        gap: 10 * fs
+                    <p style={{
+                        margin: 0,
+                        color: '#9ca3af', fontSize: 6.5 * fs,
+                        fontWeight: 600, letterSpacing: '0.3em',
+                        textTransform: 'uppercase',
                     }}>
-                        <Corner pos="tl" fs={fs} />
-                        <Corner pos="tr" fs={fs} />
-                        <Corner pos="bl" fs={fs} />
-                        <Corner pos="br" fs={fs} />
-
-                        {/* Scan instruction */}
-                        <div style={{
-                            display: 'flex', alignItems: 'center', gap: 6 * fs,
-                            color: BLUE_LIGHT, fontSize: 7 * fs, fontWeight: 800,
-                            letterSpacing: '0.18em', textTransform: 'uppercase',
-                            fontFamily: "'JetBrains Mono', monospace"
-                        }}>
-                            <Shield size={9 * fs} color={BLUE_LIGHT} strokeWidth={2.5} />
-                            Scan to Verify
-                        </div>
-
-                        {/* QR code with white mat */}
-                        <div style={{
-                            background: 'white',
-                            padding: 8 * fs,
-                            borderRadius: 6 * fs,
-                            boxShadow: '0 4px 24px rgba(0,0,0,0.5)'
-                        }}>
-                            <QRCodeImage url={PRODUCT_URL} size={168 * fs} fgColor="#0a0a12" bgColor="#ffffff" />
-                        </div>
-
-                        {/* Sub-label below QR */}
-                        <div style={{
-                            color: '#475569', fontSize: 6.5 * fs, fontWeight: 600,
-                            letterSpacing: '0.1em', fontFamily: "'Inter', sans-serif",
-                            textAlign: 'center'
-                        }}>
-                            Batch ID · Lab Report · Origin
-                        </div>
-                    </div>
+                        Graphene Ceramic Coating
+                    </p>
                 </div>
 
-                {/* ── FOOTER: Verification badge + URL ── */}
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 * fs, width: '100%' }}>
+                {/* ── SCAN TO VISIT ── */}
+                <h2 style={{
+                    margin: 0, marginBottom: 8 * fs,
+                    color: '#ffffff', fontSize: 11 * fs,
+                    fontWeight: 700, letterSpacing: '0.25em',
+                    textTransform: 'uppercase', fontFamily: 'inherit',
+                }}>
+                    Scan to Visit
+                </h2>
 
-                    {/* Green auth badge */}
-                    <div style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        gap: 8 * fs, width: '100%',
-                        background: 'rgba(16, 185, 129, 0.07)',
-                        border: `1px solid rgba(52, 211, 153, 0.22)`,
-                        borderRadius: 8 * fs,
-                        padding: `${7 * fs}px ${16 * fs}px`
-                    }}>
-                        <CheckCircle2 size={11 * fs} color={GREEN} strokeWidth={2.5} />
-                        <span style={{ color: '#e2e8f0', fontSize: 8 * fs, fontFamily: "'Inter', sans-serif" }}>
-                            <span style={{ color: 'white', fontWeight: 800 }}>Authentic Product</span>
-                            <span style={{ color: '#64748b', fontWeight: 500 }}> · Verified by Monoatom Labs</span>
-                        </span>
-                    </div>
-
-                    {/* Website pill */}
-                    <div style={{
-                        display: 'flex', alignItems: 'center', gap: 5 * fs,
-                        color: '#475569', fontSize: 7.5 * fs,
-                        fontFamily: "'JetBrains Mono', monospace", fontWeight: 600,
-                        letterSpacing: '0.06em'
-                    }}>
-                        <Globe size={8 * fs} color="#475569" strokeWidth={2} />
-                        monoatomlabs.com
-                    </div>
+                {/* ── QR CODE ── */}
+                <div style={{
+                    background: '#ffffff',
+                    padding: 11 * fs,
+                    borderRadius: 2 * fs,
+                    lineHeight: 0,
+                    boxShadow: '0 0 48px rgba(255,255,255,0.06)',
+                    marginBottom: 7 * fs,
+                }}>
+                    <QRCodeImage
+                        url={SITE_URL}
+                        size={128 * fs}
+                        fgColor="#000000"
+                        bgColor="#ffffff"
+                    />
                 </div>
 
+                {/* ── URL ── */}
+                <p style={{
+                    margin: 0, marginBottom: 14 * fs,
+                    color: '#6b7280', fontSize: 7.5 * fs,
+                    fontFamily: "'JetBrains Mono',monospace",
+                    fontWeight: 500, letterSpacing: '0.12em',
+                }}>
+                    {SITE_DISP}
+                </p>
+
+                {/* ── FOOTER ── */}
+                <div style={{
+                    width: '100%',
+                    borderTop: '1px solid rgba(255,255,255,0.1)',
+                    paddingTop: 14 * fs,
+                    display: 'flex', flexDirection: 'column',
+                    alignItems: 'center', gap: 12 * fs,
+                }}>
+
+                    {/* Description */}
+                    <p style={{
+                        margin: 0,
+                        color: '#9ca3af', fontSize: 7.5 * fs,
+                        lineHeight: 1.65, textAlign: 'center',
+                        maxWidth: 400 * fs,
+                    }}>
+                        Pioneering the future of industrial materials through graphene
+                        innovation. Access technical specifications, NABL reports, and
+                        partnership opportunities instantly.
+                    </p>
+
+                    {/* Feature icons */}
+                    <div style={{
+                        display: 'grid', gridTemplateColumns: '1fr 1fr 1fr',
+                        gap: 16 * fs, width: '100%',
+                    }}>
+                        {FEATURES.map(({ Icon, label }) => (
+                            <div key={label} style={{
+                                display: 'flex', flexDirection: 'column',
+                                alignItems: 'center', gap: 7 * fs,
+                            }}>
+                                <div style={{
+                                    padding: 8 * fs, borderRadius: '50%',
+                                    border: '1px solid rgba(255,255,255,0.18)',
+                                    lineHeight: 0,
+                                }}>
+                                    <Icon size={14 * fs} color="#d1d5db" strokeWidth={1.5} />
+                                </div>
+                                <span style={{
+                                    color: '#6b7280',
+                                    fontSize: 5.5 * fs, fontWeight: 700,
+                                    letterSpacing: '0.15em', textTransform: 'uppercase',
+                                    textAlign: 'center', lineHeight: 1.4,
+                                    whiteSpace: 'pre-line',
+                                }}>
+                                    {label}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Origin */}
+                    <p style={{
+                        margin: 0,
+                        color: '#4b5563', fontSize: 6 * fs,
+                        fontWeight: 500, letterSpacing: '0.2em',
+                        textTransform: 'uppercase',
+                    }}>
+                        Engineered in Ahmedabad, India
+                    </p>
+
+                </div>
             </div>
         </QRBase>
     )
