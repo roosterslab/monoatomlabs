@@ -183,7 +183,7 @@ const HDGPEROICalculator = ({
           <span className={`text-[10px] ${sub}`}>{cfg.max}%</span>
         </div>
         <p className={`text-[11px] ${sub}`}>
-          {((val || 0.5) / 100 * 1000).toFixed(1)} kg of HD-G-PE per ton polymer
+          {results.dosageKgPerTon ?? ((val || 0.5) / 100 * 1000).toFixed(1)} kg of HD-G-PE per ton polymer
         </p>
       </div>
     );
@@ -307,25 +307,42 @@ const HDGPEROICalculator = ({
           <p className={`text-xs font-bold uppercase tracking-wider ${sub}`}>Per-Ton Economics · {results.appLabel || 'Pipes & Fittings'}</p>
 
           <div className="space-y-2">
-            {/* Additive cost card */}
-            <div className={`rounded-xl p-4 border ${isDark ? 'border-red-800/30 bg-red-900/10' : 'border-red-100 bg-red-50'}`}>
-              <p className="text-xs font-bold uppercase tracking-widest text-red-500 mb-2">
-                HD-G-PE Additive Cost
-              </p>
-              <p className="text-2xl font-display font-medium text-red-600">
-                {fmtRaw(results.additiveCostPerTon || 0)}
-                <span className="text-sm font-normal text-red-400 ml-1">/ton</span>
-              </p>
-              <div className="space-y-0.5 mt-2">
-                {[
-                  [`Dosage (${(inputs.dosagePercent || 0.5).toFixed(1)}%)`, `${((inputs.dosagePercent || 0.5) / 100 * 1000).toFixed(1)} kg/ton`],
-                  ['Masterbatch price',                                     '₹1,200/kg'],
-                ].map(([label, val]) => (
-                  <div key={label} className="flex justify-between text-xs">
-                    <span className="text-red-400">{label}</span>
-                    <span className="font-mono text-red-500">{val}</span>
-                  </div>
-                ))}
+            {/* ── Masterbatch Requirement Box ───────────────────────────────── */}
+            <div className={`rounded-xl border-2 overflow-hidden ${isDark ? 'border-emerald-800 bg-emerald-950/20' : 'border-emerald-200 bg-white'}`}>
+              {/* Header */}
+              <div className={`px-4 py-2 flex items-center justify-between ${isDark ? 'bg-emerald-900/40 border-b border-emerald-800/50' : 'bg-emerald-50 border-b border-emerald-100'}`}>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-emerald-600">Masterbatch Requirement</p>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isDark ? 'bg-emerald-800/70 text-emerald-300' : 'bg-emerald-200 text-emerald-700'}`}>
+                  {results.dosageKgPerTon ?? ((inputs.dosagePercent || 0.5) / 100 * 1000).toFixed(1)} kg/ton @ {(inputs.dosagePercent || 0.5).toFixed(1)}%
+                </span>
+              </div>
+              {/* Two columns: Annual Volume | Annual Spend */}
+              <div className={`grid grid-cols-2 divide-x ${isDark ? 'divide-emerald-800/40' : 'divide-emerald-100'}`}>
+                <div className="p-4">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>Annual Volume</p>
+                  <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-emerald-200' : 'text-emerald-800'}`}>
+                    {(results.annualAdditiveKg || 0).toLocaleString('en-IN')}
+                    <span className={`text-sm font-normal ml-1 ${isDark ? 'text-emerald-400' : 'text-emerald-600'}`}>kg</span>
+                  </p>
+                  <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-emerald-500' : 'text-emerald-500'}`}>
+                    {results.dosageKgPerTon ?? ((inputs.dosagePercent || 0.5) / 100 * 1000).toFixed(1)} kg × {(inputs.annualProduction || 0).toLocaleString()} tons
+                  </p>
+                </div>
+                <div className="p-4">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-red-400' : 'text-red-500'}`}>Annual Spend</p>
+                  <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-red-300' : 'text-red-700'}`}>
+                    {fmt(results.annualAdditiveCost || 0)}
+                  </p>
+                  <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-red-500' : 'text-red-400'}`}>
+                    ₹{(results.masterbatchPricePerKg || 1200).toLocaleString('en-IN')}/kg × {(results.annualAdditiveKg || 0).toLocaleString('en-IN')} kg
+                  </p>
+                </div>
+              </div>
+              {/* Footer */}
+              <div className={`px-4 py-2 ${isDark ? 'bg-emerald-900/20 border-t border-emerald-800/30' : 'bg-emerald-50/80 border-t border-emerald-100'}`}>
+                <p className={`text-[10px] ${isDark ? 'text-emerald-500' : 'text-emerald-500'}`}>
+                  ₹{(results.additiveCostPerTon || 0).toLocaleString('en-IN')}/ton · {results.dosageKgPerTon ?? ((inputs.dosagePercent || 0.5) / 100 * 1000).toFixed(1)} kg/ton @ ₹{(results.masterbatchPricePerKg || 1200).toLocaleString('en-IN')}/kg
+                </p>
               </div>
             </div>
 

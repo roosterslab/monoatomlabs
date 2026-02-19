@@ -380,23 +380,78 @@ const GraphacreteROICalculator = ({
               </p>
             </div>
 
-            {/* Graphacrete net addition */}
+            {/* ── Additive Requirement Box ──────────────────────────────── */}
+            <div className={`rounded-xl border-2 overflow-hidden ${isDark ? 'border-blue-800 bg-blue-950/20' : 'border-blue-200 bg-white'}`}>
+              {/* Header */}
+              <div className={`px-4 py-2 flex items-center justify-between ${isDark ? 'bg-blue-900/40 border-b border-blue-800/50' : 'bg-blue-50 border-b border-blue-100'}`}>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-blue-500">Additive Requirement</p>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isDark ? 'bg-blue-800/70 text-blue-300' : 'bg-blue-200 text-blue-700'}`}>
+                  {results.additiveVolumeLitresPerM3 || 2} L/m³ · {results.additiveMlPerBag || 250} ml / {results.cementBagWeightKg || 50} kg bag
+                </span>
+              </div>
+
+              {/* Two columns: Volume | Cost */}
+              <div className={`grid grid-cols-2 divide-x ${isDark ? 'divide-blue-800/40' : 'divide-blue-100'}`}>
+                {/* Volume */}
+                <div className="p-4">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`}>
+                    Volume Needed
+                  </p>
+                  <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
+                    {(results.additiveVolumeLitresTotal || 0).toLocaleString('en-IN')}
+                    <span className={`text-sm font-normal ml-1 ${isDark ? 'text-blue-400' : 'text-blue-500'}`}>L</span>
+                  </p>
+                  <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>
+                    {results.additiveVolumeLitresPerM3 || 2} L × {(inputs.projectVolume || 0).toLocaleString('en-IN')} m³
+                  </p>
+                  <p className={`text-[10px] mt-1 ${isDark ? 'text-blue-600' : 'text-blue-400'}`}>
+                    = {results.additiveMlPerBag || 250} ml per {results.cementBagWeightKg || 50} kg bag
+                  </p>
+                </div>
+
+                {/* Cost */}
+                <div className="p-4">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`}>
+                    Additive Cost
+                  </p>
+                  <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
+                    {fmt(results.productCostTotal || 0)}
+                  </p>
+                  <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>
+                    ₹{results.additivePricePerLitre || 235}/L × {(results.additiveVolumeLitresTotal || 0).toLocaleString('en-IN')} L
+                  </p>
+                </div>
+              </div>
+
+              {/* Per-m³ note */}
+              <div className={`px-4 py-2 ${isDark ? 'bg-blue-900/20 border-t border-blue-800/30' : 'bg-blue-50/80 border-t border-blue-100'}`}>
+                <p className={`text-[10px] ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>
+                  ₹{(results.additiveCostPerM3 || 0).toLocaleString('en-IN')}/m³ · {results.additiveVolumeLitresPerM3 || 2} L/m³ @ ₹{results.additivePricePerLitre || 235}/L
+                </p>
+              </div>
+            </div>
+
+            {/* ── Graphacrete net (per-m³ math) ──────────────────────────── */}
             <div className={`rounded-xl p-3.5 border ${isDark ? 'border-blue-800/40 bg-blue-900/10' : 'border-blue-100 bg-blue-50'}`}>
-              <p className="text-xs font-bold uppercase tracking-widest text-blue-500 mb-2">+ Graphacrete (net)</p>
-              <div className="space-y-1 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-blue-400">Additive (2 L × ₹235)</span>
-                  <span className="font-mono text-blue-500">+₹470</span>
+              <p className="text-xs font-bold uppercase tracking-widest text-blue-500 mb-2.5">+ Graphacrete (net / m³)</p>
+              <div className="space-y-1.5 text-xs">
+                <div className="flex justify-between items-center">
+                  <span className={`${isDark ? 'text-blue-400' : 'text-blue-500'}`}>Additive</span>
+                  <span className="font-mono font-semibold text-blue-500">
+                    +₹{(results.additiveCostPerM3 || 0).toLocaleString('en-IN')}
+                  </span>
                 </div>
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <span className="text-green-600">Cement saved ({inputs.cementReductionPct}%)</span>
-                  <span className="font-mono text-green-600">−₹{(results.cementSavingsValuePerM3 || 0).toLocaleString('en-IN')}</span>
+                  <span className="font-mono font-semibold text-green-600">
+                    −₹{(results.cementSavingsValuePerM3 || 0).toLocaleString('en-IN')}
+                  </span>
                 </div>
-                <div className={`flex justify-between pt-1 border-t ${isDark ? 'border-blue-700/30' : 'border-blue-200/60'}`}>
+                <div className={`flex justify-between items-center pt-1.5 border-t ${isDark ? 'border-blue-800/40' : 'border-blue-200/60'}`}>
                   <span className="font-bold text-blue-600">Net addition/m³</span>
                   <span className="font-bold font-mono text-blue-600">
-                    {(470 - (results.cementSavingsValuePerM3 || 0)) >= 0 ? '+' : '−'}
-                    ₹{Math.abs(470 - (results.cementSavingsValuePerM3 || 0)).toLocaleString('en-IN')}
+                    {((results.additiveCostPerM3 || 0) - (results.cementSavingsValuePerM3 || 0)) >= 0 ? '+' : '−'}
+                    ₹{Math.abs((results.additiveCostPerM3 || 0) - (results.cementSavingsValuePerM3 || 0)).toLocaleString('en-IN')}
                   </span>
                 </div>
               </div>

@@ -192,7 +192,7 @@ const CerapheneROICalculator = ({
           <span className={`text-[10px] ${sub}`}>₹{(cfg.min / 1000).toFixed(0)}k</span>
           <span className={`text-[10px] ${sub}`}>₹{(cfg.max / 1000).toFixed(0)}k</span>
         </div>
-        <p className={`text-[11px] ${sub}`}>Ceraphene: ₹5,000 (fixed)</p>
+        <p className={`text-[11px] ${sub}`}>Ceraphene: ₹{(results.ceraphenePrice || 5000).toLocaleString()} (fixed)</p>
       </div>
     );
   };
@@ -369,7 +369,7 @@ const CerapheneROICalculator = ({
               </p>
               <div className="space-y-0.5 mt-2">
                 {[
-                  [`Coating (₹5,000 / ${inputs.cerapheneDurability || 3.5} yr)`, results.cerapheneCoatAmortized],
+                  [`Coating (₹${(results.ceraphenePrice || 5000).toLocaleString()} / ${inputs.cerapheneDurability || 3.5} yr)`, results.cerapheneCoatAmortized],
                   [`Washing (−${inputs.washReductionPct || 60}%)`, results.annualWashWithCoating],
                   ['Paint correction', 0]
                 ].map(([label, val]) => (
@@ -387,6 +387,49 @@ const CerapheneROICalculator = ({
               <p className="text-xl font-display font-medium text-green-700">
                 {fmtRaw(results.annualSavingsPerVehicle || 0)}
                 <span className="text-sm font-normal text-green-500 ml-0.5">/yr</span>
+              </p>
+            </div>
+          </div>
+
+          {/* ── Ceraphene Application Box ─────────────────────────────────── */}
+          <div className={`rounded-xl border-2 overflow-hidden ${isDark ? 'border-blue-800 bg-blue-950/20' : 'border-blue-200 bg-white'}`}>
+            {/* Header */}
+            <div className={`px-4 py-2 flex items-center justify-between ${isDark ? 'bg-blue-900/40 border-b border-blue-800/50' : 'bg-blue-50 border-b border-blue-100'}`}>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-blue-600">Ceraphene Application</p>
+              <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isDark ? 'bg-blue-800/70 text-blue-300' : 'bg-blue-200 text-blue-700'}`}>
+                {results.productMlPerVehicle || 35} ml / vehicle
+              </span>
+            </div>
+            {/* Two columns: Volume Needed | Cost Split */}
+            <div className={`grid grid-cols-2 divide-x ${isDark ? 'divide-blue-800/40' : 'divide-blue-100'}`}>
+              <div className="p-4">
+                <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`}>Volume Needed</p>
+                <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
+                  {(results.productMlTotal || 0).toLocaleString('en-IN')}
+                  <span className={`text-sm font-normal ml-1 ${isDark ? 'text-blue-400' : 'text-blue-500'}`}>ml</span>
+                </p>
+                <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>
+                  {results.productMlPerVehicle || 35} ml × {(inputs.vehicleCount || 1).toLocaleString()} vehicles
+                </p>
+              </div>
+              <div className="p-4">
+                <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-blue-400' : 'text-blue-500'}`}>Additive Cost</p>
+                <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-blue-200' : 'text-blue-800'}`}>
+                  {fmt(results.cerapheneProductCostTotal || 0)}
+                </p>
+                <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>
+                  ₹{(results.cerapheneProductCostPerVehicle || 2500).toLocaleString()}/vehicle × {(inputs.vehicleCount || 1).toLocaleString()}
+                </p>
+                <div className={`flex items-center justify-between mt-2 pt-1.5 border-t ${isDark ? 'border-blue-800/40' : 'border-blue-100'}`}>
+                  <span className={`text-[10px] ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>+ Installation</span>
+                  <span className={`text-[10px] font-mono font-semibold ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>{fmt(results.cerapheneServiceCostTotal || 0)}</span>
+                </div>
+              </div>
+            </div>
+            {/* Footer */}
+            <div className={`px-4 py-2 ${isDark ? 'bg-blue-900/20 border-t border-blue-800/30' : 'bg-blue-50/80 border-t border-blue-100'}`}>
+              <p className={`text-[10px] ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>
+                Total: ₹{(results.ceraphenePrice || 5000).toLocaleString()}/vehicle · vs. ₹{(inputs.competitorCost || 15000).toLocaleString()} competitor · {results.directSavingsPct}% cheaper
               </p>
             </div>
           </div>
@@ -497,7 +540,7 @@ const CerapheneROICalculator = ({
                 {fmtRaw(results.directSavingsPerVehicle || 0)}/vehicle · upfront price difference only
               </p>
               <p className="text-[10px] font-semibold text-blue-500 mt-2">
-                ✦ {results.directSavingsPct || 67}% cheaper than competitor per application
+                ✦ {results.directSavingsPct}% cheaper than competitor per application
               </p>
             </div>
           </div>
@@ -529,7 +572,7 @@ const CerapheneROICalculator = ({
             <div className={`p-3.5 rounded-xl border ${border} ${isDark ? 'bg-neutral-800/30' : 'bg-white'} text-center`}>
               <p className={`text-[10px] font-bold uppercase tracking-wider ${sub} mb-1`}>Investment</p>
               <p className={`text-sm font-bold tabular-nums ${text}`}>{fmt(results.investmentTotal || 0)}</p>
-              <p className={`text-[10px] ${sub}`}>₹5,000 × {(inputs.vehicleCount || 1).toLocaleString()}</p>
+              <p className={`text-[10px] ${sub}`}>₹{(results.ceraphenePrice || 5000).toLocaleString()} × {(inputs.vehicleCount || 1).toLocaleString()}</p>
             </div>
             <div className={`p-3.5 rounded-xl border border-blue-500/25 ${isDark ? 'bg-blue-900/10' : 'bg-blue-50'} text-center`}>
               <p className="text-[10px] font-bold uppercase tracking-wider text-blue-600/70 mb-1">Washes Saved</p>

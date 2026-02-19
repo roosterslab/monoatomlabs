@@ -277,9 +277,9 @@ const GraffisolROICalculator = ({
         <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
         <span className={isDark ? 'text-neutral-300' : 'text-neutral-600'}>Power: +{inputs.outputGainPct || 10}%</span>
         <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
-        <span className={isDark ? 'text-neutral-300' : 'text-neutral-600'}>Soiling: −35%</span>
+        <span className={isDark ? 'text-neutral-300' : 'text-neutral-600'}>Soiling: −{results.soilingRecoveryPct || 35}%</span>
         <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
-        <span className={isDark ? 'text-neutral-300' : 'text-neutral-600'}>Temp: −5-6°C</span>
+        <span className={isDark ? 'text-neutral-300' : 'text-neutral-600'}>Temp: −{results.temperatureReductionC || '5-6'}°C</span>
         <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
         <span className="font-bold text-green-600">
           All-in: +{fmtRaw(results.fullReturnPerKw || 0)}/kW/yr
@@ -315,7 +315,7 @@ const GraffisolROICalculator = ({
                 {fmtRaw(results.baselineRevenuePerKw || 0)}
                 <span className={`text-sm font-normal ${sub} ml-1`}>/kW/yr</span>
               </p>
-              <p className={`text-[10px] ${sub} mt-0.5`}>1,500 kWh/kW/yr × ₹{inputs.electricityRate || 7}/kWh</p>
+              <p className={`text-[10px] ${sub} mt-0.5`}>{(results.baselineGenPerKw || 1500).toLocaleString()} kWh/kW/yr × ₹{inputs.electricityRate || 7}/kWh</p>
             </div>
 
             {/* Graffisol additions */}
@@ -334,7 +334,7 @@ const GraffisolROICalculator = ({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-teal-600">Maintenance saved</span>
-                  <span className="font-mono text-teal-600">+{fmtRaw(results.maintenancePerKw || 200)}</span>
+                  <span className="font-mono text-teal-600">+{fmtRaw(results.maintenancePerKw || 0)}</span>
                 </div>
                 <div className={`flex justify-between pt-1 border-t ${isDark ? 'border-yellow-700/30' : 'border-yellow-200/60'}`}>
                   <span className="font-bold text-yellow-700">Net gain/kW/yr</span>
@@ -361,20 +361,47 @@ const GraffisolROICalculator = ({
               </p>
             </div>
 
-            {/* Application cost */}
-            <div className={`rounded-xl p-3.5 border ${isDark ? 'border-neutral-700 bg-neutral-800/30' : 'border-neutral-200 bg-neutral-50'}`}>
-              <div className="flex items-center justify-between">
-                <p className={`text-xs font-bold uppercase tracking-widest ${sub}`}>
-                  Application cost (one-time)
-                </p>
-                <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold ${isDark ? 'bg-neutral-700 text-neutral-400' : 'bg-neutral-200 text-neutral-500'}`}>
-                  Investment
+            {/* ── Graffisol Application Box ─────────────────────────────────── */}
+            <div className={`rounded-xl border-2 overflow-hidden ${isDark ? 'border-yellow-800 bg-yellow-950/20' : 'border-yellow-200 bg-white'}`}>
+              {/* Header */}
+              <div className={`px-4 py-2 flex items-center justify-between ${isDark ? 'bg-yellow-900/40 border-b border-yellow-800/50' : 'bg-yellow-50 border-b border-yellow-100'}`}>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-yellow-600">Graffisol Application</p>
+                <span className={`text-[9px] font-bold px-2 py-0.5 rounded-full ${isDark ? 'bg-yellow-800/70 text-yellow-300' : 'bg-yellow-200 text-yellow-700'}`}>
+                  {results.applicationRateMlM2 || 65} ml/m²
                 </span>
               </div>
-              <p className={`text-xl font-display font-medium ${text} mt-0.5`}>
-                {fmtRaw(inputs.applicationCostPerKw || 1800)}
-                <span className={`text-sm font-normal ${sub} ml-1`}>/kW</span>
-              </p>
+              {/* Two columns: Volume Needed | Cost Split */}
+              <div className={`grid grid-cols-2 divide-x ${isDark ? 'divide-yellow-800/40' : 'divide-yellow-100'}`}>
+                <div className="p-4">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>Volume Needed</p>
+                  <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-yellow-200' : 'text-yellow-800'}`}>
+                    {results.productLitresTotal || 0}
+                    <span className={`text-sm font-normal ml-1 ${isDark ? 'text-yellow-400' : 'text-yellow-500'}`}>L</span>
+                  </p>
+                  <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-yellow-500' : 'text-yellow-500'}`}>
+                    {results.applicationRateMlM2 || 65} ml × {(inputs.systemSize || 0).toLocaleString()} kW × {results.panelAreaM2PerKw || 5.3} m²/kW
+                  </p>
+                </div>
+                <div className="p-4">
+                  <p className={`text-[10px] font-bold uppercase tracking-wider mb-1.5 ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>Additive Cost</p>
+                  <p className={`text-2xl font-display font-bold tabular-nums leading-none ${isDark ? 'text-yellow-200' : 'text-yellow-800'}`}>
+                    {fmt(results.additiveCostTotal || 0)}
+                  </p>
+                  <p className={`text-[10px] mt-1.5 font-mono ${isDark ? 'text-yellow-500' : 'text-yellow-500'}`}>
+                    ₹{(results.graffisolProductPricePerLitre || 2500).toLocaleString('en-IN')}/L × {results.productLitresTotal || 0} L
+                  </p>
+                  <div className={`flex items-center justify-between mt-2 pt-1.5 border-t ${isDark ? 'border-yellow-800/40' : 'border-yellow-100'}`}>
+                    <span className={`text-[10px] ${isDark ? 'text-yellow-500' : 'text-yellow-500'}`}>+ Installation</span>
+                    <span className={`text-[10px] font-mono font-semibold ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>{fmt(results.serviceCostTotal || 0)}</span>
+                  </div>
+                </div>
+              </div>
+              {/* Footer */}
+              <div className={`px-4 py-2 ${isDark ? 'bg-yellow-900/20 border-t border-yellow-800/30' : 'bg-yellow-50/80 border-t border-yellow-100'}`}>
+                <p className={`text-[10px] ${isDark ? 'text-yellow-500' : 'text-yellow-500'}`}>
+                  Total: {fmt(results.applicationCostTotal || 0)} · Annual return: {fmt(results.fullReturnTotal || 0)}/yr · Payback: {results.paybackLabel || '—'} · ROI: {results.roiPercentage != null ? `${results.roiPercentage}%` : '—'}
+                </p>
+              </div>
             </div>
           </div>
 
@@ -449,7 +476,7 @@ const GraffisolROICalculator = ({
             </div>
             <p className={`text-[11px] text-center mt-1 ${sub}`}>
               Gap between green and amber bar = soiling recovery + maintenance (
-              ₹{((results.soilingRevenuePerKw || 0) + (results.maintenancePerKw || 200)).toLocaleString('en-IN')}/kW/yr)
+              ₹{((results.soilingRevenuePerKw || 0) + (results.maintenancePerKw || 0)).toLocaleString('en-IN')}/kW/yr)
             </p>
           </div>
 

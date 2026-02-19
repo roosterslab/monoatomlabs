@@ -30,7 +30,6 @@ export { default as RDFacilitiesOverview } from './RDFacilitiesOverview';
 
 // Product Detail Page Components
 export { default as GraphacreteLabResults } from './GraphacreteLabResults';
-export { default as ROICalculator } from './ROICalculator';
 export { default as HowItWorks } from './HowItWorks';
 export { default as PerformancePilot } from './PerformancePilot';
 export { default as TCOAnalysis } from './TCOAnalysis';

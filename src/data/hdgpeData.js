@@ -125,6 +125,9 @@ export const roiCalculatorConfig = {
     return {
       additiveCostPerTon:      Math.round(additiveCostPerTon),
       annualAdditiveCost:      Math.round(annualAdditiveCost),
+      masterbatchPricePerKg:   HD_COST_PER_KG,                              // ₹1,200/kg
+      dosageKgPerTon:          parseFloat(dosageKgPerTon.toFixed(1)),        // e.g. 5.0 kg/ton
+      annualAdditiveKg:        Math.round(dosageKgPerTon * annualProduction), // total kg/yr
       grossBenefitPerTon:      Math.round(grossBenefitPerTon),
       premiumPerTon:           app.premiumPerTon,
       downgaugeSavingsPerTon:  Math.round(downgaugeSavingsPerTon),

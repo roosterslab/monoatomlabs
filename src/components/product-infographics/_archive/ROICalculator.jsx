@@ -381,11 +381,28 @@ const ROICalculator = ({
             {/* Graphacrete net card */}
             <div className={`rounded-xl p-3.5 border ${isDark ? 'border-blue-800/40 bg-blue-900/10' : 'border-blue-100 bg-blue-50'}`}>
               <p className="text-xs font-bold uppercase tracking-widest text-blue-500 mb-2">+ Graphacrete (net)</p>
-              <div className="space-y-1 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-blue-400">Additive (2 L × ₹235)</span>
-                  <span className="font-mono text-blue-500">+₹470</span>
+
+              {/* Additive volume & cost highlight */}
+              <div className={`rounded-lg px-3 py-2 mb-2.5 ${isDark ? 'bg-blue-900/40 border border-blue-800/50' : 'bg-blue-100/80 border border-blue-200'}`}>
+                <div className="flex items-baseline justify-between">
+                  <span className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                    Additive · {results.additiveVolumeLitresPerM3 || 2} L/m³
+                  </span>
+                  <span className={`font-mono text-sm font-bold ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                    +₹{(results.additiveCostPerM3 || 0).toLocaleString('en-IN')}/m³
+                  </span>
                 </div>
+                <div className="flex items-center justify-between mt-1">
+                  <span className={`text-[10px] ${isDark ? 'text-blue-400/70' : 'text-blue-500/80'}`}>
+                    {(results.additiveVolumeLitresTotal || 0).toLocaleString('en-IN')} L needed · ₹{results.additivePricePerLitre || 235}/L
+                  </span>
+                  <span className={`text-[10px] font-semibold ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                    {fmt(results.productCostTotal || 0)} total
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-1 text-xs">
                 <div className="flex justify-between">
                   <span className="text-green-600">Cement saved ({inputs.cementReductionPct}%)</span>
                   <span className="font-mono text-green-600">−₹{(results.cementSavingsValuePerM3 || 0).toLocaleString('en-IN')}</span>
@@ -393,8 +410,8 @@ const ROICalculator = ({
                 <div className={`flex justify-between pt-1 border-t ${isDark ? 'border-blue-700/30' : 'border-blue-200/60'}`}>
                   <span className="font-bold text-blue-600">Net addition/m³</span>
                   <span className="font-bold font-mono text-blue-600">
-                    {(470 - (results.cementSavingsValuePerM3 || 0)) >= 0 ? '+' : '−'}
-                    ₹{Math.abs(470 - (results.cementSavingsValuePerM3 || 0)).toLocaleString('en-IN')}
+                    {((results.additiveCostPerM3 || 0) - (results.cementSavingsValuePerM3 || 0)) >= 0 ? '+' : '−'}
+                    ₹{Math.abs((results.additiveCostPerM3 || 0) - (results.cementSavingsValuePerM3 || 0)).toLocaleString('en-IN')}
                   </span>
                 </div>
               </div>

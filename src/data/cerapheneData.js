@@ -152,6 +152,18 @@ export const roiCalculatorConfig = {
     const waterSavedLitresPerVehicle = annualWashesSaved * 100; // ~100L per professional wash
     const waterSavedTotal       = Math.round(waterSavedLitresPerVehicle * vehicleCount);
 
+    // ── Product volume requirement ────────────────────────────────────────
+    // Coverage: 30–40 ml/vehicle (TDS spec, mid-point = 35 ml)
+    const productMlPerVehicle = 35;
+    const productMlTotal      = Math.round(productMlPerVehicle * vehicleCount);
+
+    // ── Product cost split: coating material vs. professional application ──
+    // ceraphenePrice (₹5,000) = product kit + professional installation service
+    const cerapheneProductCostPerVehicle = 2500;   // ₹/vehicle product-only (est.)
+    const cerapheneProductCostTotal      = Math.round(cerapheneProductCostPerVehicle * vehicleCount);
+    const cerapheneServiceCostPerVehicle = ceraphenePrice - cerapheneProductCostPerVehicle; // ₹2,500
+    const cerapheneServiceCostTotal      = Math.round(cerapheneServiceCostPerVehicle * vehicleCount);
+
     return {
       // ── Core ──────────────────────────────────────────────────────────────
       vehicleCount,
@@ -159,6 +171,14 @@ export const roiCalculatorConfig = {
       ceraphenePrice,
       investmentPerVehicle,
       investmentTotal,
+      productMlPerVehicle,    // 35 ml / vehicle (TDS coverage spec)
+      productMlTotal,         // total ml needed for fleet
+
+      // Product cost split
+      cerapheneProductCostPerVehicle,  // ₹/vehicle coating material only (est.)
+      cerapheneProductCostTotal,
+      cerapheneServiceCostPerVehicle,  // ₹/vehicle professional installation
+      cerapheneServiceCostTotal,
 
       // ── Per-vehicle annual cost breakdown ─────────────────────────────────
       competitorAnnualEffective,

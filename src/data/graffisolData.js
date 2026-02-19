@@ -193,6 +193,29 @@ export const roiCalculatorConfig = {
       },
       netProfitProjected,
 
+      // ── Exposed assumptions (for UI display) ─────────────────────────────
+      baselineGenPerKw,                                    // 1,500 kWh/kW/yr
+      soilingRecoveryPct: Math.round(soilingRecovery * 100), // 35
+      temperatureReductionC: '5-6',                        // °C reduction claim
+
+      // ── Product volume requirement ────────────────────────────────────────
+      // 1 kW ≈ 3.3 panels × 1.6 m²/panel ≈ 5.3 m² of panel area
+      // Application rate: 50–80 ml/m² (TDS mid-point = 65 ml/m²)
+      panelAreaM2PerKw:   5.3,
+      applicationRateMlM2: 65,
+      productLitresTotal: parseFloat(
+        ((5.3 * systemSize * 65) / 1000).toFixed(1)
+      ),
+
+      // ── Product cost split: additive (product-only) vs. installation service ─
+      // graffisolProductPricePerLitre: estimated product-only price (₹/L)
+      // 0.3445 L/kW = 5.3 m²/kW × 65 ml/m² / 1000
+      graffisolProductPricePerLitre: 2500,
+      additiveCostPerKw:  Math.round((5.3 * 65 / 1000) * 2500),           // ₹861/kW
+      additiveCostTotal:  Math.round((5.3 * systemSize * 65 / 1000) * 2500),
+      serviceCostPerKw:   Math.max(0, applicationCostPerKw - Math.round((5.3 * 65 / 1000) * 2500)),
+      serviceCostTotal:   Math.max(0, applicationCostTotal - Math.round((5.3 * systemSize * 65 / 1000) * 2500)),
+
       // ── Legacy aliases (other page components) ────────────────────────────
       additionalEnergy:    totalAdditionalKwh,
       temperatureReduction: '5-6°C',

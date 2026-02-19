@@ -125,7 +125,9 @@ export const roiCalculatorConfig = {
      * - Grade cost model: gradeCost(G, P) = fixed[G] + bags[G] × P
      *   (typical Indian RMC market assumptions, not IS 456 citation)
      */
-    const additiveCostPerM3 = 470; // 2 L × ₹235/L
+    const additiveVolumeLitresPerM3 = 2;           // 2 L/m³ (fixed dosage)
+    const additivePricePerLitre     = 235;          // ₹235/L
+    const additiveCostPerM3 = additiveVolumeLitresPerM3 * additivePricePerLitre; // ₹470/m³
 
     // Typical Indian RMC market cost components (fixed at ₹320/bag baseline)
     const gradeData = {
@@ -170,6 +172,7 @@ export const roiCalculatorConfig = {
     const netSavingsTotal        = Math.round(netSavingsPerM3 * projectVolume);
 
     // ── Investment & ROI ──────────────────────────────────────────────────────
+    const additiveVolumeLitresTotal = Math.round(additiveVolumeLitresPerM3 * projectVolume);
     const productCostTotal = Math.round(additiveCostPerM3 * projectVolume);
     // ROI is null (not shown) when net savings are not positive
     const roiPercentage    = netSavingsTotal > 0 && productCostTotal > 0
@@ -244,7 +247,13 @@ export const roiCalculatorConfig = {
       paybackLabel,            // 'Immediate' | 'Quality+'
 
       // ── Investment ────────────────────────────────────────────────────────────
+      additiveVolumeLitresPerM3,   // 2 L/m³ (fixed dosage)
+      additivePricePerLitre,       // ₹235/L
+      additiveVolumeLitresTotal,   // total litres for project
       productCostTotal,
+      additiveMlPerBag:   250,     // 250 mL per 50 kg cement bag
+      cementBagWeightKg:  50,      // standard Indian bag weight
+      baseBagsPerM3:      gradeData[baseGrade].bags,  // bags/m³ for base grade
 
       // ── Cement & CO₂ ─────────────────────────────────────────────────────────
       cementSavedBags: totalCementBags,
