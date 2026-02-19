@@ -147,7 +147,7 @@ const PricingPanel = ({ scale }) => {
             {/* Right: Savings Badge */}
             <div style={{ width: 44 * fs, height: 44 * fs, borderRadius: '50%', background: '#3b82f6', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
                 <div style={{ color: 'white', fontSize: 11 * fs, fontWeight: 900, fontFamily: "'Rajdhani', sans-serif", lineHeight: 0.9 }}>60%</div>
-                <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 5 * fs, textTransform: 'uppercase', fontWeight: 800 }}>OFF</div>
+                <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 5 * fs, textTransform: 'uppercase', fontWeight: 800 }}>LESS</div>
             </div>
         </div>
     )
