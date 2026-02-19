@@ -176,7 +176,7 @@ const PipelineSlideshow = () => {
     { src: '/images/pipeline/studio/Graphyre.png', caption: 'Graphyre: Advanced Composites' },
     { src: '/images/pipeline/studio/Graphosite.png', caption: 'Graphosite: Structural Reinforcement' },
     { src: '/images/pipeline/studio/Rustene.png', caption: 'Rustene: Anti-Corrosion Shield' },
-    { src: '/images/pipeline/studio/Thermophene.png', caption: 'Thermaphene: Thermal Management' },
+    { src: '/images/pipeline/studio/thermophene.png', caption: 'Thermaphene: Thermal Management' },
     { src: '/images/pipeline/studio/Gryogen.png', caption: 'Gryogen: Hydrogen Separation' },
     { src: '/images/pipeline/studio/DesalinationMembranes.png', caption: 'Mariphene: Water Desalination' },
     { src: '/images/pipeline/studio/Glasephene.png', caption: 'Glasphene: Reinforced Fibres' },

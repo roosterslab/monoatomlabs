@@ -137,7 +137,7 @@ export const pipelineProducts = {
         'Current desalination technologies require immense amounts of energy to force water through thick polymer membranes. This makes desalinated water expensive and environmentally taxing.',
         'Our graphene membranes are just one atom thick. This extreme thinness offers minimal resistance to water flow while perfectly blocking salt ions, reducing energy consumption by up to 40%.'
       ],
-      images: ['/images/pipeline/studio/DesalinationMembranes.png']
+      images: ['/images/pipeline/studio/DesalinationMembranes.png', '/images/pipeline/studio/mariphene.png']
     },
 
     processFlow: {
@@ -178,8 +178,9 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of desalination.',
       images: [
-        { type: 'single', image: '/images/pipeline/studio/DesalinationMembranes.png', label: 'Studio Module', bg: 'bg-neutral-100' },
-        { type: 'single', image: '/images/desalination_hero.png', label: 'Operational Environment', overlay: true }
+        { image: '/images/pipeline/studio/DesalinationMembranes.png', label: 'Desalination Module' },
+        { image: '/images/pipeline/studio/mariphene.png', label: 'Mariphene' },
+        { image: '/images/desalination_hero.png', label: 'Operational Environment' }
       ]
     },
 
@@ -367,8 +368,8 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of energy storage.',
       images: [
-        { type: 'carousel', images: ['/images/pipeline/studio/Voltaphene.png'], label: 'Studio Module', bg: 'bg-neutral-100' },
-        { type: 'single', image: '/images/battery_hero.png', label: 'Pack Integration', overlay: true }
+        { image: '/images/pipeline/studio/Voltaphene.png', label: 'Studio Module' },
+        { image: '/images/battery_hero.png', label: 'Pack Integration' }
       ]
     },
 
@@ -418,7 +419,7 @@ export const pipelineProducts = {
         'Glass fibre is the workhorse of the composites industry, but it lacks the stiffness and fatigue resistance of carbon fibre. Its weak point is often the interface between the fibre and the resin matrix.',
         'Our solution coats standard glass fibres with graphene. This nano-engineered "sizing" dramatically improves adhesion, transforming affordable glass fibre into a high-performance material that rivals carbon fibre for many structural applications.'
       ],
-      images: ['/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png']
+      images: ['/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png', '/images/pipeline/studio/Glasephene-3.png']
     },
 
     processFlow: {
@@ -459,13 +460,10 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of composites.',
       images: [
-        {
-          type: 'carousel',
-          images: ['/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png'],
-          label: 'Studio Module',
-          bg: 'bg-neutral-100'
-        },
-        { type: 'single', image: '/images/glass_fibres_hero.png', label: 'Industrial Application', overlay: true }
+        { image: '/images/pipeline/studio/Glasephene.png', label: 'Studio View' },
+        { image: '/images/pipeline/studio/Glasephene-2.png', label: 'Studio View 2' },
+        { image: '/images/pipeline/studio/Glasephene-3.png', label: 'Studio View 3' },
+        { image: '/images/glass_fibres_hero.png', label: 'Industrial Application' }
       ]
     },
 
@@ -562,13 +560,9 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of protection.',
       images: [
-        {
-          type: 'carousel',
-          images: ['/images/pipeline/studio/Armophene.png', '/images/pipeline/studio/Armophene-2.png'],
-          label: 'Studio Module',
-          bg: 'bg-slate-100'
-        },
-        { type: 'single', image: '/images/armophene_hero.png', label: 'Tactical Context', overlay: true }
+        { image: '/images/pipeline/studio/Armophene.png', label: 'Studio View' },
+        { image: '/images/pipeline/studio/Armophene-2.png', label: 'Studio View 2' },
+        { image: '/images/armophene_hero.png', label: 'Tactical Context' }
       ]
     },
 
@@ -663,13 +657,9 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of tire technology.',
       images: [
-        {
-          type: 'carousel',
-          images: ['/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png'],
-          label: 'Studio Module',
-          bg: 'bg-neutral-100'
-        },
-        { type: 'single', image: '/images/graphyre_hero.png', label: 'Performance Test', overlay: true }
+        { image: '/images/pipeline/studio/Graphyre.png', label: 'Studio View' },
+        { image: '/images/pipeline/studio/Graphyre-2.png', label: 'Studio View 2' },
+        { image: '/images/graphyre_hero.png', label: 'Performance Test' }
       ]
     },
 
@@ -766,8 +756,8 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of composites.',
       images: [
-        { type: 'carousel', images: ['/images/pipeline/studio/Graphosite.png'], label: 'Studio Module', bg: 'bg-neutral-100' },
-        { type: 'single', image: '/images/graphosite_hero.png', label: 'Application Context', overlay: true }
+        { image: '/images/pipeline/studio/Graphosite.png', label: 'Studio Module' },
+        { image: '/images/graphosite_hero.png', label: 'Application Context' }
       ]
     },
 
@@ -811,7 +801,7 @@ export const pipelineProducts = {
     subtitle: 'Graphene-based anti-rusting paint that forms an ultra-thin barrier preventing corrosion and extending metal lifespan.',
     category: 'R&D Pipeline',
     categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
-    heroImages: ['/images/rustene_hero.png'],
+    heroImages: ['/images/pipeline/application-icon/rustene_hero.png'],
     accentColor: 'teal',
 
     introduction: {
@@ -863,7 +853,12 @@ export const pipelineProducts = {
       subtitle: 'Visualizing the future of corrosion protection.',
       images: [
         { type: 'carousel', images: ['/images/pipeline/studio/Rustene.png'], label: 'Studio Module', bg: 'bg-neutral-100' },
-        { type: 'single', image: '/images/rustene_hero.png', label: 'Applied Coating', overlay: true }
+        { type: 'single', image: '/images/pipeline/application-icon/rustene_hero.png', label: 'Applied Coating', overlay: true },
+        {
+          type: 'video',
+          url: 'https://www.youtube.com/embed/_3oMSMMicxk',
+          label: 'Rustene in Action'
+        }
       ]
     },
 
@@ -903,7 +898,7 @@ export const pipelineProducts = {
     subtitle: 'Ultra-thin graphene heating technology delivering lightweight, efficient, and flexible thermal regulation for wearables and industry.',
     category: 'Prototype',
     categoryColor: 'bg-gradient-to-r from-brand-600 to-brand-700 shadow-lg shadow-brand-500/30',
-    heroImages: ['/images/thermaphene_hero.png'],
+    heroImages: ['/images/pipeline/application-icon/thermaphene_hero.png'],
     accentColor: 'teal',
 
     introduction: {
@@ -913,7 +908,7 @@ export const pipelineProducts = {
         'Traditional heating solutions, whether in clothing or machinery, rely on bulky copper wires that are heavy, prone to breakage, and create uneven "hot spots."',
         'Thermaphene replaces wires with a printable graphene coating. It covers the entire surface area, providing uniform radiant heat that feels more natural and efficient. It\'s washable, flexible, and virtually weightless.'
       ],
-      images: ['/images/pipeline/studio/Thermophene.png']
+      images: ['/images/pipeline/studio/thermophene.png', '/images/pipeline/studio/thermophene-2.png']
     },
 
     processFlow: {
@@ -954,8 +949,10 @@ export const pipelineProducts = {
       title: 'Product Gallery',
       subtitle: 'Visualizing the future of thermal wear.',
       images: [
-        { type: 'carousel', images: ['/images/pipeline/studio/Thermophene.png'], label: 'Studio Module', bg: 'bg-neutral-100' },
-        { type: 'single', image: '/images/thermaphene_hero.png', label: 'Thermal Imaging', overlay: true }
+        { image: '/images/pipeline/application-icon/thermaphene-icon.png', label: 'Thermaphene' },
+        { image: '/images/pipeline/application-icon/thermaphene_hero.png', label: 'Thermal Imaging' },
+        { image: '/images/pipeline/studio/thermophene.png', label: 'Studio View' },
+        { image: '/images/pipeline/studio/thermophene-2.png', label: 'Studio View 2' }
       ]
     },
 

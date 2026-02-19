@@ -14,11 +14,11 @@ const productImages = {
   rustene: ['/images/pipeline/application-icon/rustene_studio.png', '/images/pipeline/application-icon/rustene_hero.png', '/images/pipeline/studio/Rustene.png'],
   graphyre: ['/images/pipeline/application-icon/graphyre_studio.png', '/images/pipeline/studio/Graphyre.png', '/images/pipeline/studio/Graphyre-2.png'],
   graphosite: ['/images/pipeline/application-icon/graphosite_studio.png', '/images/pipeline/studio/Graphosite.png'],
-  thermaphene: ['/images/pipeline/application-icon/thermaphene_studio.png', '/images/pipeline/application-icon/thermaphene_hero.png', '/images/pipeline/studio/Thermophene.png'],
+  thermaphene: ['/images/pipeline/application-icon/thermaphene-icon.png', '/images/pipeline/application-icon/thermaphene_hero.png', '/images/pipeline/studio/thermophene.png', '/images/pipeline/studio/thermophene-2.png'],
   armophene: ['/images/pipeline/application-icon/armophene_studio.png', '/images/pipeline/studio/Armophene.png', '/images/pipeline/studio/Armophene-2.png'],
   hydrogen: ['/images/pipeline/application-icon/hydrogen_membrane_studio.png', '/images/pipeline/studio/Gryogen.png', '/images/pipeline/studio/HydrogenMembranes.png'],
-  desalination: ['/images/pipeline/application-icon/desalination_membrane_studio.png', '/images/pipeline/studio/DesalinationMembranes.png'],
-  glass: ['/images/pipeline/application-icon/graphene_glass_fibres_studio.png', '/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png'],
+  desalination: ['/images/pipeline/application-icon/desalination_membrane_studio.png', '/images/pipeline/studio/DesalinationMembranes.png', '/images/pipeline/studio/mariphene.png'],
+  glass: ['/images/pipeline/application-icon/graphene_glass_fibres_studio.png', '/images/pipeline/studio/Glasephene.png', '/images/pipeline/studio/Glasephene-2.png', '/images/pipeline/studio/Glasephene-3.png'],
   battery: ['/images/pipeline/application-icon/battery_storage_studio.png', '/images/pipeline/studio/Voltaphene.png'],
   aerowater: ['/images/pipeline/application-icon/atmospheric_harvesting_studio.png', '/images/pipeline/studio/aerophenter_studio.png', '/images/pipeline/studio/AtmosphericHarvesting-2.png']
 };
