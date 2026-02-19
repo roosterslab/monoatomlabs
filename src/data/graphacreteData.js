@@ -52,6 +52,26 @@ export const roiCalculatorConfig = {
       unit: '%',
       default: 15,
       note: 'NABL certified 15–20%. Conservative default = 15%.'
+    },
+    strengthGain28: {
+      label: '28-Day Strength Gain',
+      type: 'slider',
+      min: 30,
+      max: 67,
+      step: 1,
+      unit: '%',
+      default: 65,
+      note: 'NABL test: 65% gain (49.5 MPa on M-30, cert BNR-1101). Field range: 30–67%.'
+    },
+    strengthGain7: {
+      label: '7-Day Strength Gain',
+      type: 'slider',
+      min: 10,
+      max: 40,
+      step: 1,
+      unit: '%',
+      default: 22,
+      note: 'Critical for formwork striking time. Default = conservative field value.'
     }
   },
 
@@ -81,6 +101,16 @@ export const roiCalculatorConfig = {
       step: 1000,
       unit: '₹/day',
       default: 15000
+    },
+    pourSize: {
+      label: 'Pour Size',
+      type: 'slider',
+      min: 5,
+      max: 200,
+      step: 5,
+      unit: 'm³/pour',
+      default: 30,
+      note: 'Default = typical RMC batch. Adjust for your project.'
     },
     projectType: {
       label: 'Project Type',
@@ -114,7 +144,10 @@ export const roiCalculatorConfig = {
       waterproofingRate  = 150,
       laborCost          = 15000,
       projectType        = 'residential',
-      analysisPeriod     = 10
+      analysisPeriod     = 10,
+      strengthGain28     = 65,   // % — NABL test: 65% gain (49.5 MPa on M-30, BNR-1101)
+      strengthGain7      = 22,   // % — 7-day early strength gain (field: 10–40%)
+      pourSize           = 30    // m³ — standard RMC batch / pour size
     } = inputs;
 
     /**
@@ -223,6 +256,54 @@ export const roiCalculatorConfig = {
       ? Math.round((totalAllInDelta / productCostTotal) * 100)
       : null;
 
+    // ── Strength performance metrics ──────────────────────────────────────────
+    // baseMPa = grade number (MPa) per IS 456 standard concrete
+    const baseMPa         = baseGrade;
+    const targetMPa       = targetStrength;
+    const sevenDayRatio   = 0.75;   // standard 7d/28d ratio for Indian concrete
+    const baseAt7DayMPa   = parseFloat((baseMPa * sevenDayRatio).toFixed(1));
+    const targetAt7DayMPa = parseFloat((targetMPa * sevenDayRatio).toFixed(1));
+    const graphAt28DayMPa = parseFloat((baseMPa * (1 + strengthGain28 / 100)).toFixed(1));
+    const graphAt7DayMPa  = parseFloat((baseAt7DayMPa * (1 + strengthGain7 / 100)).toFixed(1));
+    const strengthGrade28Label = graphAt28DayMPa >= targetMPa - 1
+      ? `≈ M${targetStrength}`
+      : `≈ M${Math.floor(graphAt28DayMPa / 5) * 5}`;
+
+    // ── Formwork striking / construction schedule ─────────────────────────────
+    // IS 456: minimum striking strength for vertical formwork = 15 MPa
+    const strikingThresholdMPa = 15;
+    const tradDaysToStrike  = parseFloat(((strikingThresholdMPa / baseAt7DayMPa) * 7).toFixed(1));
+    const graphDaysToStrike = parseFloat(((strikingThresholdMPa / graphAt7DayMPa) * 7).toFixed(1));
+    const deshutterDaysSaved  = Math.max(0, parseFloat((tradDaysToStrike - graphDaysToStrike).toFixed(1)));
+    const estimatedFloors     = Math.max(1, Math.round(projectVolume / 300));
+    const totalCycleDaysSaved = Math.round(deshutterDaysSaved * estimatedFloors);
+    const cycleSavingsValue   = Math.round(totalCycleDaysSaved * laborCost);
+
+    // ── Per-pour breakdown (Coalorix-style: Per m³ / Per Pour / Project) ──────
+    const netSavingsPerPour   = Math.round(netSavingsPerM3 * pourSize);
+    const additiveCostPerPour = Math.round(additiveCostPerM3 * pourSize);
+    const cementSavedPerPour  = Math.round(cementSavedBagsPerM3 * pourSize);
+
+    // ── Investor / ROI multiple metrics ───────────────────────────────────────
+    const roiMultiple = netSavingsTotal > 0 && productCostTotal > 0
+      ? parseFloat((netSavingsTotal / productCostTotal).toFixed(1))
+      : null;
+    const allInMultiple = totalAllInDelta > 0 && productCostTotal > 0
+      ? parseFloat((totalAllInDelta / productCostTotal).toFixed(1))
+      : null;
+
+    // ── Carbon credit value (India BEE / VCS market) ─────────────────────────
+    const carbonCreditRatePerTon = 500;   // ₹/tCO₂ — conservative (market ₹400–800)
+    const carbonCreditValueTotal = Math.round((co2AvoidedKg / 1000) * carbonCreditRatePerTon);
+
+    // ── Contractor margin view ────────────────────────────────────────────────
+    // Contractor prices at M50 rate, pours M30+G — earns the gap
+    const contractorRevenuePerM3  = Math.round(targetCost);
+    const contractorCostPerM3     = Math.round(netCostWithGraphacrete);
+    const contractorMarginPerM3   = contractorRevenuePerM3 - contractorCostPerM3;
+    const contractorMarginTotal   = Math.round(contractorMarginPerM3 * projectVolume);
+    const contractorNetOfAdditive = Math.round((contractorMarginPerM3 - additiveCostPerM3) * projectVolume);
+
     return {
       // ── Core costs ────────────────────────────────────────────────────────────
       baseGrade,
@@ -271,6 +352,32 @@ export const roiCalculatorConfig = {
       },
       totalAllInDelta,
       totalAllInRoiPct,
+
+      // ── Strength performance ──────────────────────────────────────────────────
+      strengthGain28, strengthGain7,
+      baseMPa, targetMPa,
+      baseAt7DayMPa, targetAt7DayMPa,
+      graphAt28DayMPa, graphAt7DayMPa,
+      strengthGrade28Label,
+      nablTestMPa:  49.5,   // NABL cert BNR-1101: M-30+G ACT equivalent strength
+      nablGainPct:  65,     // 49.5/30 − 1 = 65% (reference anchor)
+
+      // ── Construction schedule ─────────────────────────────────────────────────
+      tradDaysToStrike, graphDaysToStrike,
+      deshutterDaysSaved, estimatedFloors,
+      totalCycleDaysSaved, cycleSavingsValue,
+
+      // ── Per-pour breakdown ────────────────────────────────────────────────────
+      pourSize,
+      netSavingsPerPour, additiveCostPerPour, cementSavedPerPour,
+
+      // ── Investor metrics ──────────────────────────────────────────────────────
+      roiMultiple, allInMultiple,
+      carbonCreditRatePerTon, carbonCreditValueTotal,
+
+      // ── Contractor view ───────────────────────────────────────────────────────
+      contractorRevenuePerM3, contractorCostPerM3,
+      contractorMarginPerM3, contractorMarginTotal, contractorNetOfAdditive,
 
       // ── Legacy (used by other page components) ────────────────────────────────
       savingsPerUnit:   { label: 'Net savings per m³', value: netSavingsPerM3 },
