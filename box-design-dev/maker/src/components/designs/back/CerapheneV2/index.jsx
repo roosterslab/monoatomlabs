@@ -3,7 +3,7 @@ import BackBase from '../../base/back'
 import {
     CloudRain, Bug, Disc, Flame, Wind, Zap, Sun, Droplets, Shield,
     CheckCircle2, AlertOctagon, Check, Ban, Info, Clock, ChevronRight, Mail,
-    Thermometer, Atom, Layers, AlertTriangle, Sparkles, X, Target
+    Thermometer, Atom, Layers, AlertTriangle, Sparkles, X, Target, Construction, ArrowDown
 } from 'lucide-react'
 
 // --- CONSTANTS ---
@@ -42,14 +42,6 @@ const THREATS = [
     { icon: Sun, label: 'UV Radiation', angle: 240 },
     { icon: Droplets, label: 'Water Spots', angle: 280 },
     { icon: Shield, label: 'Oxidation', angle: 320 },
-]
-
-const APP_STEPS = [
-    { num: '01', title: 'Decon', short: 'Clean', desc: 'Clay bar + Iron remover. Strip old wax.', time: '30m' },
-    { num: '02', title: 'Polish', short: 'Correct', desc: 'Remove swirls. Lock in gloss.', time: '1h+' },
-    { num: '03', title: 'Wipe', short: 'Prep', desc: 'Final IPA wipe. Surface must be bare.', time: '15m' },
-    { num: '04', title: 'Apply', short: 'Coat', desc: 'Cross-hatch 2x2. Flash 1-2m. Level.', time: '1h' },
-    { num: '05', title: 'Cure', short: 'Wait', desc: 'Keep dry 24h. Full hardness 1 week.', time: '24h' },
 ]
 
 const COMPETITORS = [
@@ -121,37 +113,41 @@ const ThreatWheel = ({ scale }) => {
 
 const PricingPanel = ({ scale }) => {
     const fs = scale
+    const BLUE_LIGHT = '#60a5fa' // Defined locally or passed in
+    const BLUE = '#3b82f6'
+
     return (
-        <div style={{ border: '1px solid #475569', borderRadius: 6 * fs, padding: 14 * fs, display: 'flex', gap: 16 * fs, alignItems: 'center', background: 'linear-gradient(145deg, #0f172a, #020617)' }}>
-            <div style={{ flex: 1 }}>
-                <div style={{ color: '#cbd5e1', fontSize: 8 * fs, letterSpacing: '0.05em', textTransform: 'uppercase', marginBottom: 4 * fs, fontWeight: 700 }}>Premium Protection. Not Premium Pricing.</div>
-                <h3 style={{ color: 'white', fontSize: 16 * fs, fontWeight: 900, fontFamily: "'Inter', sans-serif", margin: 0, lineHeight: 1 }}>
-                    PREMIUM PERFORMANCE.<br />SMARTER PRICING.
+        <div style={{ border: '1px solid #475569', borderRadius: 6 * fs, padding: 8 * fs, display: 'flex', gap: 10 * fs, alignItems: 'center', background: 'linear-gradient(145deg, #0f172a, #020617)' }}>
+
+            {/* Left: Compact Headline */}
+            <div style={{ flex: 1, borderRight: '1px solid #475569', paddingRight: 10 * fs }}>
+                <h3 style={{ color: 'white', fontSize: 13 * fs, fontWeight: 900, fontFamily: "'Inter', sans-serif", margin: 0, lineHeight: 1 }}>
+                    PREMIUM PERFORMANCE.<br /><span style={{ color: BLUE_LIGHT }}>SMARTER PRICING.</span>
                 </h3>
-                <p style={{ color: '#e2e8f0', fontSize: 9 * fs, marginTop: 8 * fs, lineHeight: 1.4, fontWeight: 500 }}>
-                    Competing coatings charge <span style={{ color: '#fff', fontWeight: 800 }}>₹12k–₹18k</span>. Ceraphene delivers 9H+ at <span style={{ color: BLUE_LIGHT, fontWeight: 800 }}>₹5,000</span>.
-                </p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 * fs, marginTop: 12 * fs }}>
-                    {[
-                        { l: 'CERAPHENE', p: '₹5,000', y: '₹1,250', s: 'Direct to You', act: true },
-                        { l: 'Int\'l Brands', p: '₹12,000+', y: '₹4,000+', s: 'Import Markup' },
-                        { l: 'Professional', p: '₹18,000+', y: '₹6,000+', s: 'Labor Included' }
-                    ].map((item, i) => (
-                        <div key={i} style={{
-                            background: item.act ? 'rgba(37, 99, 235, 0.2)' : 'rgba(255,255,255,0.05)',
-                            border: item.act ? `2px solid ${BLUE}` : '1px solid #475569',
-                            padding: 8 * fs, borderRadius: 4 * fs, textAlign: 'center'
-                        }}>
-                            <div style={{ color: item.act ? BLUE_LIGHT : '#cbd5e1', fontSize: 7 * fs, fontWeight: 800, textTransform: 'uppercase' }}>{item.l}</div>
-                            <div style={{ color: item.act ? 'white' : '#e2e8f0', fontSize: 11 * fs, fontWeight: 900, fontFamily: 'monospace', margin: '4px 0' }}>{item.p}</div>
-                            <div style={{ fontSize: 7 * fs, color: item.act ? '#34d399' : '#94a3b8', fontWeight: 700 }}>{item.y}<span style={{ fontSize: 6 * fs, fontWeight: 500 }}>/yr</span></div>
-                        </div>
-                    ))}
+                <div style={{ fontSize: 7.5 * fs, color: '#94a3b8', marginTop: 4 * fs, fontWeight: 500 }}>
+                    Direct-to-Consumer Model. <span style={{ color: '#fff' }}>No Import Markup.</span>
                 </div>
             </div>
-            <div style={{ width: 76 * fs, height: 76 * fs, borderRadius: '50%', border: `3px solid ${BLUE}`, background: 'rgba(37, 99, 235, 0.2)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <div style={{ color: 'white', fontSize: 20 * fs, fontWeight: 900, fontFamily: "'Rajdhani', sans-serif" }}>60%</div>
-                <div style={{ color: BLUE_LIGHT, fontSize: 7.5 * fs, letterSpacing: '0.05em', fontWeight: 800 }}>CHEAPER</div>
+
+            {/* Middle: Data Comparison */}
+            <div style={{ display: 'flex', gap: 12 * fs, alignItems: 'center' }}>
+                <div style={{ textAlign: 'center' }}>
+                    <div style={{ fontSize: 7 * fs, color: '#cbd5e1', fontWeight: 700, textTransform: 'uppercase' }}>Competitors</div>
+                    <div style={{ fontSize: 10 * fs, color: '#94a3b8', textDecoration: 'line-through', fontWeight: 600 }}>₹15,000+</div>
+                </div>
+
+                <ChevronRight size={12 * fs} color="#475569" />
+
+                <div style={{ textAlign: 'center', background: 'rgba(59, 130, 246, 0.15)', padding: '4px 10px', borderRadius: 4 * fs, border: `1px solid ${BLUE}60` }}>
+                    <div style={{ fontSize: 7 * fs, color: BLUE_LIGHT, fontWeight: 800, textTransform: 'uppercase' }}>Ceraphene</div>
+                    <div style={{ fontSize: 12 * fs, color: '#fff', fontWeight: 900 }}>₹5,000</div>
+                </div>
+            </div>
+
+            {/* Right: Savings Badge */}
+            <div style={{ width: 44 * fs, height: 44 * fs, borderRadius: '50%', background: '#3b82f6', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}>
+                <div style={{ color: 'white', fontSize: 11 * fs, fontWeight: 900, fontFamily: "'Rajdhani', sans-serif", lineHeight: 0.9 }}>60%</div>
+                <div style={{ color: 'rgba(255,255,255,0.9)', fontSize: 5 * fs, textTransform: 'uppercase', fontWeight: 800 }}>OFF</div>
             </div>
         </div>
     )
@@ -160,7 +156,7 @@ const PricingPanel = ({ scale }) => {
 const FeatureFocus = ({ scale }) => {
     const fs = scale
     return (
-        <div style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid #475569', padding: 12 * fs, borderRadius: 6 * fs, marginBottom: 16 * fs }}>
+        <div style={{ background: 'rgba(15, 23, 42, 0.8)', border: '1px solid #475569', padding: 12 * fs, borderRadius: 6 * fs, marginBottom: 10 * fs }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 * fs }}>
                 {[
                     { icon: Zap, label: 'Anti-Static', desc: 'Repels dust build-up.' },
@@ -218,9 +214,37 @@ const GaugeBox = ({ label, value, sub, percent, scale }) => {
     )
 }
 
+const ProcessPhase = ({ step, title, time, desc, isLast, scale }) => {
+    const fs = scale
+    return (
+        <div style={{ display: 'flex', gap: 12 * fs, position: 'relative', paddingBottom: isLast ? 0 : 20 * fs }}>
+            {/* Timeline Line */}
+            {!isLast && <div style={{ position: 'absolute', left: 9 * fs, top: 20 * fs, bottom: 0, width: 2, background: 'linear-gradient(to bottom, #3b82f6, #1e293b)' }}></div>}
+
+            {/* Node */}
+            <div style={{
+                width: 20 * fs, height: 20 * fs, borderRadius: '50%', background: '#0f172a', border: `2px solid ${BLUE}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 9 * fs, fontWeight: 800,
+                zIndex: 2, boxShadow: `0 0 10px ${BLUE}40`
+            }}>
+                {step}
+            </div>
+
+            {/* Content */}
+            <div style={{ flex: 1 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 * fs }}>
+                    <h4 style={{ color: 'white', fontSize: 10 * fs, fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>{title}</h4>
+                    <span style={{ color: BLUE_LIGHT, fontSize: 8 * fs, fontWeight: 700, background: 'rgba(59,130,246,0.1)', padding: '2px 6px', borderRadius: 4 }}>{time}</span>
+                </div>
+                <p style={{ color: '#e2e8f0', fontSize: 8 * fs, lineHeight: 1.4, margin: 0, fontWeight: 500 }}>{desc}</p>
+            </div>
+        </div>
+    )
+}
+
 const FoldLine = ({ left, scale }) => (
     <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${left}%`, width: 1, borderLeft: '1px dashed rgba(255,255,255,0.2)', zIndex: 10 }}>
-        <div style={{ position: 'absolute', top: 10 * scale, left: 4 * scale, fontSize: 7 * fs, color: 'rgba(255,255,255,0.4)', transform: 'rotate(90deg)', transformOrigin: 'top left', fontFamily: 'monospace', fontWeight: 700 }}>FOLD</div>
+        <div style={{ position: 'absolute', top: 10 * scale, left: 4 * scale, fontSize: 6.5 * scale, color: 'rgba(255,255,255,0.4)', transform: 'rotate(90deg)', transformOrigin: 'top left', fontFamily: 'monospace', fontWeight: 700 }}>FOLD</div>
     </div>
 )
 
@@ -242,56 +266,84 @@ export default function BackCerapheneV2({ scale = 1, surf }) {
                     <div style={{ transform: 'rotate(-90deg)', whiteSpace: 'nowrap', fontSize: 8 * fs, color: '#475569', fontFamily: 'monospace', fontWeight: 700 }}>GLUE AREA</div>
                 </div>
 
-                {/* 2. PANEL 4 (Right - 2.13") - FEATURES & TECH */}
+                {/* 2. LEFT PANEL (P4 Slot) - INNOVATED PROCESS DESIGN */}
+                {/* Visual Logic: Phased approach (Prep -> Coat -> Cure) with clear hierarchy */}
                 <div style={{ width: `${P4}%`, padding: `0 ${10 * fs}px`, display: 'flex', flexDirection: 'column' }}>
-                    {/* Feature Focus */}
-                    <SectionLabel label="04 | Focus" scale={scale} />
-                    <FeatureFocus scale={scale} />
 
-                    {/* Advanced Protocols */}
-                    <SectionLabel label="05 | Advanced" scale={scale} />
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10 * fs, marginBottom: 16 * fs }}>
-                        <div style={{ border: '1px solid #475569', padding: 10 * fs, borderRadius: 4 * fs, background: 'rgba(15,23,42,0.6)' }}>
-                            <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 800, marginBottom: 3 * fs }}>IR CURE</div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 7.5 * fs, color: '#e2e8f0', fontWeight: 500 }}>
-                                <span>60-70°C</span><span>@ 60cm</span><span>15m</span>
+                    <SectionLabel label="03 | Application" scale={scale} />
+
+                    {/* Phase 1: PREP (80% of result) */}
+                    <div style={{ marginBottom: 16 * fs }}>
+                        <div style={{ fontSize: 7 * fs, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 * fs, fontWeight: 700 }}>Phase 1: Surface Prep</div>
+                        <ProcessPhase step="1" title="Decon" time="30m" desc="Clay bar & Iron Remover. Strip all wax." scale={scale} />
+                        <ProcessPhase step="2" title="Polish" time="1h+" desc="Remove swirls. Creates mechanical bond." scale={scale} />
+                        <ProcessPhase step="3" title="IPA Wipe" time="15m" desc="Remove oils. Surface must be naked." isLast={true} scale={scale} />
+                    </div>
+
+                    {/* Phase 2: COAT (The Event) */}
+                    <div style={{ marginBottom: 16 * fs, background: 'linear-gradient(145deg, rgba(59,130,246,0.1), transparent)', padding: 10 * fs, borderRadius: 8 * fs, border: `1px solid ${BLUE}40` }}>
+                        <div style={{ fontSize: 7 * fs, color: BLUE_LIGHT, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 8 * fs, fontWeight: 700 }}>Phase 2: Coating</div>
+                        <ProcessPhase step="4" title="Apply" time="1h" desc="Cross-hatch pattern. Flash 1-2m. Level immediately." isLast={true} scale={scale} />
+                    </div>
+
+                    {/* Phase 3: CURE (The Lock) */}
+                    <div style={{ padding: `0 ${10 * fs}px` }}>
+                        <ProcessPhase step="5" title="Initial Cure" time="24h" desc="Keep dry. Full hardness in 7 days." isLast={true} scale={scale} />
+                    </div>
+
+                    {/* Care & Safety - Elaborated */}
+                    <div style={{ marginTop: 'auto', borderTop: '1px solid #475569', paddingTop: 12 * fs }}>
+
+                        {/* Maintenance Guide */}
+                        <div style={{ marginBottom: 12 * fs }}>
+                            <div style={{ fontSize: 8 * fs, fontWeight: 900, color: '#fff', marginBottom: 6 * fs, display: 'flex', alignItems: 'center', gap: 6 * fs }}>
+                                <CheckCircle2 size={10 * fs} color={BLUE_LIGHT} />
+                                MAINTENANCE
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 4 * fs }}>
+                                <div style={{ fontSize: 7.5 * fs, color: '#e2e8f0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed #334155', paddingBottom: 2 * fs }}>
+                                    <span>Wash Cycle</span> <span style={{ fontWeight: 700, color: '#cbd5e1' }}>Weekly (2-Bucket)</span>
+                                </div>
+                                <div style={{ fontSize: 7.5 * fs, color: '#e2e8f0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed #334155', paddingBottom: 2 * fs }}>
+                                    <span>Soap Type</span> <span style={{ fontWeight: 700, color: '#34d399' }}>pH Neutral Only</span>
+                                </div>
+                                <div style={{ fontSize: 7.5 * fs, color: '#e2e8f0', display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed #334155', paddingBottom: 2 * fs }}>
+                                    <span>Inspection</span> <span style={{ fontWeight: 700, color: '#cbd5e1' }}>Every 12 Months</span>
+                                </div>
+                                <div style={{ fontSize: 7.5 * fs, color: '#f87171', fontWeight: 600, marginTop: 2 * fs }}>
+                                    🚫 No Auto-Washes / Clay Bars
+                                </div>
                             </div>
                         </div>
-                        <div style={{ border: '1px solid #475569', padding: 10 * fs, borderRadius: 4 * fs, background: 'rgba(15,23,42,0.6)' }}>
-                            <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 800, marginBottom: 3 * fs }}>LAYERING</div>
-                            <div style={{ fontSize: 7.5 * fs, color: '#e2e8f0', fontWeight: 500 }}>Base {'>'} 1hr {'>'} Top Coat</div>
-                        </div>
-                    </div>
 
-                    {/* Care & Safety Composite */}
-                    <SectionLabel label="06 | Care & Safety" scale={scale} />
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 * fs, marginBottom: 16 * fs }}>
-                        <div style={{ fontSize: 7.5 * fs, background: '#1e293b', padding: 8 * fs, borderRadius: 3 * fs }}>
-                            <span style={{ color: '#34d399', fontWeight: 800 }}>DO:</span> <span style={{ color: '#e2e8f0', fontWeight: 500 }}>pH Neutral Soap</span>
+                        {/* Safety Warnings */}
+                        <div>
+                            <div style={{ fontSize: 8 * fs, fontWeight: 900, color: '#fff', marginBottom: 6 * fs, display: 'flex', alignItems: 'center', gap: 6 * fs }}>
+                                <AlertTriangle size={10 * fs} color="#f87171" />
+                                SAFETY PROTOCOLS
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 * fs }}>
+                                {['Wear Gloves', 'Ventilated Area', 'Eye Protection', 'Vapor Mask'].map((s, i) => (
+                                    <div key={i} style={{
+                                        fontSize: 6.5 * fs, color: '#94a3b8',
+                                        background: 'rgba(255,255,255,0.03)', padding: '4px 6px', borderRadius: 4,
+                                        textAlign: 'center', border: '1px solid #334155'
+                                    }}>
+                                        {s}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div style={{ fontSize: 7.5 * fs, background: '#1e293b', padding: 8 * fs, borderRadius: 3 * fs }}>
-                            <span style={{ color: '#f87171', fontWeight: 800 }}>NO:</span> <span style={{ color: '#e2e8f0', fontWeight: 500 }}>Auto Washes / Clay</span>
-                        </div>
-                    </div>
-
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 * fs }}>
-                        {['Eyes: Rinse', 'Skin: Soap', 'Air: Fresh', 'No Vomit'].map((s, i) => (
-                            <div key={i} style={{ borderRadius: 3 * fs, fontSize: 6.5 * fs, color: '#cbd5e1', textAlign: 'center', background: 'rgba(255,255,255,0.05)', padding: 3 * fs, fontWeight: 600 }}>{s}</div>
-                        ))}
-                    </div>
-
-                    <div style={{ marginTop: 'auto', textAlign: 'center', borderTop: '1px solid #475569', paddingTop: 10 * fs }}>
-                        <div style={{ fontSize: 7 * fs, color: '#94a3b8', fontWeight: 600 }}>support@monoatomlabs.com</div>
                     </div>
                 </div>
 
-                {/* 3. PANEL 3 (Center - 5.2") - MAIN HERO */}
+                {/* 3. CENTER PANEL (P3) - MAIN HERO */}
                 <div style={{ width: `${P3}%`, padding: `0 ${20 * fs}px`, display: 'flex', flexDirection: 'column' }}>
                     {/* Header */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 20 * fs, borderBottom: '1px solid #475569', paddingBottom: 14 * fs }}>
                         <div>
                             <h1 style={{ fontSize: 36 * fs, fontWeight: 900, fontStyle: 'italic', textTransform: 'uppercase', color: 'white', lineHeight: 0.9, marginBottom: 8 * fs, fontFamily: "'Inter', sans-serif" }}>Ceraphene™</h1>
-                            <div style={{ fontSize: 9 * fs, color: '#cbd5e1', fontFamily: 'monospace', fontWeight: 700 }}>REV 2.3 | TECHNICAL MANUAL</div>
+                            <div style={{ fontSize: 9 * fs, color: '#cbd5e1', fontFamily: 'monospace', fontWeight: 700 }}>TECHNICAL MANUAL</div>
                         </div>
                         <div style={{ textAlign: 'right' }}>
                             <div style={{ fontSize: 12 * fs, color: 'white', fontWeight: 800 }}>Gloss & Color Depth</div>
@@ -348,37 +400,66 @@ export default function BackCerapheneV2({ scale = 1, surf }) {
                     </div>
                 </div>
 
-                {/* 4. PANEL 2 (Left - 2.13") - FLIGHT DECK + APP PROCESS */}
+                {/* 4. RIGHT PANEL (P2 Slot) - FLIGHT DECK / TECH / TROUBLESHOOTING */}
                 <div style={{ width: `${P2}%`, padding: `0 ${10 * fs}px`, display: 'flex', flexDirection: 'column' }}>
 
+                    {/* Feature Focus */}
+                    <SectionLabel label="04 | Focus" scale={scale} />
+                    <FeatureFocus scale={scale} />
+
                     {/* Flight Deck */}
-                    <SectionLabel label="02 | Flight Deck" scale={scale} />
-                    <div style={{ marginBottom: 20 * fs }}>
+                    {/* Flight Deck - Header Removed for Space */}
+                    <div style={{ marginBottom: 10 * fs }}>
                         <GaugeBox label="Temp" value="20°C" sub="15-25°C" percent={60} scale={scale} />
                         <GaugeBox label="Humidity" value="<70%" sub="Max" percent={70} scale={scale} />
                         <GaugeBox label="Cure (Dry)" value="24H" percent={100} scale={scale} />
                     </div>
 
-                    {/* App Process */}
-                    <SectionLabel label="03 | Process" scale={scale} />
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 14 * fs, position: 'relative', paddingLeft: 10 * fs, flex: 1 }}>
-                        <div style={{ position: 'absolute', left: 4 * fs, top: 6 * fs, bottom: 6 * fs, width: 2, background: '#475569' }}></div>
-                        {APP_STEPS.map((step, i) => (
-                            <div key={i} style={{ position: 'relative' }}>
-                                <div style={{ position: 'absolute', left: -11 * fs, top: 1 * fs, width: 8 * fs, height: 8 * fs, borderRadius: '50%', background: '#020617', border: '1px solid #64748b', color: '#fff', fontSize: 5 * fs, display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700 }}>{i + 1}</div>
-                                <div>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 3 * fs }}>
-                                        <div style={{ fontSize: 9 * fs, color: 'white', fontWeight: 800 }}>{step.title}</div>
-                                        <div style={{ fontSize: 7 * fs, color: '#94a3b8', fontWeight: 600 }}>{step.time}</div>
-                                    </div>
-                                    <div style={{ fontSize: 7.5 * fs, color: '#e2e8f0', lineHeight: 1.3, fontWeight: 500 }}>{step.desc}</div>
+                    {/* Advanced Protocols - Elaborated */}
+                    <SectionLabel label="05 | Advanced Protocols" scale={scale} />
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 * fs, marginBottom: 10 * fs }}>
+                        {/* Layering Architecture */}
+                        <div style={{ border: '1px solid #475569', borderRadius: 4 * fs, padding: 8 * fs, background: 'rgba(15,23,42,0.4)', position: 'relative' }}>
+                            <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 800, marginBottom: 6 * fs, display: 'flex', justifyContent: 'space-between' }}>
+                                LAYER ARCHITECTURE
+                                <Layers size={10 * fs} color={BLUE_LIGHT} />
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 2 * fs }}>
+                                <div style={{ background: 'linear-gradient(90deg, #1e293b, #334155)', padding: '4px 8px', borderRadius: 2 * fs, fontSize: 7 * fs, color: '#e2e8f0', display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>TOP COAT</span> <span style={{ color: BLUE_LIGHT, fontWeight: 700 }}>Hydrophobicity + Gloss</span>
+                                </div>
+                                <div style={{ height: 2, background: BLUE, opacity: 0.5, margin: '2px 0' }}></div>
+                                <div style={{ background: 'linear-gradient(90deg, #0f172a, #1e293b)', padding: '4px 8px', borderRadius: 2 * fs, fontSize: 7 * fs, color: '#94a3b8', display: 'flex', justifyContent: 'space-between' }}>
+                                    <span>BASE COAT</span> <span style={{ color: '#cbd5e1', fontWeight: 700 }}>9H+ Hardness + Bond</span>
                                 </div>
                             </div>
-                        ))}
+                        </div>
+
+                        {/* IR Curing Dynamics */}
+                        <div style={{ border: '1px solid #475569', borderRadius: 4 * fs, padding: 8 * fs, background: 'rgba(15,23,42,0.4)' }}>
+                            <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 800, marginBottom: 6 * fs, display: 'flex', justifyContent: 'space-between' }}>
+                                IR CURING DYNAMICS
+                                <Thermometer size={10 * fs} color="#f87171" />
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 4 * fs }}>
+                                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.03)', padding: 4 * fs, borderRadius: 3 * fs }}>
+                                    <div style={{ fontSize: 6.5 * fs, color: '#94a3b8' }}>TEMP</div>
+                                    <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 700 }}>65°C</div>
+                                </div>
+                                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.03)', padding: 4 * fs, borderRadius: 3 * fs }}>
+                                    <div style={{ fontSize: 6.5 * fs, color: '#94a3b8' }}>DIST</div>
+                                    <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 700 }}>60cm</div>
+                                </div>
+                                <div style={{ textAlign: 'center', background: 'rgba(255,255,255,0.03)', padding: 4 * fs, borderRadius: 3 * fs }}>
+                                    <div style={{ fontSize: 6.5 * fs, color: '#94a3b8' }}>TIME</div>
+                                    <div style={{ fontSize: 8 * fs, color: '#fff', fontWeight: 700 }}>15m</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Troubleshooting */}
-                    <div style={{ marginTop: 16 * fs, background: '#1e293b', padding: 10 * fs, borderRadius: 3 * fs }}>
+                    <div style={{ marginTop: 'auto', background: '#1e293b', padding: 10 * fs, borderRadius: 3 * fs }}>
                         <div style={{ fontSize: 7.5 * fs, fontWeight: 800, color: '#fff', marginBottom: 4 * fs }}>TROUBLESHOOTING</div>
                         <div style={{ fontSize: 7 * fs, color: '#e2e8f0', marginBottom: 2 * fs, fontWeight: 500 }}><strong>High Spots:</strong> Level ASAP. Polish if dry.</div>
                         <div style={{ fontSize: 7 * fs, color: '#e2e8f0', fontWeight: 500 }}><strong>Hazing:</strong> Check humidity. Buff damp.</div>

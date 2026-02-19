@@ -8,6 +8,7 @@ import BackCerapheneV1 from './back/CerapheneV1'
 import BackCerapheneV2 from './back/CerapheneV2'
 import FlapsCerapheneV1 from './flaps/CerapheneV1'
 import QRCerapheneV1 from './qr/CerapheneV1'
+import QRCerapheneV2 from './qr/CerapheneV2'
 
 import WrapGrapheneV1 from './wrap/GrapheneV1'
 import BackGrapheneV1 from './back/GrapheneV1'
@@ -109,6 +110,7 @@ export const DESIGNS = {
   qr: [
     { id: 'Base', label: 'Base (Background Only)', Component: QRBase },
     { id: 'CerapheneV1', label: 'Ceraphene V1', Component: QRCerapheneV1 },
+    { id: 'CerapheneV2', label: 'Ceraphene V2 (Professional)', Component: QRCerapheneV2 },
     { id: 'GrapheneV1', label: 'Graphene V1', Component: QRGrapheneV1 },
     { id: 'GrapheneV2', label: 'Graphene V2 (Circuit)', Component: QRGrapheneV2 },
     { id: 'GrapheneV3', label: 'Graphene V3 (Lab Protocol)', Component: QRGrapheneV3 },
