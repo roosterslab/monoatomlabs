@@ -111,9 +111,16 @@ const LongTermSavingsCalculator = ({
                   step={volumeOptions.step}
                   value={yearlyVolume}
                   onChange={(e) => setYearlyVolume(Number(e.target.value))}
-                  className="w-full h-2 bg-neutral-200 dark:bg-neutral-800 rounded-lg appearance-none cursor-pointer accent-indigo-500 z-20 relative hover:accent-indigo-400 transition-all"
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer relative z-20"
+                  style={{
+                    background: (() => {
+                      const pct = ((yearlyVolume - volumeOptions.min) / (volumeOptions.max - volumeOptions.min)) * 100;
+                      const filled = isDark ? '#6366f1' : '#4f46e5';
+                      const empty = isDark ? '#374151' : '#e5e7eb';
+                      return `linear-gradient(to right, ${filled} ${pct.toFixed(1)}%, ${empty} ${pct.toFixed(1)}%)`;
+                    })()
+                  }}
                 />
-                <div className="absolute inset-x-0 h-2 bg-neutral-100 dark:bg-neutral-800 rounded-lg z-10"></div>
               </div>
               <div className="flex justify-between text-[10px] font-mono font-medium text-neutral-400 uppercase">
                 <span>{volumeOptions.min.toLocaleString()}</span>

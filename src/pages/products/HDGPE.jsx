@@ -12,6 +12,7 @@ import { products } from '../../data/content';
 // Import all infographic components
 import {
   HDGPEROICalculator,
+  HDGPEPerformanceCalculator,
   HowItWorks,
   PerformancePilot,
   MarketOpportunityAnalyzer,
@@ -258,12 +259,23 @@ const HDGPE = () => {
             </div>
           </section>
 
+          {/* Performance Property Analysis */}
+          <section>
+            <div className="mb-6">
+              <SectionHeading number="02" title="Multi-Property Performance Analysis" theme="light" />
+              <p className="text-sm text-neutral-500 mt-2">
+                See how HD-G-PE enhances every mechanical property simultaneously — elongation, durability, strength — across your target application.
+              </p>
+            </div>
+            <HDGPEPerformanceCalculator />
+          </section>
+
           {/* Lifecycle & TCO Grid */}
           <section className="space-y-8">
             {/* TCO Analysis */}
             <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
               <div className="mb-6">
-                <SectionHeading number="02" title="Lifecycle Cost Analysis" theme="light" />
+                <SectionHeading number="03" title="Lifecycle Cost Analysis" theme="light" />
               </div>
               <TCOAnalysis
                 productName={tcoAnalysisData.productName}
@@ -279,7 +291,7 @@ const HDGPE = () => {
             {/* Long-Term Savings */}
             <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
               <div className="mb-6">
-                <SectionHeading number="03" title="Infrastructure Savings" theme="light" />
+                <SectionHeading number="04" title="Infrastructure Savings" theme="light" />
                 <p className="text-sm text-neutral-500 mt-2">
                   For utilities and municipalities, doubled lifespan means halved replacement bond costs.
                 </p>
@@ -297,7 +309,7 @@ const HDGPE = () => {
           <section className="bg-neutral-900 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
             <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <SectionHeading number="04" title="Carbon Credit Ledger" theme="dark" className="mb-6" />
+                <SectionHeading number="05" title="Carbon Credit Ledger" theme="dark" className="mb-6" />
                 <p className="text-neutral-400 leading-relaxed mb-6">
                   Lighter products mean reduced transport emissions, while extended durability lowers the demand for virgin plastic production.
                 </p>

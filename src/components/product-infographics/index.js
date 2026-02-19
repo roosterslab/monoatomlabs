@@ -9,6 +9,7 @@ export { default as CerapheneROICalculator } from './CerapheneROICalculator';
 export { default as HDGPEROICalculator } from './HDGPEROICalculator';
 export { default as CerapheneCostComparison } from './CerapheneCostComparison';
 export { default as HDGPEPerformanceCalculator } from './HDGPEPerformanceCalculator';
+export { default as GraphacreteCostBenefit } from './GraphacreteCostBenefit';
 
 // Application Scenarios
 export { default as GraphacreteApplications } from './GraphacreteApplications';

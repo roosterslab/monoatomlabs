@@ -308,7 +308,7 @@ const Graphacrete = () => {
               {/* Long-Term Savings */}
               <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
                 <div className="mb-6">
-                  <SectionHeading number="03" title="Compound Savings" theme="light" />
+                  <SectionHeading number="04" title="Compound Savings" theme="light" />
                   <p className="text-sm text-neutral-500 mt-2">
                     Cumulative savings over the asset lifespan excluding initial construction gains.
                   </p>
@@ -326,7 +326,7 @@ const Graphacrete = () => {
             <section className="bg-neutral-900 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
               <div className="relative z-10 space-y-12">
                 <div className="max-w-3xl">
-                  <SectionHeading number="04" title="Carbon Credit Ledger" theme="dark" className="mb-6" />
+                  <SectionHeading number="05" title="Carbon Credit Ledger" theme="dark" className="mb-6" />
                   <p className="text-neutral-400 leading-relaxed mb-6">
                     Every ton of Graphacrete poured generates verifiable carbon credits through cement reduction and extended durability.
                   </p>

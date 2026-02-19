@@ -12,6 +12,7 @@ import ProductHero from '../../components/ui/ProductHero';
 // Import all infographic components
 import {
   GraffisolROICalculator,
+  GraffisolEnergyCalculator,
   HowItWorks,
   PerformancePilot,
   MarketOpportunityAnalyzer,
@@ -258,12 +259,23 @@ const Graffisol = () => {
             </div>
           </section>
 
+          {/* Energy Breakdown Calculator */}
+          <section>
+            <div className="mb-6">
+              <SectionHeading number="02" title="Energy Gain Breakdown" theme="light" />
+              <p className="text-sm text-neutral-500 mt-2">
+                Quantify how Graffisol recovers energy from three compounding sources: base output gain, soiling reduction, and thermal derating improvement.
+              </p>
+            </div>
+            <GraffisolEnergyCalculator />
+          </section>
+
           {/* Lifecycle & TCO Grid */}
           <section className="space-y-8">
             {/* TCO Analysis */}
             <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
               <div className="mb-6">
-                <SectionHeading number="02" title="LCOE Analysis" theme="light" />
+                <SectionHeading number="03" title="LCOE Analysis" theme="light" />
               </div>
               <TCOAnalysis
                 productName={tcoAnalysisData.productName}
@@ -279,7 +291,7 @@ const Graffisol = () => {
             {/* Long-Term Savings */}
             <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
               <div className="mb-6">
-                <SectionHeading number="03" title="Compound Savings" theme="light" />
+                <SectionHeading number="04" title="Compound Savings" theme="light" />
                 <p className="text-sm text-neutral-500 mt-2">
                   Cumulative savings from reduced cleaning, lower maintenance, and extended panel lifespan.
                 </p>
@@ -297,7 +309,7 @@ const Graffisol = () => {
           <section className="bg-neutral-900 rounded-2xl p-8 md:p-12 text-white relative overflow-hidden">
             <div className="relative z-10 grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <SectionHeading number="04" title="Carbon Credit Ledger" theme="dark" className="mb-6" />
+                <SectionHeading number="05" title="Carbon Credit Ledger" theme="dark" className="mb-6" />
                 <p className="text-neutral-400 leading-relaxed mb-6">
                   Increased clean energy generation directly translates to higher carbon offsets. Track your environmental contribution.
                 </p>
