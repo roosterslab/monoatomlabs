@@ -2,3 +2,7 @@
 	path = visiting-card-dev
 	url = https://github.com/roosterslab/monoatomlabs.git
 	branch = visiting-card-dev-main
+[submodule "website"]
+	path = website
+	url = https://github.com/roosterslab/monoatomlabs.git
+	branch = website-main
