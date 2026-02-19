@@ -19,12 +19,6 @@ export default function QRCerapheneV2({ scale = 1, surf }) {
     return (
         <QRBase scale={scale} surf={surf}>
 
-            {/* Suppress hex-wave bg → pure black, matching template */}
-            <div style={{
-                position: 'absolute', inset: 0, zIndex: 2,
-                background: 'rgba(0,0,0,0.90)',
-            }} />
-
             {/* ── Page ── */}
             <div style={{
                 position: 'absolute', inset: 0, zIndex: 3,
