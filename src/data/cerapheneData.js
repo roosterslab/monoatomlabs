@@ -203,6 +203,9 @@ export const roiCalculatorConfig = {
       roiPercentage,             // % on Ceraphene investment (null if not calculable)
       paybackLabel,              // 'X months'
       paybackMonths,
+      roiMultiple: fullSavingsTotal > 0 && investmentTotal > 0
+        ? parseFloat((fullSavingsTotal / investmentTotal).toFixed(1))
+        : null,
 
       // ── Environmental ─────────────────────────────────────────────────────
       annualWashesWithout,

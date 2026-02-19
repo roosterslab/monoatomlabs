@@ -4,7 +4,7 @@ import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, ReferenceLine, Cell, LabelList
 } from 'recharts';
-import { Sun, TrendingUp, ChevronDown, Zap, Info, Leaf } from 'lucide-react';
+import { Sun, TrendingUp, ChevronDown, Zap, Info, Leaf, RefreshCw, CheckCircle } from 'lucide-react';
 
 // ── Logarithmic scale helpers (1–10,000 kW) ──────────────────────────────────
 const posToSize = (pos) => {
@@ -94,6 +94,11 @@ const GraffisolROICalculator = ({
 
   const set = (key, val) => setInputs(prev => ({ ...prev, [key]: val }));
   const results = useMemo(() => calculations(inputs), [inputs, calculations]);
+
+  const resetInputs = () => {
+    setInputs(init);
+    setSizeText(String(init.systemSize || 100));
+  };
 
   // Theme tokens — identical pattern to Graphacrete ROICalculator
   const bg       = isDark ? 'bg-neutral-900'    : 'bg-white';
@@ -242,6 +247,11 @@ const GraffisolROICalculator = ({
           <span className={`text-[10px] ${sub}`}>{cfg.max}% optimistic</span>
         </div>
         <p className={`text-[11px] ${sub}`}>Field-validated range: 7–12%</p>
+        {results.powerBoostRevenuePerKw != null && (
+          <p className="text-[11px] font-semibold text-yellow-600">
+            → +₹{(results.powerBoostRevenuePerKw || 0).toLocaleString('en-IN')}/kW/yr power boost · ₹{(results.powerOnlySavingsTotal || 0) >= 1000 ? `${Math.round((results.powerOnlySavingsTotal || 0) / 1000)}k` : (results.powerOnlySavingsTotal || 0).toLocaleString('en-IN')} project annual
+          </p>
+        )}
       </div>
     );
   };
@@ -296,6 +306,33 @@ const GraffisolROICalculator = ({
         <RateSlider />
         <AppCostSlider />
         <GainSlider />
+      </div>
+
+      {/* ── Verified Formulas + Reset bar ───────────────────────────────── */}
+      <div className={`px-8 py-2.5 flex items-center justify-between border-b ${border} ${
+        isDark ? 'bg-neutral-900/80' : 'bg-yellow-50/60'
+      }`}>
+        <div className="flex items-center gap-2.5 flex-wrap text-[10px]">
+          <CheckCircle className={`w-3 h-3 flex-shrink-0 ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`} />
+          <span className={`font-bold uppercase tracking-wider ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>Verified Assumptions</span>
+          <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>1,500 kWh/kW/yr baseline</span>
+          <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>35% soiling recovery</span>
+          <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>CEA 2023 CO₂ factor</span>
+        </div>
+        <button
+          onClick={resetInputs}
+          className={`flex items-center gap-1.5 text-[10px] font-semibold px-3 py-1.5 rounded-lg border transition-colors flex-shrink-0 ${
+            isDark
+              ? 'text-neutral-400 border-neutral-700 hover:bg-neutral-800 hover:text-neutral-200'
+              : 'text-neutral-500 border-neutral-200 hover:bg-white hover:text-neutral-700'
+          }`}
+        >
+          <RefreshCw className="w-3 h-3" />
+          Reset
+        </button>
       </div>
 
       {/* ── Main Grid ────────────────────────────────────────────────────── */}
@@ -446,6 +483,41 @@ const GraffisolROICalculator = ({
         {/* ── RIGHT: Charts + Metrics ───────────────────────────────────── */}
         <div className={`lg:col-span-7 ${bgSub} p-8 flex flex-col gap-6`}>
 
+          {/* ── At current settings — key numbers snapshot ──────────────── */}
+          <div className={`grid grid-cols-4 gap-0 rounded-xl overflow-hidden border ${border}`}>
+            {[
+              {
+                label: 'Payback',
+                value: results.paybackLabel || '—',
+                color: isDark ? 'text-yellow-400' : 'text-yellow-700',
+                bg: isDark ? 'bg-yellow-900/20' : 'bg-yellow-50'
+              },
+              {
+                label: 'Annual Return',
+                value: fmt(results.fullReturnTotal || 0),
+                color: isDark ? 'text-green-400' : 'text-green-700',
+                bg: isDark ? 'bg-green-900/20' : 'bg-green-50'
+              },
+              {
+                label: 'Extra Energy',
+                value: fmtKwh(results.totalAdditionalKwh || 0),
+                color: isDark ? 'text-yellow-400' : 'text-yellow-700',
+                bg: isDark ? 'bg-yellow-900/20' : 'bg-yellow-50'
+              },
+              {
+                label: 'CO₂/yr',
+                value: `${results.co2AvoidedTPerYear || 0}t`,
+                color: isDark ? 'text-teal-400' : 'text-teal-700',
+                bg: isDark ? 'bg-teal-900/20' : 'bg-teal-50'
+              }
+            ].map(({ label, value, color, bg }, i) => (
+              <div key={label} className={`${bg} py-2.5 px-2 text-center ${i < 3 ? `border-r ${border}` : ''}`}>
+                <p className={`text-[8px] font-bold uppercase tracking-wider ${sub} mb-0.5`}>{label}</p>
+                <p className={`text-[11px] font-bold font-mono leading-tight ${color}`}>{value}</p>
+              </div>
+            ))}
+          </div>
+
           {/* Bar chart — revenue per kW per year */}
           <div>
             <p className={`text-xs font-bold uppercase tracking-widest ${sub} mb-3`}>
@@ -542,6 +614,26 @@ const GraffisolROICalculator = ({
             </div>
           </div>
 
+          {/* Return Multiple */}
+          {results.roiMultiple != null && (
+            <div className={`p-4 rounded-xl border ${isDark ? 'border-yellow-700 bg-yellow-900/10' : 'border-yellow-200 bg-yellow-50'} flex items-center gap-4`}>
+              <TrendingUp className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+              <div className="flex-1">
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-yellow-400' : 'text-yellow-600'}`}>
+                  {results.analysisPeriod || 20}-yr Return Multiple
+                </p>
+                <p className={`text-2xl font-display font-medium tabular-nums ${isDark ? 'text-yellow-300' : 'text-yellow-700'}`}>
+                  {results.roiMultiple}×
+                </p>
+                <p className={`text-[9px] mt-0.5 ${isDark ? 'text-yellow-500' : 'text-yellow-400'}`}>net profit ÷ application cost</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className={`text-[9px] font-bold uppercase tracking-wider ${sub} mb-0.5`}>{results.analysisPeriod || 20}-yr Profit</p>
+                <p className={`text-lg font-bold font-mono ${isDark ? 'text-yellow-300' : 'text-yellow-700'}`}>{fmt(results.netProfitProjected || 0)}</p>
+              </div>
+            </div>
+          )}
+
           {/* Energy / CO₂ / Investment */}
           <div className="grid grid-cols-3 gap-3">
             <div className={`p-3.5 rounded-xl border ${border} ${isDark ? 'bg-neutral-800/30' : 'bg-white'} text-center`}>
@@ -591,6 +683,30 @@ const GraffisolROICalculator = ({
               Starts at −{fmt(results.applicationCostTotal || 0)} (application cost). Line crosses zero at payback. Annual gains added each year.
             </p>
           </div>
+
+          {/* Dark Investor Hero Card */}
+          {(results.netProfitProjected || 0) > 0 && (
+            <div className={`rounded-2xl p-6 flex items-center justify-between ${isDark ? 'bg-neutral-800 border border-neutral-700' : 'bg-neutral-900'}`}>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                  {results.analysisPeriod || 20}-yr total · {(inputs.systemSize || 0).toLocaleString()} kW
+                </p>
+                <p className="text-3xl font-display font-medium text-white">
+                  {fmt(results.netProfitProjected || 0)}
+                </p>
+                <p className="text-[10px] text-neutral-500 mt-1">
+                  Annual {fmt(results.fullReturnTotal || 0)} × {results.analysisPeriod || 20} yr − {fmt(results.applicationCostTotal || 0)} investment
+                </p>
+              </div>
+              {results.roiMultiple && (
+                <div className="text-right flex-shrink-0 ml-6">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">Return Multiple</p>
+                  <p className="text-4xl font-display font-bold text-yellow-400">{results.roiMultiple}×</p>
+                  <p className="text-[10px] text-neutral-500 mt-1">on coating spend</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Disclaimer */}
           <p className={`text-[10px] leading-relaxed flex items-start gap-1.5 ${sub}`}>

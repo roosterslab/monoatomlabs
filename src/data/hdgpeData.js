@@ -145,6 +145,11 @@ export const roiCalculatorConfig = {
       co2SavedTons,
       appLabel:                app.label,
       analysisPeriod,
+      roiMultiple: netMarginSavingsTotal > 0 && annualAdditiveCost > 0
+        ? parseFloat((netMarginSavingsTotal / annualAdditiveCost).toFixed(1))
+        : null,
+      periodNetGain:  Math.round(netMarginSavingsTotal * analysisPeriod),
+      periodAllIn:    Math.round(allInSavingsTotal    * analysisPeriod),
     };
   },
 };

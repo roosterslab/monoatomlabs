@@ -4,7 +4,7 @@ import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
   Tooltip, ResponsiveContainer, ReferenceLine, Cell, LabelList
 } from 'recharts';
-import { ShieldCheck, TrendingUp, ChevronDown, Zap, Info, Droplets, Car } from 'lucide-react';
+import { ShieldCheck, TrendingUp, ChevronDown, Zap, Info, Droplets, Car, RefreshCw, CheckCircle } from 'lucide-react';
 
 // ── Log scale helpers (1–1000 vehicles) ──────────────────────────────────────
 const posToVehicles = (pos) => {
@@ -89,6 +89,11 @@ const CerapheneROICalculator = ({
 
   const set = (key, val) => setInputs(prev => ({ ...prev, [key]: val }));
   const results = useMemo(() => calculations(inputs), [inputs, calculations]);
+
+  const resetInputs = () => {
+    setInputs(init);
+    setCountText(String(init.vehicleCount || 5));
+  };
 
   // Theme tokens
   const bg       = isDark ? 'bg-neutral-900'    : 'bg-white';
@@ -238,6 +243,11 @@ const CerapheneROICalculator = ({
           <span className={`text-[10px] ${sub}`}>{cfg.max}% optimistic</span>
         </div>
         <p className={`text-[11px] ${sub}`}>Hydrophobic self-cleaning range</p>
+        {results.annualWashesSaved != null && (
+          <p className="text-[11px] font-semibold text-blue-600">
+            → {results.annualWashesSaved} washes saved/vehicle/yr · ₹{(results.annualSavingsPerVehicle || 0).toLocaleString('en-IN')}/vehicle annual saving
+          </p>
+        )}
       </div>
     );
   };
@@ -322,6 +332,33 @@ const CerapheneROICalculator = ({
         <CompetitorSlider />
         <WashCostSlider />
         <WashReductionSlider />
+      </div>
+
+      {/* ── Verified Assumptions + Reset bar ────────────────────────────── */}
+      <div className={`px-8 py-2.5 flex items-center justify-between border-b ${border} ${
+        isDark ? 'bg-neutral-900/80' : 'bg-blue-50/60'
+      }`}>
+        <div className="flex items-center gap-2.5 flex-wrap text-[10px]">
+          <CheckCircle className={`w-3 h-3 flex-shrink-0 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
+          <span className={`font-bold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>Verified Data</span>
+          <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>₹5,000 fixed (brochure)</span>
+          <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>35 ml/vehicle (TDS)</span>
+          <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>SGS · 9H+ · 3–4+ yr</span>
+        </div>
+        <button
+          onClick={resetInputs}
+          className={`flex items-center gap-1.5 text-[10px] font-semibold px-3 py-1.5 rounded-lg border transition-colors flex-shrink-0 ${
+            isDark
+              ? 'text-neutral-400 border-neutral-700 hover:bg-neutral-800 hover:text-neutral-200'
+              : 'text-neutral-500 border-neutral-200 hover:bg-white hover:text-neutral-700'
+          }`}
+        >
+          <RefreshCw className="w-3 h-3" />
+          Reset
+        </button>
       </div>
 
       {/* ── Main Grid ─────────────────────────────────────────────────────── */}
@@ -469,6 +506,41 @@ const CerapheneROICalculator = ({
         {/* ── RIGHT: Charts + Metrics ───────────────────────────────────── */}
         <div className={`lg:col-span-7 ${bgSub} p-8 flex flex-col gap-6`}>
 
+          {/* ── At current settings — key numbers snapshot ──────────────── */}
+          <div className={`grid grid-cols-4 gap-0 rounded-xl overflow-hidden border ${border}`}>
+            {[
+              {
+                label: 'Payback',
+                value: results.paybackLabel || '—',
+                color: isDark ? 'text-blue-400' : 'text-blue-700',
+                bg: isDark ? 'bg-blue-900/20' : 'bg-blue-50'
+              },
+              {
+                label: 'Fleet Savings',
+                value: fmt(results.fullSavingsTotal || 0),
+                color: isDark ? 'text-green-400' : 'text-green-700',
+                bg: isDark ? 'bg-green-900/20' : 'bg-green-50'
+              },
+              {
+                label: 'Washes/yr',
+                value: `−${results.annualWashesSaved || 0}/veh`,
+                color: isDark ? 'text-blue-400' : 'text-blue-700',
+                bg: isDark ? 'bg-blue-900/20' : 'bg-blue-50'
+              },
+              {
+                label: 'Water Saved',
+                value: `${((results.waterSavedTotal || 0) / 1000).toFixed(1)}kL/yr`,
+                color: isDark ? 'text-teal-400' : 'text-teal-700',
+                bg: isDark ? 'bg-teal-900/20' : 'bg-teal-50'
+              }
+            ].map(({ label, value, color, bg }, i) => (
+              <div key={label} className={`${bg} py-2.5 px-2 text-center ${i < 3 ? `border-r ${border}` : ''}`}>
+                <p className={`text-[8px] font-bold uppercase tracking-wider ${sub} mb-0.5`}>{label}</p>
+                <p className={`text-[11px] font-bold font-mono leading-tight ${color}`}>{value}</p>
+              </div>
+            ))}
+          </div>
+
           {/* Bar chart */}
           <div>
             <p className={`text-xs font-bold uppercase tracking-widest ${sub} mb-3`}>
@@ -567,6 +639,26 @@ const CerapheneROICalculator = ({
             </div>
           </div>
 
+          {/* Return Multiple */}
+          {results.roiMultiple != null && (
+            <div className={`p-4 rounded-xl border ${isDark ? 'border-blue-700 bg-blue-900/10' : 'border-blue-200 bg-blue-50'} flex items-center gap-4`}>
+              <TrendingUp className="w-5 h-5 text-blue-500 flex-shrink-0" />
+              <div className="flex-1">
+                <p className={`text-[10px] font-bold uppercase tracking-wider ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
+                  {inputs.analysisPeriod || 4}-yr Return Multiple
+                </p>
+                <p className={`text-2xl font-display font-medium tabular-nums ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>
+                  {results.roiMultiple}×
+                </p>
+                <p className={`text-[9px] mt-0.5 ${isDark ? 'text-blue-500' : 'text-blue-400'}`}>full savings ÷ Ceraphene investment</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className={`text-[9px] font-bold uppercase tracking-wider ${sub} mb-0.5`}>Fleet Savings</p>
+                <p className={`text-lg font-bold font-mono ${isDark ? 'text-blue-300' : 'text-blue-700'}`}>{fmt(results.fullSavingsTotal || 0)}</p>
+              </div>
+            </div>
+          )}
+
           {/* Investment / Wash saved / Water saved */}
           <div className="grid grid-cols-3 gap-3">
             <div className={`p-3.5 rounded-xl border ${border} ${isDark ? 'bg-neutral-800/30' : 'bg-white'} text-center`}>
@@ -618,6 +710,30 @@ const CerapheneROICalculator = ({
               Yr 0 = immediate upfront savings at purchase. Annual wash + durability savings accumulate each year.
             </p>
           </div>
+
+          {/* Dark Investor Hero Card */}
+          {(results.fullSavingsTotal || 0) > 0 && (
+            <div className={`rounded-2xl p-6 flex items-center justify-between ${isDark ? 'bg-neutral-800 border border-neutral-700' : 'bg-neutral-900'}`}>
+              <div>
+                <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">
+                  {inputs.analysisPeriod || 4}-yr fleet total · {(inputs.vehicleCount || 1).toLocaleString()} vehicles
+                </p>
+                <p className="text-3xl font-display font-medium text-white">
+                  {fmt(results.fullSavingsTotal || 0)}
+                </p>
+                <p className="text-[10px] text-neutral-500 mt-1">
+                  {fmtRaw(results.annualSavingsPerVehicle || 0)}/vehicle/yr × {inputs.analysisPeriod || 4} yr × {(inputs.vehicleCount || 1).toLocaleString()} vehicles
+                </p>
+              </div>
+              {results.roiMultiple && (
+                <div className="text-right flex-shrink-0 ml-6">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-neutral-500 mb-1">Return Multiple</p>
+                  <p className="text-4xl font-display font-bold text-blue-400">{results.roiMultiple}×</p>
+                  <p className="text-[10px] text-neutral-500 mt-1">on Ceraphene spend</p>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Disclaimer */}
           <p className={`text-[10px] leading-relaxed flex items-start gap-1.5 ${sub}`}>

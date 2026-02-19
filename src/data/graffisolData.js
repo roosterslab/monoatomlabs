@@ -192,6 +192,9 @@ export const roiCalculatorConfig = {
         total:         totalSecondary
       },
       netProfitProjected,
+      roiMultiple: netProfitProjected > 0 && applicationCostTotal > 0
+        ? parseFloat((netProfitProjected / applicationCostTotal).toFixed(1))
+        : null,
 
       // ── Exposed assumptions (for UI display) ─────────────────────────────
       baselineGenPerKw,                                    // 1,500 kWh/kW/yr
