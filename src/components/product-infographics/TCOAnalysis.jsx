@@ -11,6 +11,10 @@ const TCOAnalysis = ({
   traditionalSolution,
   productSolution,
   breakdown,
+  highlights = [
+    { label: 'Reduced Maintenance', value: '-40%', color: 'green' },
+    { label: 'Longevity Multiplier', value: '2.5x', color: 'blue' },
+  ],
   theme = 'light'
 }) => {
   const isDark = theme === 'dark';
@@ -105,14 +109,12 @@ const TCOAnalysis = ({
                 </div>
 
                 <div className="space-y-3 pt-4 border-t border-neutral-100 dark:border-neutral-800">
-                  <div className="flex justify-between text-sm">
-                    <span className={subtextClass}>Reduced Maintenance</span>
-                    <span className="font-bold text-green-500 font-mono">-40%</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className={subtextClass}>Longevity Multiplier</span>
-                    <span className="font-bold text-blue-500 font-mono">2.5x</span>
-                  </div>
+                  {highlights.map((h, i) => (
+                    <div key={i} className="flex justify-between text-sm">
+                      <span className={subtextClass}>{h.label}</span>
+                      <span className={`font-bold font-mono ${h.color === 'green' ? 'text-green-500' : 'text-blue-500'}`}>{h.value}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

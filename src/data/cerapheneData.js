@@ -409,6 +409,10 @@ export const tcoAnalysisData = {
       traditional: 80000,
       withProduct: 20000
     }
+  ],
+  highlights: [
+    { label: 'Maintenance Savings', value: '-75%', color: 'green' },
+    { label: 'Coating Durability', value: '4+ Years', color: 'blue' },
   ]
 };
 

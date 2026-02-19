@@ -506,6 +506,10 @@ export const tcoAnalysisData = {
       traditional: 120000,
       withProduct: 40000
     }
+  ],
+  highlights: [
+    { label: 'Maintenance Savings', value: '-55%', color: 'green' },
+    { label: 'Grade Upgrade', value: 'M30→M50', color: 'blue' },
   ]
 };
 

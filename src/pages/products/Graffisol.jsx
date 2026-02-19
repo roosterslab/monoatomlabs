@@ -271,6 +271,7 @@ const Graffisol = () => {
                 traditionalSolution={tcoAnalysisData.traditionalSolution}
                 productSolution={tcoAnalysisData.productSolution}
                 breakdown={tcoAnalysisData.breakdown}
+                highlights={tcoAnalysisData.highlights}
                 theme="light"
               />
             </div>

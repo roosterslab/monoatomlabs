@@ -340,6 +340,10 @@ export const tcoAnalysisData = {
       traditional: 320000,
       withProduct: 100000
     }
+  ],
+  highlights: [
+    { label: 'Quality Cost Reduction', value: '-60%', color: 'green' },
+    { label: 'Lifespan Multiplier', value: '2.5x', color: 'blue' },
   ]
 };
 

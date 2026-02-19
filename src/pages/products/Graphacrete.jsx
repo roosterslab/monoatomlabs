@@ -25,6 +25,7 @@ const IndustrySolutions = lazy(() => import('../../components/product-infographi
 const ScienceExplained = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.ScienceExplained })));
 const CompetitiveMatrix = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.CompetitiveMatrix })));
 const GraphacreteLabResults = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.GraphacreteLabResults })));
+const GraphacreteCostBenefit = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.GraphacreteCostBenefit })));
 
 // Loading fallback for infographics
 const InfographicLoader = () => (
@@ -271,12 +272,25 @@ const Graphacrete = () => {
               </div>
             </section>
 
+            {/* Cost Benefit Widget */}
+            <section>
+              <div className="mb-6">
+                <SectionHeading number="02" title="Per-m³ Cost Breakdown" theme="light" />
+                <p className="text-sm text-neutral-500 mt-2">
+                  NABL-certified: M30 + Graphacrete achieves M50 compressive strength at a net ₹430/m³ saving.
+                </p>
+              </div>
+              <Suspense fallback={<InfographicLoader />}>
+                <GraphacreteCostBenefit theme="light" />
+              </Suspense>
+            </section>
+
             {/* Lifecycle & TCO Grid */}
             <section className="space-y-8">
               {/* TCO Analysis */}
               <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow">
                 <div className="mb-6">
-                  <SectionHeading number="02" title="LCOE Analysis" theme="light" />
+                  <SectionHeading number="03" title="LCOE Analysis" theme="light" />
                 </div>
                 <Suspense fallback={<InfographicLoader />}>
                   <TCOAnalysis
@@ -285,6 +299,7 @@ const Graphacrete = () => {
                     traditionalSolution={tcoAnalysisData.traditionalSolution}
                     productSolution={tcoAnalysisData.productSolution}
                     breakdown={tcoAnalysisData.breakdown}
+                    highlights={tcoAnalysisData.highlights}
                     theme="light"
                   />
                 </Suspense>

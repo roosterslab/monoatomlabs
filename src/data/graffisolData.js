@@ -411,6 +411,10 @@ export const tcoAnalysisData = {
       traditional: 0,
       withProduct: 180000
     }
+  ],
+  highlights: [
+    { label: 'Cleaning Cost Reduction', value: '-60%', color: 'green' },
+    { label: 'Energy Recovery', value: '+7.5%', color: 'blue' },
   ]
 };
 
