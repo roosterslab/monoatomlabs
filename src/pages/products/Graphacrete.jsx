@@ -191,9 +191,9 @@ const Graphacrete = () => {
               {/* Key savings stat strip — grounded in NABL test data */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
                 {[
-                  { label: 'Cement Saved (M-20)', value: '40 kg/m³', sub: '331 vs 371 kg/m³ · NABL BNR-1127 vs BNR-1140' },
+                  { label: 'Cement Saved (M-20)', value: '40 kg/m³', sub: '331 vs 371 kg/m³ · NABL Certified' },
                   { label: 'Strength Advantage (M-20)', value: '+16%', sub: '29 MPa actual vs 25 MPa est. (control)' },
-                  { label: 'M-30 ACT Strength', value: '49.5 MPa', sub: '65% above M-30 min · NABL BNR-1101' }
+                  { label: 'M-30 ACT Strength', value: '49.5 MPa', sub: '65% above M-30 minimum · NABL Certified' }
                 ].map((s, i) => (
                   <div key={i} className="p-6 bg-neutral-50 border border-neutral-200 rounded-xl">
                     <div className="text-xs text-neutral-500 uppercase tracking-wide mb-2">{s.label}</div>
@@ -202,7 +202,41 @@ const Graphacrete = () => {
                   </div>
                 ))}
               </div>
-              <div className="mt-2 text-center">
+              {/* 3-Scenario Use Case Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                {[
+                  {
+                    label: 'Cost Optimisation',
+                    headline: '5–20% cost saving',
+                    desc: 'Same target grade — reduce cement by 20–30%, offset with Graphacrete. Net material cost drops immediately.',
+                    accent: 'bg-green-50 border-green-200 text-green-700',
+                    tag: 'Same Grade'
+                  },
+                  {
+                    label: 'Strength Upgrade',
+                    headline: 'M30 → M50 performance',
+                    desc: 'Pour M30 concrete with Graphacrete and achieve M50 equivalent compressive strength — NABL certified.',
+                    accent: 'bg-neutral-900 border-neutral-700 text-white',
+                    tag: 'NABL Certified'
+                  },
+                  {
+                    label: 'Premium HPC',
+                    headline: 'Cost-neutral vs M50',
+                    desc: 'Graphene HPC delivers M50-class strength at a similar or lower lifecycle cost than conventional M50.',
+                    accent: 'bg-blue-50 border-blue-200 text-blue-700',
+                    tag: 'Best Lifecycle'
+                  }
+                ].map((s, i) => (
+                  <div key={i} className={`p-6 rounded-2xl border ${s.accent}`}>
+                    <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider mb-3 ${i === 1 ? 'bg-white/10 text-neutral-300' : 'bg-neutral-900/10'}`}>{s.tag}</span>
+                    <h4 className="text-sm font-bold uppercase tracking-wide mb-1 opacity-70">{s.label}</h4>
+                    <p className={`text-xl font-display font-medium mb-2 ${i === 1 ? 'text-green-400' : ''}`}>{s.headline}</p>
+                    <p className={`text-sm leading-relaxed ${i === 1 ? 'text-neutral-400' : 'opacity-70'}`}>{s.desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 text-center">
                 <Link to="/contact">
                   <Button variant="secondary" theme="light">Get a Custom Quote</Button>
                 </Link>
@@ -277,7 +311,7 @@ const Graphacrete = () => {
               <div className="mb-6">
                 <SectionHeading number="02" title="Per-m³ Cost Breakdown" theme="light" />
                 <p className="text-sm text-neutral-500 mt-2">
-                  NABL-certified: M30 + Graphacrete achieves M50 compressive strength at a net ₹430/m³ saving.
+                  NABL-certified: M30 + Graphacrete achieves M50 compressive strength at a net ₹3,830/m³ saving vs standard M50.
                 </p>
               </div>
               <Suspense fallback={<InfographicLoader />}>
@@ -479,70 +513,49 @@ const Graphacrete = () => {
                   <SpecItem label="Cement Saving" value="20%" subtext="Target reduction" />
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse min-w-[600px] text-sm">
-                    <thead>
-                      <tr className="border-b border-neutral-800">
-                        <th className="p-4 text-neutral-500 font-medium tracking-wide">Metric</th>
-                        <th className="p-4 text-green-400 font-bold bg-white/5 rounded-t-lg">Graphacrete</th>
-                        <th className="p-4 text-neutral-500 font-medium">Standard Admixture</th>
-                        <th className="p-4 text-neutral-500 font-medium">Competitor Graphene</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-neutral-800">
-                      <tr>
-                        <td className="p-4 font-medium">Compressive Strength</td>
-                        <td className="p-4 font-bold text-white bg-white/5">40–50%</td>
-                        <td className="p-4 text-neutral-400">5–15%</td>
-                        <td className="p-4 text-neutral-400">10–25%</td>
-                      </tr>
-                      <tr>
-                        <td className="p-4 font-medium">Water Resistance</td>
-                        <td className="p-4 font-bold text-white bg-white/5">30–45%</td>
-                        <td className="p-4 text-neutral-400">&lt;10%</td>
-                        <td className="p-4 text-neutral-400">20–30%</td>
-                      </tr>
-                      <tr>
-                        <td className="p-4 font-medium">Dosage</td>
-                        <td className="p-4 font-bold text-white bg-white/5">0.05–0.10%</td>
-                        <td className="p-4 text-neutral-400">0.2–1.0%</td>
-                        <td className="p-4 text-neutral-400">0.2–0.5%</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                {/* Performance vs Standard RCC */}
+                <div className="mt-12 border-t border-neutral-800 pt-10">
+                  <p className="text-xs font-bold uppercase tracking-widest text-neutral-500 mb-6">Performance vs Standard RCC</p>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm min-w-[500px]">
+                      <thead>
+                        <tr className="border-b border-neutral-800">
+                          <th className="text-left py-2 pr-6 font-semibold text-neutral-500 text-xs uppercase tracking-wider">Parameter</th>
+                          <th className="text-center py-2 px-4 font-semibold text-neutral-500 text-xs uppercase tracking-wider">Normal RCC</th>
+                          <th className="text-center py-2 px-4 font-semibold text-green-400 text-xs uppercase tracking-wider">Graphacrete</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-neutral-800">
+                        {[
+                          { param: 'Compressive Strength', rcc: 'Standard',   graph: 'Up to +50%',  highlight: true  },
+                          { param: 'Cement Usage',         rcc: '100%',        graph: '70–80%',       highlight: false },
+                          { param: 'Crack Resistance',     rcc: 'Medium',      graph: 'Very High',    highlight: false },
+                          { param: 'Durability',           rcc: '30–50 yrs',   graph: '50–100 yrs',   highlight: false },
+                          { param: 'Cost / m³',            rcc: 'Base',        graph: '±0 to +15%',   highlight: false },
+                          { param: 'Life-cycle Cost',      rcc: 'High',        graph: 'Low',          highlight: true  },
+                        ].map((row, i) => (
+                          <tr key={i}>
+                            <td className="py-3 pr-6 font-medium text-neutral-200">{row.param}</td>
+                            <td className="py-3 px-4 text-center text-neutral-400">{row.rcc}</td>
+                            <td className={`py-3 px-4 text-center font-semibold ${row.highlight ? 'text-green-400' : 'text-green-300'}`}>{row.graph}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             </section>
 
-            {/* NABL Lab Test Results — real data from Global Lab, Bhubaneswar */}
+            {/* Downloads */}
             <section>
-              <SectionHeading number="03" title="NABL Lab Test Results" theme="light" subtitle="Real-world concrete mix design and compressive strength data from accredited third-party testing." className="mb-8" />
-              <Suspense fallback={<InfographicLoader />}>
-                <GraphacreteLabResults theme="light" />
-              </Suspense>
-            </section>
-
-            {/* Certifications & Downloads */}
-            <section className="space-y-24">
-              <div>
-                <SectionHeading number="04" title="Quality & Standards" theme="light" className="mb-6" />
-                <CertificationsQuality
-                  productName={certificationsData.productName}
-                  certifications={certificationsData.certifications}
-                  testingStandards={certificationsData.testingStandards}
-                  qualityMetrics={certificationsData.qualityMetrics}
-                  theme="light"
-                />
-              </div>
-              <div>
-                <SectionHeading number="05" title="Downloads" theme="light" className="mb-6" />
-                <ProductDataSheet
-                  productName={dataSheetData.productName}
-                  specifications={dataSheetData.specifications}
-                  documents={dataSheetData.documents}
-                  theme="light"
-                />
-              </div>
+              <SectionHeading number="03" title="Downloads" theme="light" className="mb-6" />
+              <ProductDataSheet
+                productName={dataSheetData.productName}
+                specifications={dataSheetData.specifications}
+                documents={dataSheetData.documents}
+                theme="light"
+              />
             </section>
 
             {/* Competitive Advantage Matrix */}

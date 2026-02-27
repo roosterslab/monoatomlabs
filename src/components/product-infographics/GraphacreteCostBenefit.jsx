@@ -6,14 +6,14 @@ import {
 } from 'recharts';
 import { TrendingDown, Zap, Award, Calculator, CheckCircle } from 'lucide-react';
 
-// ─── Fixed source data (NABL verified) ──────────────────────────────────────
+// ─── Fixed source data (NABL verified, market rates 2025-26) ─────────────────
 const PRICE_PER_LITRE = 235;          // ₹235/L (1000L MOQ)
 const DOSAGE_LITRES_PER_M3 = 2;       // 2L per m³
 const ADDITIVE_COST_PER_M3 = PRICE_PER_LITRE * DOSAGE_LITRES_PER_M3; // ₹470
-const M30_COST_PER_M3 = 4050;
-const M50_COST_PER_M3 = 4950;
-const GRAPHACRETE_TOTAL_PER_M3 = M30_COST_PER_M3 + ADDITIVE_COST_PER_M3; // ₹4,520
-const SAVINGS_PER_M3 = M50_COST_PER_M3 - GRAPHACRETE_TOTAL_PER_M3; // ₹430
+const M30_COST_PER_M3 = 6200;         // India RMC market 2025-26 (₹5,800–6,800 range)
+const M50_COST_PER_M3 = 10500;        // Premium HPC market rate 2025-26 (₹10,000–12,000 range)
+const GRAPHACRETE_TOTAL_PER_M3 = M30_COST_PER_M3 + ADDITIVE_COST_PER_M3; // ₹6,670
+const SAVINGS_PER_M3 = M50_COST_PER_M3 - GRAPHACRETE_TOTAL_PER_M3; // ₹3,830
 
 // ─── Custom tooltip for chart ─────────────────────────────────────────────────
 const CustomTooltip = ({ active, payload, label }) => {
@@ -94,14 +94,14 @@ const GraphacreteCostBenefit = ({ theme = 'light' }) => {
             Cost Benefit Analysis
           </h3>
           <p className={`text-sm mt-0.5 ${subtext}`}>
-            M30 + Graphacrete delivers M50 performance at ₹430/m³ net savings
+            M30 + Graphacrete delivers M50 performance at ₹3,830/m³ net savings
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
           <StatPill
             icon={TrendingDown}
             label="Net Savings"
-            value="₹430/m³"
+            value="₹3,830/m³"
             accent={isDark
               ? 'border-green-700/40 text-green-400'
               : 'border-green-200 text-green-700'}
@@ -149,7 +149,7 @@ const GraphacreteCostBenefit = ({ theme = 'light' }) => {
                 <span className={`text-xs font-bold uppercase tracking-widest ${subtext}`}>Standard M50</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-600 font-semibold">Baseline</span>
               </div>
-              <p className={`text-3xl font-display font-medium ${text}`}>₹4,950 <span className={`text-sm font-normal ${subtext}`}>/m³</span></p>
+              <p className={`text-3xl font-display font-medium ${text}`}>₹10,500 <span className={`text-sm font-normal ${subtext}`}>/m³</span></p>
             </div>
 
             {/* Divider with arrow */}
@@ -164,7 +164,7 @@ const GraphacreteCostBenefit = ({ theme = 'light' }) => {
               <div className="flex items-center justify-between mb-1">
                 <span className={`text-xs font-bold uppercase tracking-widest ${subtext}`}>Standard M30</span>
               </div>
-              <p className={`text-2xl font-display font-medium ${text}`}>₹4,050 <span className={`text-sm font-normal ${subtext}`}>/m³</span></p>
+              <p className={`text-2xl font-display font-medium ${text}`}>₹6,200 <span className={`text-sm font-normal ${subtext}`}>/m³</span></p>
             </div>
 
             {/* Additive */}
@@ -185,9 +185,9 @@ const GraphacreteCostBenefit = ({ theme = 'light' }) => {
                 </span>
               </div>
               <div className="flex items-end justify-between">
-                <p className="text-3xl font-display font-medium text-green-700">₹4,520 <span className="text-sm font-normal text-green-500">/m³</span></p>
+                <p className="text-3xl font-display font-medium text-green-700">₹6,670 <span className="text-sm font-normal text-green-500">/m³</span></p>
                 <div className="text-right">
-                  <p className="text-sm font-bold text-green-700">Save ₹430/m³</p>
+                  <p className="text-sm font-bold text-green-700">Save ₹3,830/m³</p>
                   <p className="text-xs text-green-600">vs standard M50</p>
                 </div>
               </div>
@@ -224,7 +224,7 @@ const GraphacreteCostBenefit = ({ theme = 'light' }) => {
                     tick={{ fontSize: 10, fill: isDark ? '#9ca3af' : '#64748b' }}
                     tickLine={false}
                     axisLine={false}
-                    domain={[3500, 5200]}
+                    domain={[4000, 11500]}
                   />
                   <Tooltip content={<CustomTooltip />} />
                   <ReferenceLine
@@ -311,11 +311,12 @@ const GraphacreteCostBenefit = ({ theme = 'light' }) => {
 
             {/* MOQ note */}
             <p className={`text-[11px] mt-3 ${subtext}`}>
-              * 1,000 L MOQ applies. Price ₹235/L. Savings calculated vs standard M50 market rate ₹4,950/m³.
+              * 1,000 L MOQ applies. Price ₹235/L. Savings calculated vs standard M50 market rate ₹10,500/m³ (India 2025-26).
             </p>
           </div>
         </div>
       </div>
+
     </div>
   );
 };

@@ -30,7 +30,8 @@ export const roiCalculatorConfig = {
         { value: 30, label: 'M30', description: 'General structural — most common' },
         { value: 40, label: 'M40', description: 'High-load beams & columns' },
         { value: 50, label: 'M50', description: 'Premium structural', badge: 'NABL Sweet Spot' },
-        { value: 60, label: 'M60', description: 'Bridges & high-rise cores' }
+        { value: 60, label: 'M60', description: 'Bridges & high-rise cores' },
+        { value: 70, label: 'M70', description: 'Ultra-high performance / special structures' }
       ]
     },
     cementPrice: {
@@ -61,7 +62,7 @@ export const roiCalculatorConfig = {
       step: 1,
       unit: '%',
       default: 65,
-      note: 'NABL test: 65% gain (49.5 MPa on M-30, cert BNR-1101). Field range: 30–67%.'
+      note: 'NABL certified: 65% gain (49.5 MPa on M-30). Field range: 30–67%.'
     },
     strengthGain7: {
       label: '7-Day Strength Gain',
@@ -75,13 +76,8 @@ export const roiCalculatorConfig = {
     }
   },
 
-  // Secondary inputs — collapsed accordion, less prominent
+  // Secondary inputs — open by default
   secondaryInputs: {
-    waterproofing: {
-      label: 'Waterproofing Needed',
-      type: 'toggle',
-      default: false
-    },
     waterproofingRate: {
       label: 'Waterproofing Cost',
       type: 'slider',
@@ -90,8 +86,7 @@ export const roiCalculatorConfig = {
       step: 10,
       unit: '₹/m²',
       default: 150,
-      note: 'Dr. Fixit / equivalent system cost per m²',
-      showWhen: { key: 'waterproofing', value: true }
+      note: 'Dr. Fixit / equivalent system cost per m²'
     },
     laborCost: {
       label: 'Daily Site Labour Cost',
@@ -101,16 +96,6 @@ export const roiCalculatorConfig = {
       step: 1000,
       unit: '₹/day',
       default: 15000
-    },
-    pourSize: {
-      label: 'Pour Size',
-      type: 'slider',
-      min: 5,
-      max: 200,
-      step: 5,
-      unit: 'm³/pour',
-      default: 30,
-      note: 'Default = typical RMC batch. Adjust for your project.'
     },
     projectType: {
       label: 'Project Type',
@@ -140,14 +125,12 @@ export const roiCalculatorConfig = {
       targetStrength     = 50,
       cementPrice        = 320,
       cementReductionPct = 15,   // 15–20%; 15% = conservative NABL-certified default
-      waterproofing      = false,
       waterproofingRate  = 150,
       laborCost          = 15000,
       projectType        = 'residential',
       analysisPeriod     = 10,
       strengthGain28     = 65,   // % — NABL test: 65% gain (49.5 MPa on M-30, BNR-1101)
       strengthGain7      = 22,   // % — 7-day early strength gain (field: 10–40%)
-      pourSize           = 30    // m³ — standard RMC batch / pour size
     } = inputs;
 
     /**
@@ -162,13 +145,18 @@ export const roiCalculatorConfig = {
     const additivePricePerLitre     = 235;          // ₹235/L
     const additiveCostPerM3 = additiveVolumeLitresPerM3 * additivePricePerLitre; // ₹470/m³
 
-    // Typical Indian RMC market cost components (fixed at ₹320/bag baseline)
+    // Indian RMC market cost components 2025-26 (fixed at ₹320/bag baseline)
+    // Source: India ready-mix concrete market survey 2025-26
+    // M20: ₹4,500–5,200 → midpoint ₹4,850 | M30: ₹5,800–6,800 → midpoint ₹6,200
+    // M40: ₹7,800–9,000 → midpoint ₹8,400 | M50: ₹10,000–12,000 → midpoint ₹10,500
+    // M60: ~₹13,000 | M70: ~₹17,000 (ultra-HPC)
     const gradeData = {
-      20: { bags: 5.00, fixed: 2000 }, // 5.00×320+2000 = 3600
-      30: { bags: 6.25, fixed: 2050 }, // 6.25×320+2050 = 4050
-      40: { bags: 7.50, fixed: 2050 }, // 7.50×320+2050 = 4450
-      50: { bags: 8.50, fixed: 2230 }, // 8.50×320+2230 = 4950
-      60: { bags: 10.0, fixed: 2350 }  // 10.0×320+2350 = 5550
+      20: { bags: 5.00, fixed: 3250  }, // 5.00×320+3250  = 4,850
+      30: { bags: 6.25, fixed: 4200  }, // 6.25×320+4200  = 6,200
+      40: { bags: 7.50, fixed: 6000  }, // 7.50×320+6000  = 8,400
+      50: { bags: 8.50, fixed: 7780  }, // 8.50×320+7780  = 10,500
+      60: { bags: 10.0, fixed: 9800  }, // 10.0×320+9800  = 13,000
+      70: { bags: 12.0, fixed: 13160 }  // 12.0×320+13160 = 17,000
     };
 
     // NABL grade upgrade mapping: base grade used with Graphacrete to reach target
@@ -177,7 +165,8 @@ export const roiCalculatorConfig = {
       30: 30, // no upgrade; value = cement savings + enhanced durability
       40: 30, // M30 + Graphacrete → M40 performance
       50: 30, // M30 + Graphacrete → M50 (NABL certified sweet spot)
-      60: 40  // M40 + Graphacrete → M60 performance
+      60: 40, // M40 + Graphacrete → M60 performance
+      70: 50  // M50 + Graphacrete → M70 ultra-HPC performance
     };
 
     const gradeCost = (grade, P) => gradeData[grade].fixed + gradeData[grade].bags * P;
@@ -224,12 +213,10 @@ export const roiCalculatorConfig = {
 
     // ── Lifecycle savings (optional, shown in accordion, labeled "Estimates") ──
 
-    // C: Waterproofing avoidance (project-dependent, off by default)
+    // C: Waterproofing avoidance (always included)
     const waterproofingArea    = Math.round(projectVolume * 0.25);
     const reapplications       = Math.floor(analysisPeriod / 7);
-    const waterproofingSavings = waterproofing
-      ? waterproofingArea * waterproofingRate * 0.70 * (1 + reapplications)
-      : 0;
+    const waterproofingSavings = waterproofingArea * waterproofingRate * 0.70 * (1 + reapplications);
 
     // D: Construction schedule — 17% faster cycles → site overhead saved
     const constructionSavings = Math.round((projectVolume / 30) * 0.17 * laborCost * 1.5);
@@ -279,10 +266,11 @@ export const roiCalculatorConfig = {
     const totalCycleDaysSaved = Math.round(deshutterDaysSaved * estimatedFloors);
     const cycleSavingsValue   = Math.round(totalCycleDaysSaved * laborCost);
 
-    // ── Per-pour breakdown (Coalorix-style: Per m³ / Per Pour / Project) ──────
-    const netSavingsPerPour   = Math.round(netSavingsPerM3 * pourSize);
-    const additiveCostPerPour = Math.round(additiveCostPerM3 * pourSize);
-    const cementSavedPerPour  = Math.round(cementSavedBagsPerM3 * pourSize);
+    // ── Per-pour breakdown (fixed 30 m³ reference pour) ──────────────────────
+    const refPourSize         = 30;
+    const netSavingsPerPour   = Math.round(netSavingsPerM3 * refPourSize);
+    const additiveCostPerPour = Math.round(additiveCostPerM3 * refPourSize);
+    const cementSavedPerPour  = Math.round(cementSavedBagsPerM3 * refPourSize);
 
     // ── Investor / ROI multiple metrics ───────────────────────────────────────
     const roiMultiple = netSavingsTotal > 0 && productCostTotal > 0
@@ -367,8 +355,8 @@ export const roiCalculatorConfig = {
       deshutterDaysSaved, estimatedFloors,
       totalCycleDaysSaved, cycleSavingsValue,
 
-      // ── Per-pour breakdown ────────────────────────────────────────────────────
-      pourSize,
+      // ── Per-pour breakdown (30 m³ reference pour) ────────────────────────────
+      pourSize: refPourSize,
       netSavingsPerPour, additiveCostPerPour, cementSavedPerPour,
 
       // ── Investor metrics ──────────────────────────────────────────────────────
@@ -667,17 +655,17 @@ export const certificationsData = {
     {
       name: 'NABL Accredited',
       description: 'Global Lab, Bhubaneswar — independent third-party testing',
-      certNumber: 'BNR-1127-TR-790403'
+      certNumber: 'NABL Certified'
     },
     {
       name: 'NABL Accredited',
       description: 'M-20 without Graphene (control mix)',
-      certNumber: 'BNR-1140-TR-793018'
+      certNumber: 'NABL Certified'
     },
     {
       name: 'NABL Accredited',
       description: 'M-30 Graphene admixture — R&D mix',
-      certNumber: 'BNR-1101-TR-823120'
+      certNumber: 'NABL Certified'
     }
   ],
   testingStandards: [
@@ -1168,7 +1156,7 @@ export const scienceExplainedData = {
         }
       ],
       technicalData: {
-        'NABL Reports': 'BNR-1127 · BNR-1140 · BNR-1101',
+        'NABL Reports': 'NABL Certified · 3 Test Reports',
         'M-20 Actual 28-Day': '29.0 MPa avg (3 cubes)',
         'M-30 ACT Equiv.': '49.5 MPa avg (3 cubes)'
       }

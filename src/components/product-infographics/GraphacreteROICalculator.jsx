@@ -103,7 +103,7 @@ const GraphacreteROICalculator = ({
 
   const [inputs, setInputs]               = useState(init);
   const [volText, setVolText]             = useState(String(init.projectVolume || 500));
-  const [showSecondary, setShowSecondary] = useState(false);
+  const [showSecondary, setShowSecondary] = useState(true);
   const [contractorMode, setContractorMode] = useState(false);   // NEW
   const [chartTab, setChartTab]           = useState('cost');     // NEW: 'cost' | 'strength'
 
@@ -495,7 +495,7 @@ const GraphacreteROICalculator = ({
           <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
           <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>{inputs.cementReductionPct || 15}% cement reduction</span>
           <span className={isDark ? 'text-neutral-600' : 'text-neutral-300'}>·</span>
-          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>IS 456 · NABL BNR-1101</span>
+          <span className={isDark ? 'text-neutral-400' : 'text-neutral-600'}>IS 456 · NABL Certified</span>
         </div>
         <button
           onClick={resetInputs}

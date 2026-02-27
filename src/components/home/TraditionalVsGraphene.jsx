@@ -69,12 +69,12 @@ const TraditionalVsGraphene = () => {
                 "Heavy cement usage",
                 "High micro-crack risk",
                 "Water permeable",
-                "High carbon footprint"
+                "30–50 yr lifespan only"
             ],
             graphene: [
-                "20% Cement Reduction",
+                "Up to 30% Cement Reduction",
                 "Zero Micro-cracks",
-                "Water Resistant",
+                "50–100 yr Durability",
                 "LEED Credit Points"
             ]
         },

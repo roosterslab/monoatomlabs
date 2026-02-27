@@ -297,14 +297,13 @@ const GraphacreteLabResults = () => {
         </div>
         <div className="flex flex-wrap gap-2 shrink-0">
           {[
-            { no: 'BNR-1127-TR-790403', label: 'M-20 + Graphene' },
-            { no: 'BNR-1140-TR-793018', label: 'M-20 Control'    },
-            { no: 'BNR-1101-TR-823120', label: 'M-30 + Graphene' },
+            { label: 'M-20 + Graphene' },
+            { label: 'M-20 Control'    },
+            { label: 'M-30 + Graphene' },
           ].map(r => (
-            <div key={r.no} className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs">
+            <div key={r.label} className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-neutral-200 rounded-lg text-xs">
               <FileCheck className="w-3.5 h-3.5 text-green-600 shrink-0" />
               <span className="text-neutral-500">{r.label}</span>
-              <span className="font-mono text-neutral-700">{r.no}</span>
             </div>
           ))}
         </div>
@@ -335,7 +334,7 @@ const GraphacreteLabResults = () => {
             <StatBox label="Cement Saved"           value="40" unit="kg/m³" sub="331 vs 371 — 10.8% less" />
             <StatBox label="W/C Ratio"              value="0.48" sub="vs 0.55 control · Denser mix" />
             <StatBox label="Slump (Workability)"    value="160" unit="mm" sub="vs 130 mm control · Better flow" />
-            <StatBox label="28-Day Actual Strength" value="29.0" unit="MPa" sub="Avg 3 cubes · NABL BNR-1127" dark />
+            <StatBox label="28-Day Actual Strength" value="29.0" unit="MPa" sub="Avg 3 cubes · NABL Certified" dark />
           </div>
 
           {/* ── GRAPH 1: IS 10262 Fig 1 — W/C vs 28-Day Strength ───────── */}
@@ -506,7 +505,7 @@ const GraphacreteLabResults = () => {
           </ToggleSection>
 
           {/* ── Full Mix Design Tables ───────────────────────────────────── */}
-          <ToggleSection title="M-20 + Graphene Full Mix Proportions (SSD & Dry)" badge="BNR-1127-TR-790403">
+          <ToggleSection title="M-20 + Graphene Full Mix Proportions (SSD & Dry)" badge="M-20 + Graphene">
             <div className="space-y-6">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-neutral-50 rounded-xl p-4 text-xs">
                 {[
@@ -525,7 +524,7 @@ const GraphacreteLabResults = () => {
             </div>
           </ToggleSection>
 
-          <ToggleSection title="M-20 Control Full Mix Proportions (SSD & Dry)" badge="BNR-1140-TR-793018">
+          <ToggleSection title="M-20 Control Full Mix Proportions (SSD & Dry)" badge="M-20 Control">
             <div className="space-y-6">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-neutral-50 rounded-xl p-4 text-xs">
                 {[
@@ -551,7 +550,7 @@ const GraphacreteLabResults = () => {
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 md:divide-x md:divide-neutral-800">
               <div className="md:pr-8">
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-900/40 text-green-400 rounded-lg text-xs font-bold uppercase tracking-wider mb-4">
-                  <FlaskConical className="w-3.5 h-3.5" />M-30 R&D Mix · BNR-1101-TR-823120
+                  <FlaskConical className="w-3.5 h-3.5" />M-30 R&D Mix
                 </div>
                 <h4 className="text-xl font-display font-medium mb-2">Significantly Exceeds Grade Target</h4>
                 <p className="text-neutral-400 text-sm leading-relaxed">
@@ -701,7 +700,7 @@ const GraphacreteLabResults = () => {
           </ToggleSection>
 
           {/* ── Full Mix Design Table ────────────────────────────────────── */}
-          <ToggleSection title="M-30 + Graphene Full Mix Proportions (SSD)" badge="BNR-1101-TR-823120">
+          <ToggleSection title="M-30 + Graphene Full Mix Proportions (SSD)" badge="M-30 + Graphene">
             <div className="space-y-6">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-neutral-50 rounded-xl p-4 text-xs">
                 {[
