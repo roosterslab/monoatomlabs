@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -62,8 +62,8 @@ function App() {
                     <Route path="products/ceraphene" element={<Ceraphene />} />
                     <Route path="products/hd-g-pe" element={<HDGPE />} />
 
-                    {/* Pipeline Routes */}
-                    <Route path="products/pipeline" element={<PipelineOverview />} />
+                    {/* Pipeline Routes — overview redirects to unified products page */}
+                    <Route path="products/pipeline" element={<Navigate to="/products" replace />} />
                     <Route path="products/pipeline/rustene" element={<Rustene />} />
                     <Route path="products/pipeline/graphyre" element={<Graphyre />} />
                     <Route path="products/pipeline/graphosite" element={<Graphosite />} />
