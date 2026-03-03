@@ -1,0 +1,234 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Screen wrapper ──────────────────────────────────────────── */
+.profile-wrapper {
+  background: #222;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ── Each A4 landscape page ──────────────────────────────────── */
+.profile-page {
+  width: 297mm;
+  height: 210mm;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.8),
+    0 8px 32px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-page.theme-dark {
+  background: #000;
+  color: #fff;
+}
+
+.profile-page.theme-light {
+  background: #fff;
+  color: #111;
+}
+
+.hex-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+/* Dark theme vignettes */
+.theme-dark .vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 10%, rgba(0, 0, 0, 0.95) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+.theme-dark .gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.03) 0%, rgba(0, 0, 0, 0.8) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Light theme subtle overlays */
+.theme-light .vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.03) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Base Image Columns */
+.img-col {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+}
+
+.theme-dark .img-col {
+  filter: grayscale(100%) contrast(1.1) brightness(0.8);
+}
+
+.theme-light .img-col {
+  filter: grayscale(100%) contrast(1.1) brightness(1.1);
+}
+
+.img-col-lab {
+  background-image: url('/images/ceraphene_lifecycle_lab_making.png');
+}
+
+.img-col-car {
+  background-image: url('/images/ceraphene_lifecycle_studio_application.png');
+}
+
+.img-col-hdg {
+  background-image: url('/images/hd-g-pe-01.jpg');
+}
+
+.img-col-graphacrete {
+  background-image: url('/images/graphacrete-01.jpg');
+}
+
+.img-col-conf {
+  background-image: url('/images/hall-of-fame/conf3.jpeg');
+  filter: none !important;
+}
+
+/* Typography elements */
+.accent-bar {
+  width: 8mm;
+  height: 2px;
+  background: #3b82f6;
+  margin-bottom: 4mm;
+}
+
+.theme-light .accent-bar {
+  background: #2563eb;
+}
+
+/* Minimalist border lines */
+.line-separator {
+  height: 1px;
+  width: 100%;
+}
+
+.theme-dark .line-separator {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.theme-light .line-separator {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Bullet Lists */
+ul.minimal-list {
+  list-style: none;
+}
+
+ul.minimal-list li {
+  position: relative;
+  padding-left: 12px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+ul.minimal-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-weight: 700;
+  font-size: 10px;
+}
+
+.theme-dark ul.minimal-list li {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.theme-dark ul.minimal-list li::before {
+  color: #60a5fa;
+}
+
+.theme-light ul.minimal-list li {
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.theme-light ul.minimal-list li::before {
+  color: #2563eb;
+}
+
+/* ── Print ───────────────────────────────────────────────────── */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  *,
+  *::before,
+  *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+  }
+
+  .profile-wrapper {
+    background: transparent !important;
+    padding: 0 !important;
+    gap: 0 !important;
+    display: block !important;
+  }
+
+  .profile-page {
+    box-shadow: none !important;
+    page-break-after: always;
+    page-break-inside: avoid;
+    break-after: page;
+    break-inside: avoid;
+    display: block;
+  }
+
+  .profile-page.theme-dark {
+    background: #000 !important;
+  }
+
+  .profile-page.theme-light {
+    background: #fff !important;
+  }
+
+  .profile-page:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
+
+  canvas {
+    display: none !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}

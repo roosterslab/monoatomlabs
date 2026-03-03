@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Ceraphene – Monoatom Labs</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ── CSS RESET & VARS ── */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    :root {
+      --fs: 'Inter', system-ui, sans-serif;
+      --fm: 'Space Grotesk', monospace;
+    }
+
+    body {
+      font-family: var(--fs);
+      background: #222;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+
+    .page {
+      width: 297mm;
+      height: 210mm;
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: repeat(3, 99mm);
+      background: #111;
+      color: #fff;
+    }
+
+    @media screen {
+      .page {
+        box-shadow: 0 8px 48px rgba(0, 0, 0, .5);
+        margin: 24px auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: white
+      }
+
+      .page {
+        page-break-after: always;
+        margin: 0;
+      }
+
+      canvas {
+        display: none
+      }
+    }
+
+    /* ── BACKGROUNDS ── */
+    .hex-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 50%, transparent 10%, rgba(0, 0, 0, .8) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── LAYOUT COLUMNS ── */
+    .col {
+      position: relative;
+      z-index: 10;
+      height: 210mm;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .col-pad {
+      padding: 12mm 9mm;
+    }
+
+    .col-white {
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    .col-dark {
+      background: transparent;
+      color: #fff;
+    }
+
+    /* ── TYPOGRAPHY ── */
+    h1 {
+      font-family: var(--fs);
+      font-size: 26pt;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 5mm;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+
+    .col-white h1 {
+      color: #111;
+      font-weight: 700;
+      font-size: 22pt;
+      margin-bottom: 3mm;
+    }
+
+    h2 {
+      font-family: var(--fs);
+      font-size: 22pt;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 5mm;
+      color: #fff;
+    }
+
+    p {
+      font-size: 8.5pt;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, .75);
+      margin-bottom: 4mm;
+    }
+
+    .col-white p {
+      color: rgba(0, 0, 0, .7);
+      font-size: 8pt;
+      line-height: 1.55;
+      font-weight: 500;
+      text-align: left;
+    }
+
+    /* ── LISTS ── */
+    ul.bl {
+      list-style: none;
+      margin-bottom: 6mm;
+    }
+
+    ul.bl li {
+      position: relative;
+      padding-left: 4mm;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      color: rgba(255, 255, 255, .8);
+      margin-bottom: 2mm;
+      font-weight: 400;
+    }
+
+    .col-white ul.bl li {
+      color: rgba(0, 0, 0, .75);
+      font-weight: 500;
+      font-size: 8.5pt;
+    }
+
+    ul.bl li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: rgba(255, 255, 255, .5);
+      font-size: 12pt;
+      line-height: 1.3;
+    }
+
+    .col-white ul.bl li::before {
+      color: rgba(0, 0, 0, .5);
+    }
+
+    /* ── PAGE 1 STYLES ── */
+    .lab-img {
+      width: 100%;
+      height: 88mm;
+      background: url('../website/public/images/ceraphene_lifecycle_lab_making.png') center/cover no-repeat;
+      filter: grayscale(100%) contrast(1.1);
+      border-bottom: 1px solid #ddd;
+    }
+
+    .about-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3mm;
+      margin-top: 0mm;
+    }
+
+    .about-logo {
+      display: flex;
+      align-items: center;
+      gap: 1.5mm;
+    }
+
+    .about-logo svg {
+      height: 12mm;
+      fill: none;
+      stroke: #111;
+      stroke-width: 1.5;
+    }
+
+    .about-logo-text {
+      font-size: 9.5pt;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      line-height: 1;
+      font-family: var(--fm);
+    }
+
+    .car-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 99mm;
+      width: 198mm;
+      height: 65mm;
+      background: url('../website/public/images/ceraphene_lifecycle_studio_application.png') center/cover no-repeat;
+      filter: grayscale(100%) contrast(1.2);
+      z-index: 2;
+      mask-image: linear-gradient(to bottom, transparent, black 20%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%);
+    }
+
+    /* Match Diagram */
+    .diagram-wrap {
+      margin-top: 2mm;
+      position: relative;
+      width: 100%;
+      border: none;
+      border-radius: 4px;
+      padding: 0;
+      z-index: 5;
+    }
+
+    .diag-layers {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .diag-layer {
+      width: 80%;
+      text-align: center;
+      padding: 2mm;
+      font-size: 6pt;
+      color: #fff;
+      margin-bottom: 1mm;
+      position: relative;
+      border: 1px dashed rgba(255, 255, 255, .5);
+      border-radius: 15px;
+      background: rgba(255, 255, 255, .05);
+    }
+
+    .diag-text {
+      font-size: 6.5pt;
+      color: rgba(255, 255, 255, .8);
+      text-align: center;
+      margin-bottom: 2mm;
+    }
+
+    .diag-arrows {
+      display: flex;
+      justify-content: space-between;
+      font-size: 5.5pt;
+      color: rgba(255, 255, 255, .6);
+      margin: 1.5mm 0;
+    }
+
+    .diag-arrows div {
+      text-align: center;
+    }
+
+    /* ── PAGE 2 STYLES ── */
+    .page2-col1 {
+      justify-content: space-between;
+    }
+
+    .qr-wrapper {
+      margin-top: auto;
+      padding: 6mm;
+      background: #292929;
+      margin-left: -9mm;
+      margin-right: -9mm;
+      margin-bottom: -12mm;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 65mm;
+      clip-path: polygon(0 15%, 100% 0, 100% 100%, 0% 100%);
+    }
+
+    .qr-box {
+      width: 40mm;
+      height: 40mm;
+      background: #fff;
+      padding: 2mm;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 2px;
+    }
+
+    .qr-box>div {
+      background: #111;
+    }
+
+    /* basic qr pattern */
+    .qr-box .q-tl {
+      grid-column: 1/3;
+      grid-row: 1/3;
+      background: none;
+      border: 3px solid #111;
+      position: relative;
+    }
+
+    .qr-box .q-tl::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: #111;
+    }
+
+    .qr-box .q-tr {
+      grid-column: 4/6;
+      grid-row: 1/3;
+      background: none;
+      border: 3px solid #111;
+      position: relative;
+    }
+
+    .qr-box .q-tr::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: #111;
+    }
+
+    .qr-box .q-bl {
+      grid-column: 1/3;
+      grid-row: 4/6;
+      background: none;
+      border: 3px solid #111;
+      position: relative;
+    }
+
+    .qr-box .q-bl::after {
+      content: '';
+      position: absolute;
+      inset: 2px;
+      background: #111;
+    }
+
+    .qr-box .q-x1 {
+      grid-column: 3;
+      grid-row: 1;
+    }
+
+    .qr-box .q-x2 {
+      grid-column: 3;
+      grid-row: 3;
+    }
+
+    .qr-box .q-x3 {
+      grid-column: 4;
+      grid-row: 4;
+    }
+
+    .qr-box .q-x4 {
+      grid-column: 5;
+      grid-row: 5;
+    }
+
+    .qr-box .q-x5 {
+      grid-column: 4;
+      grid-row: 5;
+    }
+
+    .contact-half {
+      background: #f4f4f4;
+      height: 105mm;
+      padding: 12mm 9mm;
+      color: #111;
+    }
+
+    .matrix-half {
+      background: #151515;
+      height: 105mm;
+      padding: 6mm;
+      color: #fff;
+      border-top: 1px solid #111;
+    }
+
+    .contact-title {
+      font-size: 26pt;
+      font-weight: 800;
+      margin-bottom: 5mm;
+      color: #111;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .contact-info {
+      font-size: 10pt;
+      line-height: 1.75;
+      color: #333;
+      margin-bottom: 5mm;
+    }
+
+    .contact-cta {
+      font-size: 26pt;
+      font-weight: 800;
+      line-height: 1;
+      color: #111;
+      letter-spacing: -0.02em;
+    }
+
+    .matrix-title {
+      font-size: 18pt;
+      font-weight: 400;
+      margin-bottom: 3mm;
+      text-align: right;
+      color: #fff;
+      letter-spacing: 0.01em;
+      padding-right: 2mm;
+    }
+
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 6pt;
+      color: #ddd;
+    }
+
+    .matrix-table th,
+    .matrix-table td {
+      border: 1px solid #fff;
+      padding: 2mm 1.5mm;
+      text-align: left;
+      vertical-align: top;
+      line-height: 1.4;
+      color: #fff;
+    }
+
+    .matrix-table th {
+      font-weight: 700;
+      font-size: 6.5pt;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ══════════════════════════════════
+     PAGE 1 (Inside features)
+══════════════════════════════════ -->
+  <div class="page p1">
+    <canvas class="hex-canvas" id="c1"></canvas>
+    <div class="vignette"></div>
+    <div class="car-overlay"></div>
+
+    <!-- Panel 1 -->
+    <div class="col col-white">
+      <div class="lab-img"></div>
+      <div class="col-pad" style="padding-top:6mm;">
+        <div class="about-header">
+          <h1>About Us</h1>
+          <div class="about-logo">
+            <svg viewBox="0 0 32 32">
+              <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" fill="rgba(0,0,0,0.05)" />
+              <path d="M16 8L22 11.5V18.5L16 22L10 18.5V11.5L16 8Z" />
+              <circle cx="16" cy="15" r="2" fill="#111" />
+            </svg>
+            <div class="about-logo-text">MONOATOM<br>LABS</div>
+          </div>
+        </div>
+        <p>Monoatom Labs is brain child of Sushanth Paatnaik, 6 times President of India Awardee. His innovation journey
+          started at age of 11. Aayush Bansal is an astout businessman from Maharashtra with steel manufacturing and
+          clothing business over 38 years.</p>
+        <p>Sushanth Paatnaik Develops Graphene Innovations, Aayush is instrumental in deploying Innovations in the
+          Industry. Monoatom Labs team has scientists from reputed institute like IISC, IIT and National Chemical
+          Laboratory as research and development partners.</p>
+        <p>At Monoatom Labs we challenge the normal, set performance benchmarks for materials and achieve them using
+          graphene based solutions. We develop lab scale Innovations, test and validate results and then setup
+          commercial scale manufacturing of such solutions to make them commercially viable to use in industry. Our
+          solutions have applications in Aerospace, Defence, Clean energy storage, Solar Panel efficiency improvement,
+          Construction Industry, Tyre Industry, Chemical and Water filtration, Specialized Engineering components, High
+          performance clothing and polymers.</p>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="col col-dark col-pad">
+      <h1>Applications !</h1>
+      <ul class="bl">
+        <li>Automotive exterior paint surfaces</li>
+        <li>Two-wheelers &amp; premium motorcycles</li>
+        <li>Luxury &amp; commercial vehicles</li>
+        <li>Marine painted surfaces</li>
+        <li>Exterior painted metal &amp; alloy surfaces</li>
+        <li>Architectural painted panels &amp; façades</li>
+        <li>Industrial painted equipment &amp; enclosures</li>
+      </ul>
+      <h2>Why Choose Us?</h2>
+      <ul class="bl">
+        <li>Advanced graphene-enhanced<br>ceramic formulation</li>
+        <li>Bonds directly to painted surfaces</li>
+        <li>Improves aesthetics while delivering<br>functional protection</li>
+        <li>Reduces maintenance frequency and<br>surface wear</li>
+        <li>Designed for harsh outdoor<br>environments</li>
+      </ul>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="col col-dark col-pad">
+      <h1>How It Works ?</h1>
+      <p style="color:#fff; font-size:9.5pt; font-weight:400; line-height:1.5;">Ceraphene utilises graphene
+        nano-platelets embedded within a ceramic coating matrix. Once applied, this structure enables:</p>
+      <ul class="bl">
+        <li>Formation of a dense, chemically<br>bonded protective layer</li>
+        <li>Enhanced resistance to heat, UV<br>radiation, and oxidation</li>
+        <li>Reduced surface porosity, limiting<br>dust, dirt, and contaminant<br>adhesion</li>
+      </ul>
+
+      <div class="diagram-wrap">
+        <div class="diag-text">Ceraphene graphene ceramic coating</div>
+        <div class="diag-arrows" style="padding:0 5mm;">
+          <div>↑↑<br>Heat and UV<br>resistant</div>
+          <div>↓ ↓ ↓<br>Reduced dust,<br>dirt, &amp; contaminant<br>adhesion</div>
+        </div>
+        <div class="diag-layers">
+          <div class="diag-layer">Ceraphene layer</div>
+          <div class="diag-layer" style="margin-top:2mm; border:none; border-top:1px dashed #fff; border-radius:0;">
+            Painted surface</div>
+        </div>
+        <div class="diag-arrows" style="justify-content:space-around; margin-top:3mm;">
+          <div>Hydrophobic</div>
+          <div>Reduced contamination<br>adhesion</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+     PAGE 2 (Outside covers)
+══════════════════════════════════ -->
+  <div class="page p2">
+    <canvas class="hex-canvas" id="c2"></canvas>
+    <div class="vignette"></div>
+
+    <!-- Panel 1 -->
+    <div class="col col-dark col-pad page2-col1">
+      <div>
+        <h1 style="font-size:32pt; line-height:1.1; margin-bottom:6mm;">Cost Benefit<br>Analysis</h1>
+        <ul class="bl">
+          <li>Ceraphene price: ₹ 5,000 / 50 ml</li>
+          <li>Competitor average price:<br>₹ 15,000 / 50 ml (typical<br>premium ceramic coatings)</li>
+          <li>Performance life (expected):<br>Ceraphene 2–5 years,<br>Competitors 2–5 years</li>
+          <li>Installed panel area: 1 average<br>passenger vehicle surface</li>
+          <li>Maintenance: Annual cleaning<br>cost considered where relevant</li>
+        </ul>
+      </div>
+      <div class="qr-wrapper">
+        <div class="qr-box">
+          <div class="q-tl"></div>
+          <div class="q-tr"></div>
+          <div class="q-bl"></div>
+          <div class="q-x1"></div>
+          <div class="q-x2"></div>
+          <div class="q-x3"></div>
+          <div class="q-x4"></div>
+          <div class="q-x5"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel 2 -->
+    <div class="col col-dark col-pad">
+      <h1 style="font-size:32pt; line-height:1.1; margin-bottom:6mm;">Why our<br>Product is<br>Superior ?</h1>
+      <ul class="bl">
+        <li>Up to 60–70% lower cost than<br>premium ceramic coatings for<br>similar durability</li>
+        <li>Graphene-enhanced<br>formulation at a price where<br>most competitors offer<br>ceramic-only chemistry</li>
+        <li>Lower cost per protection year,<br>improving value for customers<br>and applicators</li>
+      </ul>
+    </div>
+
+    <!-- Panel 3 -->
+    <div class="col">
+      <div class="contact-half">
+        <div class="contact-title">Contact Us</div>
+        <div class="contact-info">
+          +91-989-819-9809<br>
+          info@monoatomlabs.com<br>
+          www.monoatomlabs.com<br>
+          3rd floor, iHub Gujarat,<br>
+          Ahd- 380015
+        </div>
+        <div class="contact-cta">Let's do<br>business<br>together!</div>
+      </div>
+      <div class="matrix-half">
+        <div class="matrix-title">Competitive Matrix</div>
+        <table class="matrix-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Ceraphene</th>
+              <th>Gtechniq<br>CSL / CSU</th>
+              <th>CarPro<br>CQuartz</th>
+              <th>Ceramic<br>Pro 9H</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Graphene-enhanced<br>formulation</td>
+              <td>Yes</td>
+              <td>No</td>
+              <td>No</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td>Durability</td>
+              <td>3–4+ years</td>
+              <td>2–3+ years</td>
+              <td>1.5–2.5 years</td>
+              <td>Up to 5 years</td>
+            </tr>
+            <tr>
+              <td>Hydrophobicity</td>
+              <td>Excellent</td>
+              <td>High</td>
+              <td>High</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td>Heat &amp; UV resistance</td>
+              <td>Excellent</td>
+              <td>Very good</td>
+              <td>Very good</td>
+              <td>Very good</td>
+            </tr>
+            <tr>
+              <td>Gloss &amp; colour depth</td>
+              <td>Excellent</td>
+              <td>High</td>
+              <td>High</td>
+              <td>High</td>
+            </tr>
+            <tr>
+              <td>Cost effectiveness</td>
+              <td>Very high</td>
+              <td>Medium</td>
+              <td>Medium</td>
+              <td>Low to medium</td>
+            </tr>
+            <tr>
+              <td>Maintenance frequency</td>
+              <td>Low</td>
+              <td>Medium</td>
+              <td>Medium</td>
+              <td>Medium</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      function hexWave(id) {
+        const c = document.getElementById(id); if (!c) return;
+        const ctx = c.getContext('2d');
+        let W, H, pts = [], raf;
+        function init() {
+          W = c.width = c.parentElement.offsetWidth || 1122;
+          H = c.height = c.parentElement.offsetHeight || 793;
+          pts = [];
+          const R = 20, xS = 50, yS = 43;
+          const rows = Math.ceil(H / yS) + 2, cols = Math.ceil(W / xS) + 2;
+          for (let y = -1; y < rows; y++)for (let x = -1; x < cols; x++) {
+            let px = x * xS, py = y * yS; if (y % 2 !== 0) px += xS / 2;
+            pts.push({ x: px, y: py, ox: px, oy: py, r: R });
+          }
+        }
+        function hexPath(cx, cy, r) {
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) { const a = (Math.PI / 3) * i + Math.PI / 6; const m = i === 0 ? 'moveTo' : 'lineTo'; ctx[m](cx + r * Math.cos(a), cy + r * Math.sin(a)); }
+          ctx.closePath(); ctx.stroke(); ctx.fill();
+        }
+        function draw(t) {
+          ctx.clearRect(0, 0, W, H);
+          const ts = t * 0.0008;
+          for (const p of pts) {
+            const wx = Math.sin(p.oy * 0.008 + p.ox * 0.005 + ts) * 12;
+            const wy = Math.cos(p.ox * 0.005 + p.oy * 0.008 + ts) * 12;
+            const d = Math.sin(p.ox * 0.01 + ts * 1.5);
+            const op = 0.03 + (d + 1) * 0.15;
+            p.x = p.ox + wx; p.y = p.oy + wy;
+            ctx.strokeStyle = `rgba(255,255,255,${op})`;
+            ctx.fillStyle = `rgba(255,255,255,${op * 0.06})`;
+            ctx.lineWidth = 1; hexPath(p.x, p.y, p.r);
+          }
+          raf = requestAnimationFrame(draw);
+        }
+        function start() { init(); cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); }
+        window.addEventListener('load', start);
+        window.addEventListener('resize', start);
+      }
+      hexWave('c1'); hexWave('c2');
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MonoAtom Labs — Corporate ID Card (CR80)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: #b0b6be;
+            background-image:
+                radial-gradient(ellipse 80% 60% at 50% 0%, #d1d5db, transparent),
+                radial-gradient(ellipse 60% 80% at 100% 100%, #9ca3af, transparent);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 72px 40px;
+            gap: 60px;
+        }
+
+        /* ── Page label ─────────────────────────── */
+        .group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .side-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(0, 0, 0, 0.32);
+        }
+
+        /* ── CR80 card shell ────────────────────── */
+        /* Physical: 85.6 × 53.98 mm  |  Screen: 600 × 378 px */
+        .card {
+            width: 600px;
+            height: 378px;
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            flex-shrink: 0;
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.1),
+                0 2px 6px rgba(0, 0, 0, 0.10),
+                0 12px 32px rgba(0, 0, 0, 0.22),
+                0 32px 72px rgba(0, 0, 0, 0.18);
+        }
+
+
+        /* ══════════════════════════════════════════
+           FRONT
+        ══════════════════════════════════════════ */
+        #front {
+            background: #050505;
+            color: #fff;
+        }
+
+        canvas#hexWave {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        /* Gradient: left stays open (hex visible), right darkens for text */
+        .f-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background: linear-gradient(108deg,
+                    rgba(0, 0, 0, 0.04) 0%,
+                    rgba(0, 0, 0, 0.26) 32%,
+                    rgba(0, 0, 0, 0.72) 62%,
+                    rgba(0, 0, 0, 0.90) 100%);
+        }
+
+        /* 5 px slate accent bar — left edge */
+        .f-accent {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            z-index: 3;
+            background: linear-gradient(180deg, #94a3b8 0%, #475569 60%, #1e293b 100%);
+        }
+
+        /* ── Front layout shell ── */
+        .f-shell {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .f-row {
+            flex: 1;
+            display: flex;
+            min-height: 0;
+        }
+
+        /* ── Photo column  210 px ── */
+        .photo-col {
+            width: 210px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 13px;
+            padding: 22px 16px 18px 28px;
+        }
+
+        .photo-frame {
+            width: 130px;
+            height: 158px;
+            border-radius: 8px;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.03) 100%);
+            border: 1.5px solid rgba(255, 255, 255, 0.18);
+            overflow: hidden;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Subtle inner rim */
+        .photo-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 7px;
+            box-shadow: inset 0 0 24px rgba(100, 116, 139, 0.18);
+            pointer-events: none;
+        }
+
+        /* ── Info column — fills remaining 390 px ── */
+        .info-col {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px 24px 18px 20px;
+        }
+
+        /* Three zones: brand header | identity center | validity footer */
+        .info-top {
+            flex-shrink: 0;
+        }
+
+        .info-mid {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 7px;
+        }
+
+        .info-bot {
+            flex-shrink: 0;
+        }
+
+        .emp-chip {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.42);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .f-name {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 0.02em;
+            color: #fff;
+            line-height: 1.06;
+        }
+
+        .f-role {
+            font-size: 10.5px;
+            font-weight: 600;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: #64748b;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .dept-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 4px;
+            background: rgba(100, 116, 139, 0.14);
+            border: 1px solid rgba(100, 116, 139, 0.24);
+            font-size: 8.5px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.38);
+            width: fit-content;
+        }
+
+        .f-rule {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.46);
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1;
+        }
+
+        .cdot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: #475569;
+            flex-shrink: 0;
+        }
+
+        /* ── Bottom barcode strip  32 px ── */
+        .f-strip {
+            height: 32px;
+            flex-shrink: 0;
+            background: rgba(0, 0, 0, 0.28);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            padding: 0 24px 0 28px;
+            gap: 16px;
+        }
+
+        #bcFront {
+            flex: 1;
+            display: flex;
+            gap: 1.5px;
+            align-items: center;
+            height: 18px;
+            overflow: hidden;
+        }
+
+        #bcFront span {
+            display: block;
+            background: rgba(255, 255, 255, 0.38);
+            border-radius: 0.5px;
+        }
+
+
+        /* ══════════════════════════════════════════
+           BACK
+        ══════════════════════════════════════════ */
+        #back {
+            background: #ffffff;
+            border: 1px solid #e2e5e9;
+        }
+
+        .hex-bg {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='28' height='49' viewBox='0 0 28 49' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.9v13.2l11 6.35 11-6.35V17.9l-11-6.35L3 17.9zM0 15l12.98-7.5V0h-2v6.35L0 12.69v2.3zm0 18.5L10.98 40v6.35L0 40v-6.5zM14.98 0v7.5l13 7.5-13-7.5zm13 26.5l-13 7.5V49l13-7.5V26.5z' fill='%23f1f5f9' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background-size: 30px 53px;
+            opacity: 0.7;
+        }
+
+        .b-shell {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Magnetic stripe  42 px */
+        .mag {
+            width: 100%;
+            height: 42px;
+            flex-shrink: 0;
+            background: linear-gradient(180deg, #1d1d1d 0%, #0b0b0b 100%);
+        }
+
+        /* Main info row */
+        .b-row {
+            flex: 1;
+            min-height: 0;
+            display: flex;
+            padding: 18px 22px 14px;
+            gap: 18px;
+        }
+
+        .b-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .b-sep {
+            width: 1px;
+            background: #edf0f3;
+            flex-shrink: 0;
+        }
+
+        /* QR panel  180 px */
+        .b-right {
+            width: 180px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* QR viewfinder */
+        .qr-wrap {
+            position: relative;
+            width: 136px;
+            height: 136px;
+        }
+
+        .qr-c {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+        }
+
+        .qr-c.tl {
+            top: 0;
+            left: 0;
+            border-top: 2.5px solid #111;
+            border-left: 2.5px solid #111;
+        }
+
+        .qr-c.tr {
+            top: 0;
+            right: 0;
+            border-top: 2.5px solid #111;
+            border-right: 2.5px solid #111;
+        }
+
+        .qr-c.bl {
+            bottom: 0;
+            left: 0;
+            border-bottom: 2.5px solid #111;
+            border-left: 2.5px solid #111;
+        }
+
+        .qr-c.br {
+            bottom: 0;
+            right: 0;
+            border-bottom: 2.5px solid #111;
+            border-right: 2.5px solid #111;
+        }
+
+        .qr-inner {
+            position: absolute;
+            inset: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Signature strip  22 px */
+        .sig {
+            height: 22px;
+            flex-shrink: 0;
+            background: repeating-linear-gradient(90deg, #f4f5f7 0, #f4f5f7 4px, #ebedf0 4px, #ebedf0 8px);
+            border-top: 1px solid #e9ecef;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            gap: 8px;
+        }
+
+        /* Barcode row  40 px */
+        .b-bc {
+            height: 40px;
+            flex-shrink: 0;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5px;
+            padding: 5px 22px;
+        }
+
+        .b-bc span {
+            display: block;
+            background: #111;
+            border-radius: 0.5px;
+        }
+
+        /* Disclaimer  18 px */
+        .b-disc {
+            height: 18px;
+            flex-shrink: 0;
+            border-top: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ════════════════════════════════════════════════
+     FRONT SIDE
+════════════════════════════════════════════════ -->
+    <div class="group">
+        <p class="side-label">Front — CR80 &nbsp;·&nbsp; 85.6 × 53.98 mm</p>
+
+        <div class="card" id="front">
+            <canvas id="hexWave"></canvas>
+            <div class="f-overlay"></div>
+            <div class="f-accent"></div>
+
+            <div class="f-shell">
+                <div class="f-row">
+
+                    <!-- ── Photo column ── -->
+                    <div class="photo-col">
+                        <div class="photo-frame">
+                            <!-- Person silhouette SVG -->
+                            <svg width="110" height="152" viewBox="0 0 110 152" fill="none">
+                                <!-- subtle bg gradient inside frame -->
+                                <defs>
+                                    <linearGradient id="photoBg" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="0%" stop-color="#1e293b" stop-opacity="0.6" />
+                                        <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9" />
+                                    </linearGradient>
+                                </defs>
+                                <rect width="110" height="152" fill="url(#photoBg)" />
+                                <!-- head -->
+                                <circle cx="55" cy="52" r="26" fill="rgba(255,255,255,0.20)" />
+                                <!-- shoulders / body -->
+                                <path d="M5 152 Q15 108 55 100 Q95 108 105 152Z" fill="rgba(255,255,255,0.16)" />
+                            </svg>
+                        </div>
+
+                        <!-- Employee ID -->
+                        <div style="text-align:center;">
+                            <p
+                                style="font-size:7px;font-weight:700;letter-spacing:0.2em;color:rgba(255,255,255,0.26);text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
+                                Emp. ID</p>
+                            <p
+                                style="font-size:11.5px;font-weight:700;color:rgba(255,255,255,0.55);font-family:'JetBrains Mono',monospace;margin-top:3px;letter-spacing:0.06em;">
+                                MAL-2025-001</p>
+                        </div>
+                    </div>
+
+                    <!-- ── Info column ── -->
+                    <div class="info-col">
+
+                        <!-- TOP: Company brand + badge chip -->
+                        <div class="info-top" style="display:flex;justify-content:space-between;align-items:center;">
+                            <div style="display:flex;align-items:center;gap:11px;">
+                                <img src="assets/logo.svg" alt="MonoAtom Labs"
+                                    style="width:30px;height:30px;filter:invert(1) brightness(0.62) saturate(0.4);">
+                                <div style="border-left:3px solid #64748b;padding-left:11px;">
+                                    <p
+                                        style="font-size:13px;font-weight:800;letter-spacing:0.15em;color:#fff;line-height:1;">
+                                        MONOATOM</p>
+                                    <p
+                                        style="font-size:8px;font-weight:700;letter-spacing:0.42em;color:rgba(255,255,255,0.30);font-family:'JetBrains Mono',monospace;margin-top:3px;">
+                                        LABS</p>
+                                </div>
+                            </div>
+                            <span class="emp-chip">Employee</span>
+                        </div>
+
+                        <!-- MIDDLE: Identity — vertically centered in remaining space -->
+                        <div class="info-mid">
+                            <h1 class="f-name">SUSHANTH<br>PAATNAIK</h1>
+                            <p class="f-role">Co-Founder &amp; CEO</p>
+                            <span class="dept-pill">Executive Leadership</span>
+                            <div class="f-rule"></div>
+                            <div class="contact-item"><span class="cdot"></span>+91 851 197 6999</div>
+                            <div class="contact-item"><span class="cdot"></span>ceo@monoatomlabs.com</div>
+                        </div>
+
+                        <!-- BOTTOM: Validity -->
+                        <div class="info-bot">
+                            <p
+                                style="font-size:8.5px;font-weight:700;letter-spacing:0.16em;color:rgba(255,255,255,0.24);text-transform:uppercase;font-family:'JetBrains Mono',monospace;">
+                                Valid Until &nbsp;·&nbsp; DEC 2026
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Barcode strip -->
+                <div class="f-strip">
+                    <div id="bcFront"></div>
+                    <p
+                        style="font-size:8px;font-weight:600;letter-spacing:0.1em;color:rgba(255,255,255,0.18);font-family:'JetBrains Mono',monospace;flex-shrink:0;">
+                        monoatomlabs.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ════════════════════════════════════════════════
+     BACK SIDE
+════════════════════════════════════════════════ -->
+    <div class="group">
+        <p class="side-label">Back — CR80 &nbsp;·&nbsp; 85.6 × 53.98 mm</p>
+
+        <div class="card" id="back">
+            <div class="hex-bg"></div>
+
+            <div class="b-shell">
+
+                <!-- Magnetic stripe -->
+                <div class="mag"></div>
+
+                <!-- Main row: company info | QR -->
+                <div class="b-row">
+
+                    <!-- Left: company identity block -->
+                    <div class="b-left">
+
+                        <!-- Logo + brand -->
+                        <div>
+                            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                                <img src="assets/logo.svg" alt="MonoAtom Labs" style="width:26px;height:26px;">
+                                <div style="border-left:2.5px solid #64748b;padding-left:10px;">
+                                    <p
+                                        style="font-size:13px;font-weight:800;letter-spacing:0.13em;color:#111;line-height:1;">
+                                        MONOATOM</p>
+                                    <p
+                                        style="font-size:8px;font-weight:700;letter-spacing:0.34em;color:#64748b;font-family:'JetBrains Mono',monospace;margin-top:3px;">
+                                        LABS</p>
+                                </div>
+                            </div>
+                            <p style="font-size:9px;font-weight:500;color:#6b7280;line-height:1.55;padding-left:1px;">
+                                Advanced Materials for<br>4th Industrial Revolution
+                            </p>
+                        </div>
+
+                        <!-- Headquarters -->
+                        <div>
+                            <p
+                                style="font-size:8px;font-weight:700;letter-spacing:0.17em;text-transform:uppercase;color:#9ca3af;margin-bottom:5px;">
+                                Headquarters</p>
+                            <p
+                                style="font-size:10px;font-weight:600;color:#1f2937;line-height:1.58;font-family:'JetBrains Mono',monospace;">
+                                3rd Floor, iHub<br>Ahmedabad — 380015, India
+                            </p>
+                        </div>
+
+                        <!-- Web + contact -->
+                        <div style="display:flex;flex-direction:column;gap:3px;">
+                            <p
+                                style="font-size:10.5px;font-weight:700;color:#111;font-family:'JetBrains Mono',monospace;letter-spacing:0.04em;">
+                                monoatomlabs.com</p>
+                            <p
+                                style="font-size:9px;font-weight:500;color:#6b7280;font-family:'JetBrains Mono',monospace;">
+                                ceo@monoatomlabs.com</p>
+                        </div>
+
+                    </div>
+
+                    <!-- Divider -->
+                    <div class="b-sep"></div>
+
+                    <!-- Right: QR code -->
+                    <div class="b-right">
+                        <p
+                            style="font-size:8px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#9ca3af;">
+                            Scan to Verify</p>
+
+                        <div class="qr-wrap">
+                            <div class="qr-c tl"></div>
+                            <div class="qr-c tr"></div>
+                            <div class="qr-c bl"></div>
+                            <div class="qr-c br"></div>
+                            <div class="qr-inner">
+                                <!-- Decorative QR — correct finder pattern structure -->
+                                <svg width="100%" height="100%" viewBox="0 0 105 105" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <!-- ── Finder: Top-Left ── -->
+                                    <rect x="0" y="0" width="35" height="35" rx="2" fill="#111" />
+                                    <rect x="5" y="5" width="25" height="25" rx="1" fill="white" />
+                                    <rect x="10" y="10" width="15" height="15" fill="#111" />
+                                    <!-- ── Finder: Top-Right ── -->
+                                    <rect x="70" y="0" width="35" height="35" rx="2" fill="#111" />
+                                    <rect x="75" y="5" width="25" height="25" rx="1" fill="white" />
+                                    <rect x="80" y="10" width="15" height="15" fill="#111" />
+                                    <!-- ── Finder: Bottom-Left ── -->
+                                    <rect x="0" y="70" width="35" height="35" rx="2" fill="#111" />
+                                    <rect x="5" y="75" width="25" height="25" rx="1" fill="white" />
+                                    <rect x="10" y="80" width="15" height="15" fill="#111" />
+                                    <!-- ── Timing row (y=30, x=40..65) ── -->
+                                    <rect x="40" y="30" width="5" height="5" fill="#111" />
+                                    <rect x="50" y="30" width="5" height="5" fill="#111" />
+                                    <rect x="60" y="30" width="5" height="5" fill="#111" />
+                                    <!-- ── Timing col (x=30, y=40..65) ── -->
+                                    <rect x="30" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="30" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="30" y="60" width="5" height="5" fill="#111" />
+                                    <!-- ── Data modules — top zone ── -->
+                                    <rect x="40" y="0" width="5" height="5" fill="#111" />
+                                    <rect x="50" y="0" width="5" height="5" fill="#111" />
+                                    <rect x="65" y="0" width="5" height="5" fill="#111" />
+                                    <rect x="40" y="10" width="5" height="5" fill="#111" />
+                                    <rect x="55" y="10" width="5" height="5" fill="#111" />
+                                    <rect x="65" y="10" width="5" height="5" fill="#111" />
+                                    <rect x="45" y="20" width="5" height="5" fill="#111" />
+                                    <rect x="60" y="20" width="5" height="5" fill="#111" />
+                                    <!-- ── Data — left zone ── -->
+                                    <rect x="0" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="10" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="25" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="0" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="15" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="25" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="5" y="60" width="5" height="5" fill="#111" />
+                                    <rect x="20" y="60" width="5" height="5" fill="#111" />
+                                    <!-- ── Data — center ── -->
+                                    <rect x="40" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="55" y="45" width="5" height="5" fill="#111" />
+                                    <rect x="60" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="40" y="55" width="5" height="5" fill="#111" />
+                                    <rect x="55" y="55" width="5" height="5" fill="#111" />
+                                    <rect x="45" y="60" width="5" height="5" fill="#111" />
+                                    <rect x="60" y="55" width="5" height="5" fill="#111" />
+                                    <!-- ── Data — right zone ── -->
+                                    <rect x="70" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="80" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="95" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="100" y="40" width="5" height="5" fill="#111" />
+                                    <rect x="70" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="85" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="100" y="50" width="5" height="5" fill="#111" />
+                                    <rect x="75" y="60" width="5" height="5" fill="#111" />
+                                    <rect x="90" y="60" width="5" height="5" fill="#111" />
+                                    <!-- ── Data — bottom zone ── -->
+                                    <rect x="40" y="70" width="5" height="5" fill="#111" />
+                                    <rect x="55" y="70" width="5" height="5" fill="#111" />
+                                    <rect x="60" y="70" width="5" height="5" fill="#111" />
+                                    <rect x="40" y="80" width="5" height="5" fill="#111" />
+                                    <rect x="50" y="80" width="5" height="5" fill="#111" />
+                                    <rect x="65" y="80" width="5" height="5" fill="#111" />
+                                    <rect x="45" y="90" width="5" height="5" fill="#111" />
+                                    <rect x="55" y="95" width="5" height="5" fill="#111" />
+                                    <rect x="65" y="90" width="5" height="5" fill="#111" />
+                                    <rect x="40" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="55" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="60" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="70" y="70" width="5" height="5" fill="#111" />
+                                    <rect x="80" y="75" width="5" height="5" fill="#111" />
+                                    <rect x="95" y="70" width="5" height="5" fill="#111" />
+                                    <rect x="100" y="70" width="5" height="5" fill="#111" />
+                                    <rect x="70" y="80" width="5" height="5" fill="#111" />
+                                    <rect x="85" y="80" width="5" height="5" fill="#111" />
+                                    <rect x="100" y="80" width="5" height="5" fill="#111" />
+                                    <rect x="75" y="90" width="5" height="5" fill="#111" />
+                                    <rect x="90" y="90" width="5" height="5" fill="#111" />
+                                    <rect x="70" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="80" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="95" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="0" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="10" y="95" width="5" height="5" fill="#111" />
+                                    <rect x="25" y="100" width="5" height="5" fill="#111" />
+                                    <rect x="0" y="90" width="5" height="5" fill="#111" />
+                                    <rect x="20" y="90" width="5" height="5" fill="#111" />
+                                    <rect x="5" y="95" width="5" height="5" fill="#111" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <p
+                            style="font-size:8px;font-weight:600;color:#9ca3af;letter-spacing:0.08em;font-family:'JetBrains Mono',monospace;">
+                            monoatomlabs.com</p>
+                    </div>
+
+                </div>
+
+                <!-- Signature + hologram strip -->
+                <div class="sig">
+                    <p
+                        style="font-size:8.5px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#9ca3af;font-family:'JetBrains Mono',monospace;">
+                        Authorized Signature</p>
+                    <div style="flex:1;"></div>
+                    <!-- hologram sticker simulation -->
+                    <div
+                        style="width:26px;height:20px;border-radius:3px;background:conic-gradient(from 0deg, #a855f7,#6366f1,#06b6d4,#10b981,#f59e0b,#ef4444,#a855f7);opacity:0.35;">
+                    </div>
+                </div>
+
+                <!-- Barcode -->
+                <div class="b-bc" id="bcBack"></div>
+
+                <!-- Disclaimer -->
+                <div class="b-disc">
+                    <p style="font-size:7px;color:#c8cdd4;letter-spacing:0.04em;text-align:center;">
+                        Property of MonoAtom Labs Pvt. Ltd. &nbsp;·&nbsp; If found, please return to 3rd Floor, iHub,
+                        Ahmedabad 380015, India
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        /* ════════════════════════════════════════════
+           Hexagon Wave Canvas — matches visiting card
+           ════════════════════════════════════════════ */
+        (function () {
+            const canvas = document.getElementById('hexWave');
+            const ctx = canvas.getContext('2d');
+            const W = 600, H = 378;
+            const dpr = Math.min(window.devicePixelRatio || 2, 3);
+
+            canvas.width = W * dpr;
+            canvas.height = H * dpr;
+            ctx.scale(dpr, dpr);
+
+            const hexR = 17;
+            const xSp = 36;
+            const ySp = 32;
+            const T = 3200;   /* frozen wave position — same as visiting card */
+
+            const pts = [];
+            const rows = Math.ceil(H / ySp) + 2;
+            const cols = Math.ceil(W / xSp) + 2;
+
+            for (let r = -1; r < rows; r++) {
+                for (let c = -1; c < cols; c++) {
+                    let x = c * xSp, y = r * ySp;
+                    if (r % 2) x += xSp / 2;
+                    pts.push({ ox: x, oy: y });
+                }
+            }
+
+            /* Single static render */
+            const ts = T * 0.0008;
+
+            ctx.fillStyle = '#050505';
+            ctx.fillRect(0, 0, W, H);
+
+            pts.forEach(({ ox, oy }) => {
+                const wx = Math.sin(oy * 0.008 + ox * 0.005 + ts) * 8;
+                const wy = Math.cos(ox * 0.005 + oy * 0.008 + ts) * 8;
+                const d = Math.sin(ox * 0.01 + ts * 1.5);
+                const op = 0.07 + (d + 1) * 0.12;
+                const cx = ox + wx, cy = oy + wy;
+
+                ctx.strokeStyle = `rgba(255,255,255,${op})`;
+                ctx.fillStyle = `rgba(255,255,255,${op * 0.04})`;
+                ctx.lineWidth = 1;
+
+                ctx.beginPath();
+                for (let i = 0; i < 6; i++) {
+                    const a = (Math.PI / 3) * i + Math.PI / 6;
+                    const px = cx + hexR * Math.cos(a);
+                    const py = cy + hexR * Math.sin(a);
+                    i ? ctx.lineTo(px, py) : ctx.moveTo(px, py);
+                }
+                ctx.closePath();
+                ctx.stroke();
+                ctx.fill();
+            });
+        })();
+
+
+        /* ════════════════════════════════════════════
+           Deterministic barcode renderer
+           ════════════════════════════════════════════ */
+        function renderBarcode(id, count, opts) {
+            const el = document.getElementById(id);
+            if (!el) return;
+
+            for (let i = 0; i < count; i++) {
+                const r = Math.abs(Math.sin(i * 47.371 + 13.719) * 99991) % 1;
+                const w = r < 0.22 ? 3.5 : r < 0.48 ? 2.5 : 1.5;
+                const h = opts.dark
+                    ? (9 + Math.abs(Math.sin(i * 29.13) * 9))
+                    : (18 + Math.abs(Math.sin(i * 29.13) * 14));
+
+                const s = document.createElement('span');
+                s.style.cssText =
+                    `width:${w}px;` +
+                    `height:${h}px;` +
+                    `background:${opts.dark ? 'rgba(255,255,255,0.40)' : '#111'};` +
+                    `border-radius:0.5px;` +
+                    `flex-shrink:0;`;
+                el.appendChild(s);
+            }
+        }
+
+        renderBarcode('bcFront', 78, { dark: true });
+        renderBarcode('bcBack', 96, { dark: false });
+    </script>
+
+</body>
+
+</html>

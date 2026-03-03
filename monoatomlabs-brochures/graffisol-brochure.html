@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Graffisol – Monoatom Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --accent:#d97706;
+  --accent-l:#fbbf24;
+  --accent-pale:rgba(217,119,6,.07);
+  --n50:#f8fafc;--n100:#f1f5f9;--n200:#e2e8f0;
+  --n400:#94a3b8;--n500:#64748b;--n600:#475569;
+  --n700:#334155;--n800:#1e293b;--n900:#0f172a;
+  --fd:'Outfit',sans-serif;
+  --fs:'Inter',system-ui,sans-serif;
+  --fm:'Space Grotesk',monospace;
+}
+body{font-family:var(--fs);background:#555;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.page{width:297mm;height:210mm;position:relative;overflow:hidden;display:grid;grid-template-columns:repeat(3,99mm)}
+@media screen{.page{box-shadow:0 8px 48px rgba(0,0,0,.4);margin:24px auto}}
+@media print{body{background:white}.page{page-break-after:always;margin:0}canvas{display:none}}
+
+.hex-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,transparent 20%,rgba(0,0,0,.65) 100%);z-index:1;pointer-events:none}
+.p1{background:#000}
+.p2{background:#000}
+
+.col{position:relative;z-index:10;height:210mm;overflow:hidden;display:flex;flex-direction:column}
+.col-d{border-right:1px solid rgba(255,255,255,.07)}
+.col-d:last-child{border-right:none}
+.col-l{background:var(--n50);border-left:1px solid var(--n200)}
+.pad{padding:8mm 7mm}
+
+/* DARK TYPE */
+.d-eyebrow{font-family:var(--fm);font-size:5.5pt;color:var(--accent-l);letter-spacing:.18em;text-transform:uppercase;margin-bottom:2.5mm}
+.d-h1{font-family:var(--fd);font-size:26pt;font-weight:700;color:#fff;line-height:1.05;margin-bottom:3.5mm}
+.d-h2{font-family:var(--fd);font-size:16pt;font-weight:700;color:#fff;line-height:1.1;margin-bottom:2.5mm}
+.d-body{font-size:7.5pt;color:rgba(255,255,255,.62);line-height:1.65}
+.d-sep{border:none;border-top:1px solid rgba(255,255,255,.08);margin:4mm 0}
+.accent-bar{width:8mm;height:2px;background:var(--accent-l);margin-bottom:4mm}
+
+.bl{list-style:none}
+.bl li{display:flex;align-items:flex-start;gap:2.5mm;font-size:7.5pt;color:rgba(255,255,255,.65);padding:1.2mm 0;line-height:1.5;border-bottom:1px solid rgba(255,255,255,.04)}
+.bl li:last-child{border-bottom:none}
+.bl li::before{content:'→';color:var(--accent-l);flex-shrink:0;font-size:7pt;margin-top:.2mm;font-weight:600}
+
+/* Product hero */
+.prod-hero{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.08);padding:6mm 6mm 5mm;flex-shrink:0}
+.prod-logo{display:flex;align-items:center;gap:2mm;margin-bottom:5mm}
+.hex-icon{width:7mm;height:7mm;flex-shrink:0}
+.logo-txt{font-family:var(--fd);font-size:7.5pt;font-weight:700;color:#fff;letter-spacing:.12em;text-transform:uppercase}
+.logo-dot{color:var(--accent-l)}
+.prod-cat{font-family:var(--fm);font-size:5.5pt;color:var(--accent-l);letter-spacing:.16em;text-transform:uppercase;margin-bottom:2.5mm;border:1px solid rgba(251,191,36,.3);padding:1mm 2.5mm;display:inline-block}
+.prod-name-big{font-family:var(--fd);font-size:36pt;font-weight:800;color:#fff;line-height:.9;letter-spacing:-.02em;margin-bottom:2mm}
+.prod-sub{font-size:7pt;color:rgba(255,255,255,.4);line-height:1.5;margin-bottom:4mm}
+.key-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:2mm}
+.kstat{border:1px solid rgba(255,255,255,.08);padding:2.5mm 3mm;background:rgba(255,255,255,.015)}
+.kstat-val{font-family:var(--fm);font-size:10pt;font-weight:600;color:var(--accent-l);line-height:1}
+.kstat-lbl{font-size:5.5pt;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-top:.8mm}
+
+.about-section{flex:1;padding:5mm 7mm;border-top:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column}
+
+/* LIGHT TYPE */
+.l-h2{font-family:var(--fd);font-size:8pt;font-weight:700;color:var(--n900);margin-bottom:3mm;display:flex;align-items:center;gap:1.5mm}
+.l-h2::before{content:'';display:inline-block;width:2mm;height:2mm;background:var(--accent);flex-shrink:0}
+.l-body{font-size:7pt;color:var(--n600);line-height:1.6}
+.l-sep{border:none;border-top:1px solid var(--n200);margin:3.5mm 0}
+.biz-cta{font-family:var(--fd);font-size:18pt;font-weight:800;color:var(--n900);line-height:1.05;margin:3mm 0}
+.ct-row{font-size:7pt;color:var(--n700);margin-bottom:1.2mm;line-height:1.4}
+
+/* Competitive table */
+.comp-table{width:100%;border-collapse:collapse;margin-top:1mm}
+.comp-table th{font-family:var(--fm);font-size:5.5pt;text-transform:uppercase;letter-spacing:.06em;padding:1.8mm 2mm;text-align:left;background:var(--n900);color:#fff;border-right:1px solid rgba(255,255,255,.1)}
+.comp-table th.th-our{background:var(--accent);color:#fff}
+.comp-table td{font-size:6pt;padding:1.8mm 2mm;color:var(--n500);border-bottom:1px solid var(--n100);border-right:1px solid var(--n100);vertical-align:top;line-height:1.35}
+.comp-table td.td-m{font-weight:600;color:var(--n800);background:var(--n50);white-space:nowrap}
+.comp-table td.td-our{color:var(--accent);font-weight:600;background:var(--accent-pale)}
+.comp-table tr:last-child td{border-bottom:none}
+
+/* Diagram */
+.diag{margin-top:3mm;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.02);padding:4mm}
+.diag-title{font-family:var(--fm);font-size:5.5pt;color:var(--accent-l);letter-spacing:.12em;text-transform:uppercase;margin-bottom:3mm}
+.diag-solar{position:relative}
+.solar-sun{font-size:14pt;text-align:center;margin-bottom:2mm;color:var(--accent-l)}
+.solar-rays{display:flex;justify-content:center;gap:1mm;margin-bottom:2mm}
+.solar-ray{width:1px;height:6mm;background:linear-gradient(to bottom,rgba(251,191,36,.6),transparent)}
+.solar-layer{padding:1.8mm 3mm;font-size:6pt;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.sl-coat{background:rgba(217,119,6,.15);border:1px solid rgba(251,191,36,.3);color:var(--accent-l)}
+.sl-glass{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.7)}
+.sl-cell{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);color:rgba(255,255,255,.4)}
+.solar-props{display:grid;grid-template-columns:1fr 1fr;gap:2mm;margin-top:2mm}
+.solar-prop{font-size:5.5pt;color:rgba(255,255,255,.5);display:flex;align-items:center;gap:1.5mm}
+.solar-prop::before{content:'↑';color:var(--accent-l);font-weight:700;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     PAGE 1 — THREE-FOLD DARK
+══════════════════════════════════ -->
+<div class="page p1">
+  <canvas class="hex-canvas" id="c1"></canvas>
+  <div class="vignette"></div>
+
+  <!-- PANEL 1: Product + About Us -->
+  <div class="col col-d">
+    <div class="prod-hero">
+      <div class="prod-logo">
+        <svg class="hex-icon" viewBox="0 0 32 32" fill="none">
+          <path d="M16 2L28 9V23L16 30L4 23V9L16 2Z" stroke="rgba(251,191,36,0.7)" stroke-width="1.5" fill="rgba(217,119,6,0.08)"/>
+          <path d="M16 8L22 11.5V18.5L16 22L10 18.5V11.5L16 8Z" stroke="rgba(251,191,36,0.5)" stroke-width="1" fill="none"/>
+          <circle cx="16" cy="15" r="2" fill="rgba(251,191,36,0.6)"/>
+        </svg>
+        <span class="logo-txt">MONOATOM<span class="logo-dot"> ·</span> LABS</span>
+      </div>
+      <div class="prod-cat">Graphene Solar Coating</div>
+      <div class="prod-name-big">Graffi­sol</div>
+      <div class="prod-sub">Next-generation graphene nanocoating for superior solar panel performance</div>
+      <div class="key-stats">
+        <div class="kstat"><div class="kstat-val">7–8%</div><div class="kstat-lbl">Power Boost</div></div>
+        <div class="kstat"><div class="kstat-val">5–6°C</div><div class="kstat-lbl">Temp Drop</div></div>
+        <div class="kstat"><div class="kstat-val">&gt;98%</div><div class="kstat-lbl">Transmission</div></div>
+      </div>
+    </div>
+
+    <div class="about-section">
+      <div class="d-eyebrow" style="margin-bottom:2mm">About Us</div>
+      <div class="accent-bar"></div>
+      <p class="d-body">Monoatom Labs is brain child of Sushanth Paatnaik, 6 times President of India Awardee. His innovation journey started at age of 11. Aayush Bansal is an astout businessman from Maharashtra with steel manufacturing and clothing business over 38 years.</p>
+      <br>
+      <p class="d-body">Sushanth Paatnaik Develops Graphene Innovations, Aayush is instrumental in deploying Innovations in the Industry. Monoatom Labs team has scientists from reputed institute like IISC, IIT and National Chemical Laboratory as research and development partners.</p>
+      <br>
+      <p class="d-body">At Monoatom Labs we challenge the normal, set performance benchmarks for materials and achieve them using graphene based solutions. We develop lab scale Innovations, test and validate results and then setup commercial scale manufacturing of such solutions to make them commercially viable to use in industry. Our solutions have applications in Aerospace, Defence, Clean energy storage, Solar Panel efficiency improvement, Construction Industry, Tyre Industry, Chemical and Water filtration, Specialized Engineering components, High performance clothing and polymers.</p>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Applications + Why Choose Us -->
+  <div class="col col-d pad">
+    <div class="d-h1">Applications !</div>
+    <div class="accent-bar"></div>
+    <ul class="bl" style="margin-bottom:6mm">
+      <li>Utility-scale solar power plants</li>
+      <li>Rooftop residential solar installations</li>
+      <li>Commercial &amp; industrial solar rooftops</li>
+      <li>Floating solar plants</li>
+      <li>Solar farms in high-dust &amp; temp zones</li>
+      <li>Retrofitting of existing solar panels</li>
+    </ul>
+    <div class="d-h1">Why Choose Us?</div>
+    <div class="accent-bar"></div>
+    <ul class="bl">
+      <li>Developed using cutting-edge graphene nanotechnology</li>
+      <li>Proven lab &amp; field-tested performance</li>
+      <li>Compatible with all major crystalline &amp; thin-film solar panels</li>
+      <li>Non-invasive, easy spray or wipe application</li>
+      <li>Suitable for new installations &amp; retrofit projects</li>
+    </ul>
+  </div>
+
+  <!-- PANEL 3: How It Works + Diagram -->
+  <div class="col col-d pad">
+    <div class="d-h1">How It Works ?</div>
+    <div class="accent-bar"></div>
+    <p class="d-body" style="margin-bottom:4mm">Graffisol utilises ultra-fine graphene nano structures uniformly dispersed within a transparent coating matrix. These enable:</p>
+    <ul class="bl" style="margin-bottom:5mm">
+      <li>Anti-reflective behaviour by reducing surface light losses &amp; increasing photon absorption</li>
+      <li>Enhanced thermal dissipation, lowering panel operating temp</li>
+      <li>Hydrophobic and dust-repellent surface, minimizing soiling losses</li>
+    </ul>
+
+    <!-- Solar Coating Diagram -->
+    <div class="diag">
+      <div class="diag-title">How Solar Coating Works</div>
+      <div class="diag-solar">
+        <div class="solar-sun">☀</div>
+        <div class="solar-rays">
+          <div class="solar-ray"></div><div class="solar-ray"></div><div class="solar-ray"></div>
+          <div class="solar-ray"></div><div class="solar-ray"></div><div class="solar-ray"></div>
+          <div class="solar-ray"></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1.2mm;margin-bottom:2mm">
+          <div class="solar-layer sl-coat">Graffisol Hydrophobic Coating<span style="float:right;font-size:5pt;font-weight:400;color:rgba(251,191,36,.5)">← Repels water &amp; dirt</span></div>
+          <div class="solar-layer sl-glass">Solar Panel Glass<span style="float:right;font-size:5pt;font-weight:400;color:rgba(255,255,255,.3)">← +Photon absorption</span></div>
+          <div class="solar-layer sl-cell">Solar Cells (PV layer)<span style="float:right;font-size:5pt;font-weight:400;color:rgba(255,255,255,.2)">← Reduced heat loss</span></div>
+        </div>
+        <div class="solar-props">
+          <div class="solar-prop">Anti-reflective surface</div>
+          <div class="solar-prop">Thermal dissipation</div>
+          <div class="solar-prop">Dust-repellent barrier</div>
+          <div class="solar-prop">Extended panel life</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:auto;padding-top:4mm;border-top:1px solid rgba(255,255,255,.06)">
+      <div style="font-family:var(--fm);font-size:5.5pt;color:rgba(255,255,255,.2);letter-spacing:.14em;text-transform:uppercase">Graphene Technology · Field Validated · monoatomlabs.com</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 2 — 2 DARK + 1 LIGHT
+══════════════════════════════════ -->
+<div class="page p2">
+  <canvas class="hex-canvas" id="c2"></canvas>
+  <div class="vignette" style="background:radial-gradient(ellipse at 33% 50%,transparent 20%,rgba(0,0,0,.6) 100%)"></div>
+
+  <!-- PANEL 1: Cost Benefit Analysis -->
+  <div class="col col-d pad" style="justify-content:space-between">
+    <div>
+      <div class="d-h1" style="font-size:22pt;line-height:1.05">Cost Benefit<br>Analysis</div>
+      <div class="accent-bar"></div>
+      <ul class="bl">
+        <li>For 1 MW Plant, Coating required: 50 L (₹2,500/L)</li>
+        <li>Total coating: ₹1.25 L + labour</li>
+        <li>Annual generation: 14.6 lakh units</li>
+        <li>Efficiency gain: 8–9%</li>
+        <li>Extra energy: 1.17 lakh units/year</li>
+        <li>Power tariff (assumed): ₹6/unit</li>
+        <li>Annual benefit: ₹7.0 lakh</li>
+        <li>3-year benefit: ₹21.0 lakh</li>
+      </ul>
+      <hr class="d-sep">
+      <div style="background:rgba(217,119,6,.1);border:1px solid rgba(251,191,36,.2);padding:4mm">
+        <div style="font-family:var(--fm);font-size:5.5pt;color:var(--accent-l);letter-spacing:.1em;text-transform:uppercase;margin-bottom:2mm">3-Year ROI</div>
+        <div style="font-family:var(--fd);font-size:24pt;font-weight:800;color:#fff;line-height:1">₹21.0 L</div>
+        <div style="font-size:6.5pt;color:rgba(255,255,255,.5);margin-top:1mm">Per 1 MW plant · 18-month payback</div>
+      </div>
+    </div>
+    <div style="margin-top:auto">
+      <div style="width:18mm;height:18mm;border:1px solid rgba(255,255,255,.1);display:grid;grid-template-columns:repeat(5,1fr);gap:1px;padding:2mm;background:rgba(255,255,255,.02)">
+        <div style="background:rgba(255,255,255,.3);grid-column:1/3;grid-row:1/3"></div>
+        <div style="background:rgba(255,255,255,.1);grid-column:3;grid-row:1"></div>
+        <div style="background:rgba(255,255,255,.3);grid-column:4/6;grid-row:1/3"></div>
+        <div style="background:rgba(255,255,255,.3);grid-column:1/3;grid-row:4/6"></div>
+        <div style="background:rgba(255,255,255,.2);grid-column:3/6;grid-row:4"></div>
+        <div style="background:rgba(255,255,255,.3);grid-column:5;grid-row:4/6"></div>
+      </div>
+      <div style="font-size:5.5pt;color:rgba(255,255,255,.2);margin-top:1.5mm;font-family:var(--fm)">www.monoatomlabs.com</div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Why Our Product Is Superior -->
+  <div class="col col-d pad">
+    <div class="d-h1" style="font-size:22pt;line-height:1.05">Why our<br>Product is<br>Superior ?</div>
+    <div class="accent-bar"></div>
+    <ul class="bl">
+      <li>Delivers efficiency enhancement without electrical modification</li>
+      <li>Combines efficiency gain, thermal management, and surface protection</li>
+      <li>Lower cost per watt gained compared to mechanical or electrical upgrades</li>
+      <li>Improves ROI &amp; reduces LCOE</li>
+    </ul>
+  </div>
+
+  <!-- PANEL 3: Contact + Competitive Matrix (LIGHT) -->
+  <div class="col col-l pad">
+    <div class="l-h2" style="font-size:11pt;font-weight:800">Contact Us</div>
+    <div style="margin-bottom:3mm">
+      <div class="ct-row">+91-989-819-9809</div>
+      <div class="ct-row">info@monoatomlabs.com</div>
+      <div class="ct-row">www.monoatomlabs.com</div>
+      <div class="ct-row">3rd floor, iHub Gujarat,<br>Ahd- 380015</div>
+    </div>
+    <div class="biz-cta">Let's do<br>business<br>together!</div>
+    <hr class="l-sep">
+    <div class="l-h2" style="font-size:10pt;font-weight:700;margin-bottom:2mm">Competitive Matrix</div>
+    <table class="comp-table">
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="th-our">Graffisol</th>
+          <th>KhepriCoat</th>
+          <th>DSM Coating</th>
+          <th>Borosil</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="td-m">Power output</td><td class="td-our">7–8%</td><td>2–3%</td><td>~3%</td><td>0%</td></tr>
+        <tr><td class="td-m">Operating temp reduction</td><td class="td-our">5–6°C</td><td>Not publicly specified</td><td>Not publicly specified</td><td>Not publicly specified</td></tr>
+        <tr><td class="td-m">Soiling loss reduction</td><td class="td-our">30–40%</td><td>Not publicly specified</td><td>Not publicly specified</td><td>Not publicly specified</td></tr>
+        <tr><td class="td-m">UV protection</td><td class="td-our">Extended panel life</td><td>Durability/aging testing is referenced</td><td>reduced maintenance</td><td>Not publicly specified</td></tr>
+        <tr><td class="td-m">Transmission</td><td class="td-our">&gt; 98% light transmission</td><td>Not publicly specified</td><td>Not publicly specified</td><td>&gt;94%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+(function(){
+  function hexWave(id){
+    const c=document.getElementById(id);if(!c)return;
+    const ctx=c.getContext('2d');
+    let W,H,pts=[],raf;
+    function init(){
+      W=c.width=c.parentElement.offsetWidth||1122;
+      H=c.height=c.parentElement.offsetHeight||793;
+      pts=[];
+      const R=20,xS=50,yS=43;
+      const rows=Math.ceil(H/yS)+2,cols=Math.ceil(W/xS)+2;
+      for(let y=-1;y<rows;y++)for(let x=-1;x<cols;x++){
+        let px=x*xS,py=y*yS;if(y%2!==0)px+=xS/2;
+        pts.push({x:px,y:py,ox:px,oy:py,r:R});
+      }
+    }
+    function hexPath(cx,cy,r){
+      ctx.beginPath();
+      for(let i=0;i<6;i++){const a=(Math.PI/3)*i+Math.PI/6;const m=i===0?'moveTo':'lineTo';ctx[m](cx+r*Math.cos(a),cy+r*Math.sin(a));}
+      ctx.closePath();ctx.stroke();ctx.fill();
+    }
+    function draw(t){
+      ctx.clearRect(0,0,W,H);const ts=t*0.0008;
+      for(const p of pts){
+        const wx=Math.sin(p.oy*0.008+p.ox*0.005+ts)*12;
+        const wy=Math.cos(p.ox*0.005+p.oy*0.008+ts)*12;
+        const d=Math.sin(p.ox*0.01+ts*1.5);
+        const op=0.05+(d+1)*0.19;
+        p.x=p.ox+wx;p.y=p.oy+wy;
+        ctx.strokeStyle=`rgba(255,255,255,${op})`;
+        ctx.fillStyle=`rgba(255,255,255,${op*0.09})`;
+        ctx.lineWidth=1;hexPath(p.x,p.y,p.r);
+      }
+      raf=requestAnimationFrame(draw);
+    }
+    function start(){init();cancelAnimationFrame(raf);raf=requestAnimationFrame(draw);}
+    window.addEventListener('load',start);
+    window.addEventListener('resize',start);
+  }
+  hexWave('c1');hexWave('c2');
+})();
+</script>
+</body>
+</html>
