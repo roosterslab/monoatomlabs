@@ -25,15 +25,19 @@ const ProductHero = ({
                     transitionDuration={2000}
                 />
                 {/* Gradient Overlay */}
-                <div className={`absolute inset-0 z-10 ${isLight
-                        ? 'bg-gradient-to-r from-white via-white/90 to-transparent'
-                        : 'bg-gradient-to-r from-black via-black/90 to-black/40'
-                    }`}></div>
+                <div
+                    className="absolute inset-0 z-10"
+                    style={{
+                        background: isLight
+                            ? 'linear-gradient(to right, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.6) 35%, transparent 60%)'
+                            : 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.35) 35%, transparent 60%)'
+                    }}
+                ></div>
             </div>
 
-            <div className="relative z-10 p-8 md:p-16 lg:p-24 max-w-4xl">
+            <div className="relative z-10 p-8 md:p-12 lg:p-16 max-w-lg">
                 {category && (
-                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border backdrop-blur-md text-xs font-bold tracking-widest uppercase mb-8 ${isLight
+                    <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border backdrop-blur-md text-xs font-bold tracking-widest uppercase mb-6 ${isLight
                             ? 'bg-white/50 border-neutral-200 text-neutral-500'
                             : 'bg-white/10 border-white/20 text-white'
                         }`}>
@@ -42,12 +46,12 @@ const ProductHero = ({
                     </div>
                 )}
 
-                <h2 className={`text-5xl md:text-7xl font-display font-medium mb-8 leading-[0.9] tracking-tight ${isLight ? 'text-neutral-900' : 'text-white'
+                <h2 className={`text-3xl md:text-4xl font-display font-medium mb-4 leading-tight tracking-tight ${isLight ? 'text-neutral-900' : 'text-white'
                     }`}>
                     {title}
                 </h2>
 
-                <p className={`text-xl md:text-2xl leading-relaxed mb-10 max-w-xl font-light ${isLight ? 'text-neutral-500' : 'text-neutral-300'
+                <p className={`text-sm md:text-base leading-relaxed mb-8 font-light ${isLight ? 'text-neutral-500' : 'text-neutral-300'
                     }`}>
                     {subtitle}
                 </p>

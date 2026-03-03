@@ -16,18 +16,32 @@ const Hero = () => {
             <div className="absolute inset-0 z-0 bg-gradient-to-t from-black via-transparent to-transparent pointer-events-none"></div>
 
             <div className="max-w-7xl mx-auto relative z-10 text-center md:text-left fade-in">
-                <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-neutral-700 bg-neutral-900/50 backdrop-blur mb-8 shadow-sm">
-                    <span className="w-2 h-2 rounded-full bg-white animate-pulse"></span>
-                    <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">Unlocking Trillion Dollar Economy</span>
+                <div className="relative inline-flex items-center gap-2.5 px-5 py-2 rounded-full mb-10" style={{
+                    background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%)',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    boxShadow: '0 0 24px rgba(255,255,255,0.06), inset 0 1px 0 rgba(255,255,255,0.1)'
+                }}>
+                    <div className="absolute inset-0 rounded-full blur-md opacity-20" style={{ background: 'linear-gradient(135deg, #fff 0%, transparent 100%)' }}></div>
+                    <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-60"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                    </span>
+                    <span className="relative text-xs font-semibold tracking-[0.2em] uppercase" style={{
+                        background: 'linear-gradient(90deg, #ffffff 0%, #a3a3a3 100%)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}>
+                        Unlocking Trillion Dollar Economy
+                    </span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-medium text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
-                    Structured for <br />
-                    <span className="text-neutral-500">Performance.</span>
+                    The Future is <br />
+                    <span className="text-neutral-500">Graphene.</span>
                 </h1>
 
                 <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mb-12 font-light leading-relaxed">
-                    We design graphene at the atomic level. Creating materials that are stronger, conductive, and exponentially more efficient.
+                    We structure Graphene at atomic level to make impossible to possible.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-20">
@@ -45,6 +59,7 @@ const Hero = () => {
                     <StatCard value="2" label="Advanced Facilities" theme="dark" />
                     <StatCard value="5" label="Pilot Technologies" theme="dark" />
                 </div>
+
             </div>
         </section>
     );

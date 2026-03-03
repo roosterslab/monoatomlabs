@@ -16,16 +16,16 @@ const LabToManufacturing = () => {
         },
         {
             number: '2',
-            icon: TrendingUp,
-            title: 'Scale-Up',
-            description: 'Process optimization',
+            icon: CheckCircle2,
+            title: 'Field Validation',
+            description: 'Real-world testing',
             color: 'indigo'
         },
         {
             number: '3',
-            icon: CheckCircle2,
-            title: 'Field Validation',
-            description: 'Real-world testing',
+            icon: TrendingUp,
+            title: 'Scale-Up',
+            description: 'Process optimization',
             color: 'purple'
         },
         {
@@ -123,23 +123,6 @@ const LabToManufacturing = () => {
                 })}
             </div>
 
-            {/* Key Differentiator */}
-            <div className="bg-black/40 backdrop-blur-md border border-white/10 rounded-2xl p-8 md:p-10 mb-12 text-center">
-                <h3 className="text-3xl font-medium mb-4 text-white">Our Unique Approach</h3>
-                <p className="text-lg text-neutral-300 max-w-3xl mx-auto leading-relaxed font-light">
-                    Deep scientific expertise from IISc, IIT, and National Chemical Laboratory combined with
-                    real-world industrial deployment, supply-chain integration, and entrepreneurial execution.
-                </p>
-            </div>
-
-            {/* CTA */}
-            <div className="text-center">
-                <Link to="/contact">
-                    <Button variant="primary" theme="dark" icon={ArrowRight}>
-                        Partner With Us
-                    </Button>
-                </Link>
-            </div>
             </div>
         </section>
     );

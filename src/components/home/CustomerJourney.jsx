@@ -183,13 +183,6 @@ const CustomerJourney = () => {
                     </div>
                 </div>
 
-                <div className="text-center mt-12">
-                    <Link to="/contact">
-                        <Button variant="primary" theme="light" icon={ArrowRight}>
-                            Start Your Journey Today
-                        </Button>
-                    </Link>
-                </div>
             </div>
         </section>
     );

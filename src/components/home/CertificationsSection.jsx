@@ -103,7 +103,7 @@ const CertificationsSection = () => {
                 <SectionHeading
                     number="07"
                     title="Certified Trust"
-                    subtitle="Rigorous testing, certified quality, and transparent validation at every step."
+                    subtitle=""
                     theme="dark"
                 />
 

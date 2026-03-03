@@ -1,30 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Cpu, Atom, Layers, Zap, TrendingUp, Factory, ArrowRight, CheckCircle2, Network, Bot, Leaf, Truck, Package } from 'lucide-react';
+import { Shield, Repeat, Zap, Factory, ArrowRight, Network, Bot, Leaf, Truck, Package } from 'lucide-react';
 import Button from '../ui/Button';
 import SectionHeading from '../ui/SectionHeading';
 
 const Industry40Enabler = () => {
     const industry40Features = [
         {
-            icon: Atom,
-            title: 'Smart Materials',
-            description: 'Graphene-enhanced solutions with programmable properties'
+            icon: Shield,
+            title: 'Ultra Strong but Light',
+            description: '200x stronger than steel at a fraction of the weight — enabling structures that were previously impossible to build.'
         },
         {
-            icon: Layers,
-            title: 'Nano-Engineering',
-            description: 'Atomic-level precision for next-gen applications'
+            icon: Repeat,
+            title: 'Super Hard but Flexible',
+            description: 'The hardest material known, yet it bends without breaking — delivering durability and adaptability at the atomic scale.'
         },
         {
             icon: Zap,
-            title: 'Performance Boost',
-            description: '40-50% improvements in strength, conductivity, efficiency'
-        },
-        {
-            icon: TrendingUp,
-            title: 'Scale Ready',
-            description: 'From pilot to mass manufacturing deployment'
+            title: 'Highly Conductive but Stable',
+            description: 'Exceptional electrical and thermal conductivity with outstanding chemical stability — performing reliably in extreme conditions.'
         }
     ];
 
@@ -70,7 +65,7 @@ const Industry40Enabler = () => {
                 </div>
 
                 {/* Industry 4.0 Features Grid - Modern Cards */}
-                <div className="grid md:grid-cols-4 gap-6 mb-24">
+                <div className="grid md:grid-cols-3 gap-6 mb-24">
                     {industry40Features.map((feature, index) => {
                         const Icon = feature.icon;
                         return (
@@ -101,15 +96,14 @@ const Industry40Enabler = () => {
                                 return (
                                     <div
                                         key={index}
-                                        className="flex items-center justify-between p-4 border-b border-neutral-200 hover:bg-neutral-50 transition-colors group"
+                                        className="flex items-center p-4 border-b border-neutral-200"
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 group-hover:bg-blue-100 group-hover:border-blue-200 transition-colors">
+                                            <div className="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
                                                 <Icon className="w-5 h-5" strokeWidth={1.5} />
                                             </div>
-                                            <span className="text-lg text-neutral-700 font-light group-hover:text-neutral-900">{app.title}</span>
+                                            <span className="text-lg text-neutral-700 font-light">{app.title}</span>
                                         </div>
-                                        <ArrowRight className="w-4 h-4 text-neutral-300 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                                     </div>
                                 );
                             })}

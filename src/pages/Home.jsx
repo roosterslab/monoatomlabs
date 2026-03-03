@@ -8,10 +8,6 @@ const LabToScale = lazy(() => import('../components/home/LabToScale'));
 const ProductsSection = lazy(() => import('../components/home/ProductsSection'));
 const LabToManufacturing = lazy(() => import('../components/home/LabToManufacturing'));
 const CustomerJourney = lazy(() => import('../components/home/CustomerJourney'));
-const ImpactMetricsDashboard = lazy(() => import('../components/home/ImpactMetricsDashboard'));
-const ImpactMetrics = lazy(() => import('../components/home/ImpactMetrics'));
-const CertificationsSection = lazy(() => import('../components/home/CertificationsSection'));
-const PartnershipModels = lazy(() => import('../components/home/PartnershipModels'));
 const FAQSection = lazy(() => import('../components/home/FAQSection'));
 
 // Minimal loader for sections (invisible during fast loads)
@@ -30,10 +26,6 @@ const Home = () => {
                 <ProductsSection />
                 <LabToManufacturing />
                 <CustomerJourney />
-                <ImpactMetricsDashboard />
-                <ImpactMetrics />
-                <CertificationsSection />
-                <PartnershipModels />
                 <FAQSection />
             </Suspense>
         </>

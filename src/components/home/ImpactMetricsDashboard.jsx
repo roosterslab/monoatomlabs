@@ -102,12 +102,6 @@ const ImpactMetricsDashboard = () => {
                         <span className="text-sm font-bold text-green-300 uppercase tracking-wide">Real Impact</span>
                     </div>
 
-                    <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight tracking-tight">
-                        Making a Measurable Difference
-                    </h2>
-                    <p className="text-xl md:text-2xl text-neutral-300 max-w-3xl mx-auto font-light">
-                        Our graphene nano-platelets aren't just advanced materials—they're delivering real-world results across industries
-                    </p>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

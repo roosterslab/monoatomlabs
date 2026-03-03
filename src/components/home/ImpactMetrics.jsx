@@ -126,16 +126,6 @@ const ImpactMetrics = () => {
             <div className="max-w-7xl mx-auto px-6 relative z-10">
                 <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
                     <div>
-                        <div className="inline-flex items-center space-x-2 px-3 py-1 rounded-full border border-emerald-200 bg-emerald-50 mb-6">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span className="text-xs font-bold text-emerald-700 tracking-wide uppercase">
-                                Planet First
-                            </span>
-                        </div>
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-neutral-900 leading-tight">
-                            Measurable<br />
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-cyan-600">Green Impact</span>
-                        </h2>
                     </div>
                     <p className="text-neutral-500 max-w-sm text-lg leading-relaxed mb-2">
                         Tracking the real-time environmental benefits of every kilogram of Monoatom material deployed globally.
