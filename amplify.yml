@@ -7,16 +7,16 @@ frontend:
         - echo "Initializing git submodules..."
         - git submodule update --init --recursive
         # Navigate to app directory
-        - cd visiting-card-dev/maker
+        - cd extra-websites/visiting-card/maker
         # Install dependencies
         - npm ci
     build:
       commands:
         - npm run build
   artifacts:
-    baseDirectory: visiting-card-dev/maker/dist
+    baseDirectory: extra-websites/visiting-card/maker/dist
     files:
       - '**/*'
   cache:
     paths:
-      - visiting-card-dev/maker/node_modules/**/*
+      - extra-websites/visiting-card/maker/node_modules/**/*

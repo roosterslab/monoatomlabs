@@ -1,8 +1,8 @@
 [submodule "visiting-card-dev"]
-	path = visiting-card-dev
+	path = extra-websites/visiting-card
 	url = https://github.com/roosterslab/monoatomlabs.git
 	branch = visiting-card-dev-main
 [submodule "website"]
-	path = website
+	path = website/main
 	url = https://github.com/roosterslab/monoatomlabs.git
 	branch = website-main
