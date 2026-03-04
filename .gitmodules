@@ -1,8 +1,69 @@
-[submodule "visiting-card-dev"]
-	path = extra-websites/visiting-card
-	url = https://github.com/roosterslab/monoatomlabs.git
-	branch = visiting-card-dev-main
-[submodule "website"]
+[submodule "website/main"]
 	path = website/main
-	url = https://github.com/roosterslab/monoatomlabs.git
-	branch = website-main
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = website__main
+
+[submodule "website/staged"]
+	path = website/staged
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = website__staged
+
+[submodule "website/backup"]
+	path = website/backup
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = website__backup
+
+[submodule "extra-websites/visiting-card"]
+	path = extra-websites/visiting-card
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__visiting-card
+
+[submodule "extra-websites/company-profile"]
+	path = extra-websites/company-profile
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__company-profile
+
+[submodule "extra-websites/box-design"]
+	path = extra-websites/box-design
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__box-design
+
+[submodule "extra-websites/box-design-infographics"]
+	path = extra-websites/box-design-infographics
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__box-design-infographics
+
+[submodule "extra-websites/herosection-lab"]
+	path = extra-websites/herosection-lab
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__herosection-lab
+
+[submodule "extra-websites/homepage-content-lab"]
+	path = extra-websites/homepage-content-lab
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__homepage-content-lab
+
+[submodule "extra-websites/id-card"]
+	path = extra-websites/id-card
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__id-card
+
+[submodule "extra-websites/infographics-lab"]
+	path = extra-websites/infographics-lab
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__infographics-lab
+
+[submodule "extra-websites/infographics-data-lab"]
+	path = extra-websites/infographics-data-lab
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = extra-websites__infographics-data-lab
+
+[submodule "content"]
+	path = content
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = content__source
+
+[submodule "infrastructure/maker-app"]
+	path = infrastructure/maker-app
+	url = https://rebuildworkflows@github.com/rebuildworkflows/monoatomlabs.git
+	branch = infrastructure__maker-app
