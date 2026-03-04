@@ -1,326 +1,295 @@
-# Git Operating Instructions - Monoatom Labs Development Root
+# Operating Instructions — Monoatom Labs Dev Root
 
-## Repository Structure
-
-This is a **mono repository** with multiple projects managed as git submodules, including **nested submodules** (second-order).
-
-```
-monoatomlabs_dev_root/
-├── .git/                    # Main repository
-├── .gitmodules              # Submodule configuration (Level 1)
-├── visiting-card-dev/       # Submodule: visiting card project (Level 1)
-│   ├── .gitmodules          # Nested submodule configuration (Level 2)
-│   └── maker/               # Nested Submodule: maker app (Level 2)
-└── website/                 # Submodule: main website project (Level 1)
-```
-
-### Main Repository
-- **Repository**: `https://github.com/roosterslab/monoatomlabs.git`
-- **Branch**: `monoatomlabs_dev_root`
-- **Purpose**: Container for all submodules
+Complete guide for working with the monorepo.
 
 ---
 
-## Submodules Configuration
+## Repository Architecture
 
-### 1. visiting-card-dev (Level 1)
-```ini
-[submodule "visiting-card-dev"]
-    path = visiting-card-dev
-    url = https://github.com/roosterslab/monoatomlabs.git
-    branch = visiting-card-dev-main
+### How it works
+
+The root repo (`monoatomlabs_dev_root`) is the **parent** that contains two git submodules. Both submodules live inside the same GitHub repository (`roosterslab/monoatomlabs.git`) but on different branches. This is a single-remote multi-branch monorepo pattern.
+
+```
+GitHub: roosterslab/monoatomlabs.git
+│
+├── Branch: monoatomlabs_dev_root   ← parent repo
+├── Branch: website-main            ← website submodule
+├── Branch: visiting-card-dev-main  ← visiting card submodule
+├── Branch: visiting-card-dev-branch
+├── Branch: maker-app
+└── Branch: source-contents-branch
 ```
 
-#### Nested Submodule: maker (Level 2)
-The `visiting-card-dev` submodule contains its own nested submodule:
+The parent repo **does not contain the submodule files directly** — it stores a pointer (commit hash) to each submodule's branch. When you clone the parent or run `git submodule update`, git checks out those commits into the submodule directories.
 
-**Location**: `visiting-card-dev/maker/`
+---
 
-```ini
-[submodule "maker"]
-    path = maker
-    url = https://github.com/roosterslab/monoatomlabs.git
-    branch = maker-app
+## Initial Setup (Clone on New Machine)
+
+```bash
+# Clone with all submodules in one step
+git clone --recurse-submodules -b monoatomlabs_dev_root \
+  https://github.com/roosterslab/monoatomlabs.git \
+  monoatomlabs_dev_root
+
+cd monoatomlabs_dev_root
+
+# Verify submodules are checked out
+git submodule status
+
+# Install all npm workspace packages
+npm install
 ```
 
-This is a **second-order nested submodule** - a submodule within a submodule. When working with visiting-card-dev, use `--recursive` flag to ensure nested submodules are also initialized and updated.
-
-### 2. website (Level 1)
-```ini
-[submodule "website"]
-    path = website
-    url = https://github.com/roosterslab/monoatomlabs.git
-    branch = website-main
+If you already cloned without `--recurse-submodules`:
+```bash
+git submodule update --init --recursive
 ```
 
 ---
 
-## Website Submodule Details
+## Daily Development — Website
 
-### Remote Configuration
-The website submodule has **two remotes**:
-
-1. **origin** (mono repo)
-   - URL: `https://github.com/roosterslab/monoatomlabs.git`
-   - Branch: `website-main`
-   - Purpose: Primary version control within mono repo structure
-
-2. **publish** (standalone repo)
-   - URL: `https://github.com/vrocky/monoatoms-websites.git`
-   - Branch: `main` (maps from `website-main`)
-   - Purpose: Standalone deployment repository
-   - **Authentication**: Requires vrocky account credentials
-
-### Branch Structure
-- **website-main**: Primary development branch in mono repo
-- **main**: Target branch in publish repository
-
----
-
-## Common Operations
-
-### Initial Setup / Clone Repository
-
+### 1. Start dev server
 ```bash
-# Clone main repository
-git clone https://github.com/roosterslab/monoatomlabs.git
-cd monoatomlabs
-git checkout monoatomlabs_dev_root
-
-# Initialize and update all submodules
-git submodule init
-git submodule update --remote --recursive
+cd website/main
+npm run dev        # starts on http://localhost:5173
 ```
 
-### Working with Website Submodule
-
-#### Navigate to Website
+### 2. Make changes, then commit inside the submodule
 ```bash
-cd /c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/website
-```
-
-#### Check Status
-```bash
-git status
-git remote -v
-git branch -vv
-```
-
-#### Commit Changes in Website
-```bash
-# Inside website directory
-git add .
-git commit -m "Your commit message
-
-Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>"
-```
-
-#### Push to Mono Repo (origin)
-```bash
-# Push to origin (mono repo)
+cd website/main
+git add <files>
+git commit -m "feat: description of change"
 git push origin website-main
+```
 
-# Update parent repository to point to new commit
-cd ..
-git add website
-git commit -m "Update website submodule to latest commit"
+### 3. Update parent repo's submodule pointer
+```bash
+cd ../..           # back to monoatomlabs_dev_root/
+git add website/main
+git commit -m "chore: update website submodule pointer"
 git push origin monoatomlabs_dev_root
 ```
 
-#### Push to Publish Repository
+### 4. (Optional) Push to publish/deploy remote
 ```bash
-# Push to standalone repository (requires vrocky credentials)
+cd website/main
 git push publish website-main:main
+```
+
+---
+
+## Daily Development — Visiting Card
+
+```bash
+cd extra-websites/visiting-card
+# make changes
+git add <files>
+git commit -m "feat: update visiting card"
+git push origin visiting-card-dev-main
+
+# back in parent
+cd ../..
+git add extra-websites/visiting-card
+git commit -m "chore: update visiting-card submodule pointer"
+git push origin monoatomlabs_dev_root
+```
+
+---
+
+## Pulling Latest Changes
+
+### Pull everything (parent + all submodules)
+```bash
+# Recommended: pull parent then update submodule pointers
+git pull origin monoatomlabs_dev_root
+git submodule update --init --recursive
+
+# Alternative: also pull submodules to their latest remote commits
+git pull origin monoatomlabs_dev_root
+git submodule update --remote --merge
+```
+
+**Difference:**
+- `--init --recursive` → checks out the commit the **parent references** (safe, reproducible)
+- `--remote --merge` → pulls the **latest commit from the tracking branch** (may be ahead of parent)
+
+---
+
+## Submodule Branch Management
+
+### Check which branch a submodule is on
+```bash
+cd website/main && git branch
+cd extra-websites/visiting-card && git branch
+```
+
+### Visiting card branch issue
+The visiting-card submodule is currently on `dev` instead of the configured `visiting-card-dev-main`. To align:
+```bash
+cd extra-websites/visiting-card
+git checkout visiting-card-dev-main
+git merge dev   # or cherry-pick specific commits
+```
+
+Or, if `dev` should be the canonical branch, update `.gitmodules`:
+```ini
+[submodule "visiting-card-dev"]
+    branch = dev
 ```
 
 ---
 
 ## Authentication Setup
 
-### For roosterslab Account
-Already configured via Git Credential Manager.
+All remotes use HTTPS. Use Git Credential Manager (GCM) — it handles token storage automatically on Windows.
 
-### For vrocky Account (Publish Repository)
-
-**Option 1: Personal Access Token**
 ```bash
-cd website
+# Verify GCM is active
+git config --global credential.helper
 
-# Create token at: https://github.com/settings/tokens/new
-# Scopes needed: repo
+# Should output: manager
 
-# Store credentials
-git credential approve << EOF
-protocol=https
-host=github.com
-username=vrocky
-password=YOUR_TOKEN_HERE
-EOF
+# Force re-authentication (if token expired)
+git credential reject
+# Then run any git push — it will prompt for new credentials
 ```
 
-**Option 2: SSH Authentication**
-```bash
-# Change publish remote to SSH
-git remote set-url publish git@github.com:vrocky/monoatoms-websites.git
+For `vrocky/monoatoms-websites.git` (publish remote), you may need a separate PAT if the account differs from `roosterslab`.
 
-# Ensure SSH keys are set up for vrocky account
+---
+
+## Adding a New Submodule
+
+```bash
+# From root of parent repo
+git submodule add -b <branch-name> \
+  https://github.com/roosterslab/monoatomlabs.git \
+  <local-path>
+
+# Example: add a new extra-website
+git submodule add -b new-feature-branch \
+  https://github.com/roosterslab/monoatomlabs.git \
+  extra-websites/new-feature
+
+# Commit the new .gitmodules and submodule pointer
+git add .gitmodules extra-websites/new-feature
+git commit -m "chore: add new-feature submodule"
+git push origin monoatomlabs_dev_root
 ```
 
 ---
 
-## Submodule Maintenance
+## Removing a Submodule
 
-### Update Submodule to Latest Remote Changes
 ```bash
-# From parent directory
-git submodule update --remote website
+# 1. Remove from .gitmodules
+git config -f .gitmodules --remove-section submodule.<name>
 
-# Or from within submodule
-cd website
-git pull origin website-main
-```
+# 2. Remove from .git/config
+git config --remove-section submodule.<name>
 
-### Add New Submodule
-```bash
-# From parent directory
-git submodule add -b BRANCH_NAME REPO_URL PATH
+# 3. Stage the .gitmodules change
+git add .gitmodules
 
-# Example:
-git submodule add -b new-project-main https://github.com/roosterslab/monoatomlabs.git new-project
-```
+# 4. Remove the submodule directory
+git rm --cached <path>
+rm -rf <path>
+rm -rf .git/modules/<name>
 
-### Remove Submodule
-```bash
-# From parent directory
-git submodule deinit -f PATH
-git rm -f PATH
-rm -rf .git/modules/PATH
+# 5. Commit
+git commit -m "chore: remove <name> submodule"
 ```
 
 ---
 
-## Commit Message Format
+## Managing website/staged/
 
-Standard format for commits:
+`website/staged/` is currently untracked. It appears to be a staging copy of the website for pre-deployment testing. Options:
+
+**Option A — Keep it untracked (current behavior)**
+Add to `.gitignore` so it doesn't appear in git status:
+```bash
+echo "website/staged/" >> .gitignore
 ```
-Brief description of changes
 
-Detailed explanation of what changed and why.
-- Bullet points for specific changes
-- Keep it clear and concise
+**Option B — Track it as another submodule**
+If staged should pull from a staging branch:
+```bash
+git submodule add -b website-staging \
+  https://github.com/roosterslab/monoatomlabs.git \
+  website/staged
+```
 
-Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+**Option C — Track it as regular files**
+```bash
+git add website/staged/
+git commit -m "chore: add staged website snapshot"
 ```
 
 ---
 
 ## Troubleshooting
 
-### Submodule Not Updating
+### Submodule shows modified but no changes inside
+The parent pointer is out of date. The submodule has new commits that the parent doesn't reference yet.
 ```bash
-# Force update
-git submodule update --init --recursive --force
+git submodule status       # shows + prefix if ahead
+git add website/main       # or extra-websites/visiting-card
+git commit -m "chore: update submodule pointer"
 ```
 
-### Detached HEAD in Submodule
+### Detached HEAD in submodule
 ```bash
-cd website
+cd website/main
 git checkout website-main
 git pull origin website-main
 ```
 
-### Authentication Failures
-
-**401 Unauthorized**
-- Check credentials are stored for correct account
-- Verify token/password hasn't expired
-- Test with: `echo "url=https://github.com/vrocky/monoatoms-websites.git" | git credential fill`
-
-**Repository Not Found**
-- Verify repository exists
-- Check you have access permissions
-- Confirm URL is correct
-
-### Parent Repo Shows "modified content" for Submodule
+### Push rejected
 ```bash
-# This means submodule has new commits
-cd website
-git status  # Check if changes need committing
+git pull --rebase origin <branch>
+# resolve conflicts if any
+git push origin <branch>
+```
 
-# If clean, update parent to point to current commit
-cd ..
-git add website
-git commit -m "Update website submodule reference"
+### Submodule directory is empty after clone
+```bash
+git submodule update --init --recursive
+```
+
+### Wrong branch in visiting-card (on `dev` instead of `visiting-card-dev-main`)
+```bash
+cd extra-websites/visiting-card
+git checkout visiting-card-dev-main
 ```
 
 ---
 
-## Quick Reference Commands
+## Security Notes
 
-### Status Check (All Levels)
+- Never commit tokens, passwords, or `.env` files
+- Rotate GitHub PATs every 90 days
+- Use minimum required token scopes (repo only)
+- The `publish` remote (`vrocky/`) requires its own authentication
+
+---
+
+## npm Workspace Commands
+
 ```bash
-# Parent repo status
-git status
+# From root: install all packages
+npm install
 
-# All submodules status
-git submodule status
+# Run script in a specific workspace
+npm run dev --workspace=website/main
 
-# Detailed submodule status
-git submodule foreach 'git status'
-```
-
-### Push Everything
-```bash
-# Push submodule first
-cd website
-git push origin website-main
-
-# Update and push parent
-cd ..
-git add website
-git commit -m "Update website submodule"
-git push origin monoatomlabs_dev_root
-```
-
-### Pull Everything
-```bash
-# Pull parent
-git pull origin monoatomlabs_dev_root
-
-# Update all submodules
-git submodule update --remote --recursive
+# Install a package into a specific workspace
+npm install <pkg> --workspace=website/main
 ```
 
 ---
 
-## Important Notes
-
-1. **Always commit submodule changes first** before updating parent repository
-2. **Parent repo tracks specific commits** of submodules, not branches
-3. **Two-step push required**: Push submodule, then update parent reference
-4. **Publish remote requires vrocky authentication** - separate from roosterslab
-5. **Submodules are independent repos** - each has its own branches and commits
-
----
-
-## File Locations
-
-- **Main Repository**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root`
-- **Visiting Card Submodule**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\visiting-card-dev`
-  - **Nested Maker Submodule**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\visiting-card-dev\maker`
-- **Website Submodule**: `C:\Users\globql-ws\Documents\projects-2\monoatomlabs\monoatomlabs_dev_root\website`
-- **Git Config**: `.git/config` (in each repository)
-- **Submodule Config**: `.gitmodules` (in parent and visiting-card-dev repositories)
-
----
-
-## Contact & Support
-
-- Repository Owner: roosterslab
-- Publish Repository: vrocky
-- GitHub Issues: https://github.com/roosterslab/monoatomlabs/issues
-
----
-
-*Last Updated: 2026-02-16*
-*Generated by: Claude Sonnet 4.5*
+*Last updated: 2026-03-04*

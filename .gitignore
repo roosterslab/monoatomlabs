@@ -41,3 +41,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Website staging copy (local only, managed separately)
+website/staged/

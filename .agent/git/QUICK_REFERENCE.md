@@ -1,104 +1,116 @@
-# Git Quick Reference - Monoatom Labs
+# Quick Reference — Monoatom Labs Dev Root
+
+---
+
+## Remotes
+
+| Remote | URL |
+|--------|-----|
+| `origin` (mono repo) | `https://github.com/roosterslab/monoatomlabs.git` |
+| `publish` (website deploy) | `https://github.com/vrocky/monoatoms-websites.git` |
+
+---
 
 ## Daily Workflow
 
-### Working on Website
-
+### Website changes
 ```bash
-# Navigate to website
-cd /c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/website
-
-# Check status
-git status
-
-# Make changes, then commit
-git add .
-git commit -m "Your changes"
-
-# Push to mono repo
+# 1. Work inside submodule
+cd website/main
+git add <files>
+git commit -m "feat: your change"
 git push origin website-main
 
-# Push to publish repo (optional)
-git push publish website-main:main
+# 2. Update parent pointer
+cd ../..
+git add website/main
+git commit -m "chore: update website submodule pointer"
+git push origin monoatomlabs_dev_root
+```
 
-# Update parent repository
-cd ..
-git add website
-git commit -m "Update website submodule"
+### Visiting card changes
+```bash
+cd extra-websites/visiting-card
+git add <files>
+git commit -m "feat: your change"
+git push origin visiting-card-dev-main
+
+cd ../..
+git add extra-websites/visiting-card
+git commit -m "chore: update visiting-card submodule pointer"
+git push origin monoatomlabs_dev_root
+```
+
+### Push website to deploy (publish remote)
+```bash
+cd website/main
+git push publish website-main:main
+```
+
+---
+
+## Submodule Commands
+
+```bash
+# Check status of all submodules
+git submodule status
+
+# Pull latest for all submodules
+git submodule update --remote --merge
+
+# Init submodules after fresh clone
+git submodule update --init --recursive
+
+# Enter a submodule
+cd website/main
+# or
+cd extra-websites/visiting-card
+```
+
+---
+
+## Common Git Commands
+
+```bash
+# Full status (parent + submodules)
+git status
+git submodule status
+
+# Pull parent + sync submodule pointers
+git pull origin monoatomlabs_dev_root
+git submodule update --init --recursive
+
+# View branch mapping
+git branch -a
+
+# Push parent
 git push origin monoatomlabs_dev_root
 ```
 
 ---
 
-## Remote URLs
+## Branch Map
 
-### Website Submodule
-- **origin**: `https://github.com/roosterslab/monoatomlabs.git` (branch: website-main)
-- **publish**: `https://github.com/vrocky/monoatoms-websites.git` (branch: main)
-
-### Parent Repository
-- **origin**: `https://github.com/roosterslab/monoatomlabs.git` (branch: monoatomlabs_dev_root)
-
----
-
-## Common Commands
-
-```bash
-# View all remotes
-git remote -v
-
-# View current branch
-git branch -vv
-
-# View submodule status
-git submodule status
-
-# Update submodules
-git submodule update --remote
-
-# View commit history
-git log --oneline -10
-
-# View changes
-git diff
-```
+| Project | Branch |
+|---------|--------|
+| Root / parent | `monoatomlabs_dev_root` |
+| `website/main` | `website-main` |
+| `extra-websites/visiting-card` | `visiting-card-dev-main` |
+| Content / source | `source-contents-branch` |
+| Maker app | `maker-app` |
 
 ---
 
 ## Troubleshooting
 
-```bash
-# Check credentials
-git config --get credential.helper
-
-# Test credentials for vrocky repo
-echo "url=https://github.com/vrocky/monoatoms-websites.git" | git credential fill
-
-# Reset submodule
-git submodule update --init --force website
-```
+| Problem | Fix |
+|---------|-----|
+| Submodule shows `modified` but nothing changed | `git add <submodule-path>` then commit pointer |
+| Detached HEAD in submodule | `cd <submodule> && git checkout <branch>` |
+| Push rejected | `git pull --rebase origin <branch>` then push |
+| Submodule directory empty | `git submodule update --init --recursive` |
+| Token expired | Re-run any push — GCM will prompt |
 
 ---
 
-## Authentication
-
-### Current Setup
-- **roosterslab**: Authenticated via Git Credential Manager
-- **vrocky**: Needs manual token setup for publish remote
-
-### Setup vrocky Token
-```bash
-# 1. Create token at https://github.com/settings/tokens/new
-# 2. Store it:
-cd website
-git credential approve << EOF
-protocol=https
-host=github.com
-username=vrocky
-password=YOUR_TOKEN
-EOF
-```
-
----
-
-*Quick reference for common git operations*
+*Last updated: 2026-03-04*

@@ -1,217 +1,131 @@
-# Git Workflows - Monoatom Labs
+# Workflows — Monoatom Labs Dev Root
 
-## Workflow 1: Website Development & Deployment
+---
+
+## Workflow 1: Website Development & Deploy
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ WEBSITE DEVELOPMENT WORKFLOW                                │
-└─────────────────────────────────────────────────────────────┘
-
-1. WORK ON WEBSITE
-   ┌──────────────────────────┐
-   │ cd website/              │
-   │ [make changes]           │
-   │ git add .                │
-   │ git commit -m "..."      │
-   └──────────────────────────┘
-                │
-                ▼
-2. PUSH TO MONO REPO (Required)
-   ┌──────────────────────────────────┐
-   │ git push origin website-main     │
-   └──────────────────────────────────┘
-                │
-                ├───────────────────────────┐
-                ▼                           ▼
-3a. UPDATE PARENT (Required)    3b. PUBLISH (Optional)
-   ┌──────────────────────┐        ┌─────────────────────────────┐
-   │ cd ..                │        │ git push publish            │
-   │ git add website      │        │   website-main:main         │
-   │ git commit -m "..."  │        │                             │
-   │ git push origin      │        │ Requires vrocky auth        │
-   └──────────────────────┘        └─────────────────────────────┘
-                │
-                ▼
-          ┌─────────┐
-          │  DONE   │
-          └─────────┘
+START
+  │
+  ▼
+cd website/main
+  │
+  ▼
+Make changes (edit files)
+  │
+  ▼
+git add <files>
+git commit -m "feat: ..."
+  │
+  ▼
+git push origin website-main ──────────────► roosterslab/monoatomlabs (website-main)
+  │
+  ▼
+cd ../..  (back to parent)
+  │
+  ▼
+git add website/main
+git commit -m "chore: update website submodule pointer"
+git push origin monoatomlabs_dev_root ────► roosterslab/monoatomlabs (monoatomlabs_dev_root)
+  │
+  ├─── [Deploy?] ──► git push publish website-main:main
+  │                    └── vrocky/monoatoms-websites (main)
+  ▼
+DONE
 ```
 
 ---
 
-## Workflow 2: Pulling Latest Changes
+## Workflow 2: Pull Latest Changes
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ SYNC WITH REMOTE CHANGES                                    │
-└─────────────────────────────────────────────────────────────┘
-
-1. UPDATE PARENT REPOSITORY
-   ┌──────────────────────────────────────┐
-   │ cd monoatomlabs_dev_root/            │
-   │ git pull origin monoatomlabs_dev_root│
-   └──────────────────────────────────────┘
-                │
-                ▼
-2. UPDATE SUBMODULES
-   ┌──────────────────────────────────────┐
-   │ git submodule update --remote        │
-   │                                      │
-   │ OR                                   │
-   │                                      │
-   │ cd website/                          │
-   │ git pull origin website-main         │
-   └──────────────────────────────────────┘
-                │
-                ▼
-          ┌─────────┐
-          │  SYNCED │
-          └─────────┘
+START
+  │
+  ▼
+cd monoatomlabs_dev_root
+  │
+  ▼
+git pull origin monoatomlabs_dev_root
+  │
+  ▼
+git submodule update --init --recursive
+  │        (checks out commits the parent references)
+  ▼
+[Need latest submodule commits?]
+  │
+  ├── YES ──► git submodule update --remote --merge
+  │
+  └── NO  ──► Done
 ```
 
 ---
 
-## Workflow 3: Initial Clone & Setup
+## Workflow 3: Clone on New Machine
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ NEW MACHINE SETUP                                           │
-└─────────────────────────────────────────────────────────────┘
-
-1. CLONE MAIN REPOSITORY
-   ┌────────────────────────────────────────┐
-   │ git clone                              │
-   │   https://github.com/roosterslab/     │
-   │   monoatomlabs.git                     │
-   └────────────────────────────────────────┘
-                │
-                ▼
-2. CHECKOUT BRANCH
-   ┌────────────────────────────────────────┐
-   │ cd monoatomlabs/                       │
-   │ git checkout monoatomlabs_dev_root     │
-   └────────────────────────────────────────┘
-                │
-                ▼
-3. INITIALIZE SUBMODULES
-   ┌────────────────────────────────────────┐
-   │ git submodule init                     │
-   │ git submodule update --recursive       │
-   └────────────────────────────────────────┘
-                │
-                ▼
-4. SETUP WEBSITE PUBLISH REMOTE
-   ┌────────────────────────────────────────┐
-   │ cd website/                            │
-   │ git remote add publish                 │
-   │   https://github.com/vrocky/           │
-   │   monoatoms-websites.git               │
-   └────────────────────────────────────────┘
-                │
-                ▼
-5. CONFIGURE AUTHENTICATION (if needed)
-   ┌────────────────────────────────────────┐
-   │ git config --local                     │
-   │   credential.https://github.com/vrocky │
-   │   .username vrocky                     │
-   │                                        │
-   │ [Setup PAT or SSH]                     │
-   └────────────────────────────────────────┘
-                │
-                ▼
-          ┌─────────┐
-          │  READY  │
-          └─────────┘
+git clone --recurse-submodules \
+  -b monoatomlabs_dev_root \
+  https://github.com/roosterslab/monoatomlabs.git \
+  monoatomlabs_dev_root
+  │
+  ▼
+cd monoatomlabs_dev_root
+  │
+  ▼
+npm install   (installs all workspace packages)
+  │
+  ▼
+Verify:
+  git submodule status          ── should show clean (no + prefix)
+  cd website/main && npm run dev
 ```
 
 ---
 
-## Workflow 4: Adding New Submodule
+## Workflow 4: Add New Project as Submodule
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ ADD NEW SUBMODULE                                           │
-└─────────────────────────────────────────────────────────────┘
+# On GitHub: create new branch from an orphan or existing branch
+git checkout --orphan <new-branch>
+git rm -rf .
+# add your project files
+git add .
+git commit -m "init: new project"
+git push origin <new-branch>
 
-1. CREATE BRANCH IN MONO REPO
-   ┌────────────────────────────────────────┐
-   │ # On mono repo                         │
-   │ git checkout -b new-project-main       │
-   │ [commit project files]                 │
-   │ git push origin new-project-main       │
-   └────────────────────────────────────────┘
-                │
-                ▼
-2. ADD AS SUBMODULE TO PARENT
-   ┌────────────────────────────────────────┐
-   │ cd monoatomlabs_dev_root/              │
-   │ git submodule add                      │
-   │   -b new-project-main                  │
-   │   https://github.com/roosterslab/      │
-   │   monoatomlabs.git                     │
-   │   new-project                          │
-   └────────────────────────────────────────┘
-                │
-                ▼
-3. COMMIT SUBMODULE ADDITION
-   ┌────────────────────────────────────────┐
-   │ git add .gitmodules new-project        │
-   │ git commit -m "Add new-project         │
-   │   submodule"                           │
-   │ git push origin monoatomlabs_dev_root  │
-   └────────────────────────────────────────┘
-                │
-                ▼
-          ┌─────────┐
-          │  DONE   │
-          └─────────┘
+# Back in parent repo:
+git submodule add -b <new-branch> \
+  https://github.com/roosterslab/monoatomlabs.git \
+  <local-path>
+
+git add .gitmodules <local-path>
+git commit -m "chore: add <project> submodule"
+git push origin monoatomlabs_dev_root
 ```
 
 ---
 
-## Workflow 5: Resolving Submodule Conflicts
+## Workflow 5: Rename Branch (new naming convention)
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ SUBMODULE OUT OF SYNC                                       │
-└─────────────────────────────────────────────────────────────┘
+# Inside the submodule repo
+cd <submodule-path>
 
-SYMPTOM: Parent shows "modified content" for submodule
+# Create new branch from current
+git checkout -b <new-branch-name>
+git push origin <new-branch-name>
 
-1. CHECK SUBMODULE STATUS
-   ┌────────────────────────────────────────┐
-   │ cd website/                            │
-   │ git status                             │
-   └────────────────────────────────────────┘
-                │
-                ├─────────────────┬──────────────────┐
-                ▼                 ▼                  ▼
-        HAS UNCOMMITTED    DETACHED HEAD    BEHIND REMOTE
-        CHANGES
+# Delete old branch on remote (confirm first!)
+git push origin --delete <old-branch-name>
 
-2a. COMMIT CHANGES     2b. CHECKOUT BRANCH   2c. PULL UPDATES
-   ┌────────────┐         ┌──────────────┐      ┌─────────────┐
-   │ git add .  │         │ git checkout │      │ git pull    │
-   │ git commit │         │ website-main │      │   origin    │
-   │ git push   │         └──────────────┘      │   website-  │
-   └────────────┘                               │   main      │
-        │                      │                 └─────────────┘
-        └──────────────────────┴────────────────────┘
-                              │
-                              ▼
-3. UPDATE PARENT REFERENCE
-   ┌────────────────────────────────────────┐
-   │ cd ..                                  │
-   │ git add website                        │
-   │ git commit -m "Update website          │
-   │   submodule reference"                 │
-   │ git push origin monoatomlabs_dev_root  │
-   └────────────────────────────────────────┘
-                │
-                ▼
-          ┌─────────┐
-          │ RESOLVED│
-          └─────────┘
+# Update parent .gitmodules
+# Edit: branch = <new-branch-name>
+
+# Commit .gitmodules update
+cd <root>
+git add .gitmodules <submodule-path>
+git commit -m "chore: rename branch to <new-branch-name>"
+git push origin monoatomlabs_dev_root
 ```
 
 ---
@@ -219,62 +133,41 @@ SYMPTOM: Parent shows "modified content" for submodule
 ## Workflow 6: Emergency Rollback
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│ ROLLBACK TO PREVIOUS VERSION                               │
-└─────────────────────────────────────────────────────────────┘
+STOP — coordinate with team first
+  │
+  ▼
+# Rollback submodule to previous commit
+cd <submodule-path>
+git log --oneline -10          ── find safe commit
+git checkout <safe-commit>
 
-1. FIND COMMIT TO ROLLBACK TO
-   ┌────────────────────────────────────────┐
-   │ cd website/                            │
-   │ git log --oneline                      │
-   │ # Note the commit hash                 │
-   └────────────────────────────────────────┘
-                │
-                ▼
-2. RESET TO COMMIT
-   ┌────────────────────────────────────────┐
-   │ git reset --hard COMMIT_HASH           │
-   │                                        │
-   │ WARNING: This discards changes         │
-   └────────────────────────────────────────┘
-                │
-                ▼
-3. FORCE PUSH (CAREFUL!)
-   ┌────────────────────────────────────────┐
-   │ git push --force origin website-main   │
-   │                                        │
-   │ Confirm with team before force push!   │
-   └────────────────────────────────────────┘
-                │
-                ▼
-4. UPDATE PARENT
-   ┌────────────────────────────────────────┐
-   │ cd ..                                  │
-   │ git add website                        │
-   │ git commit -m "Rollback website"       │
-   │ git push origin monoatomlabs_dev_root  │
-   └────────────────────────────────────────┘
+# Update parent pointer
+cd <root>
+git add <submodule-path>
+git commit -m "revert: rollback <project> to <safe-commit>"
+git push origin monoatomlabs_dev_root
+  │
+  ▼
+Document the incident
 ```
 
 ---
 
-## Decision Tree: Where to Push?
+## Branch Naming Convention (target)
 
 ```
-START: Made changes to website
-│
-├─ Is this a hotfix/urgent deployment?
-│  ├─ YES → Push to both origin AND publish
-│  └─ NO  → Continue
-│
-├─ Is this ready for production?
-│  ├─ YES → Push to both origin AND publish
-│  └─ NO  → Push to origin only
-│
-└─ Is this experimental/testing?
-   └─ Push to origin only (mono repo)
+<dir-name>__<project-name>
 
-ALWAYS: Update parent repository after pushing submodule
+Examples:
+  website__main
+  website__staging
+  website__backup
+  extra-websites__visiting-card
+  extra-websites__company-profile
+  extra-websites__box-design
+  extra-websites__id-card
+  content__source
+  infrastructure__maker-app
 ```
 
 ---
@@ -282,62 +175,21 @@ ALWAYS: Update parent repository after pushing submodule
 ## Authentication Decision Tree
 
 ```
-PUSH FAILS WITH 401 UNAUTHORIZED
-│
-├─ Pushing to origin (roosterslab)?
-│  └─ Check: gh auth status
-│     ├─ Not logged in → Run: gh auth login
-│     └─ Token expired → Refresh token
-│
-└─ Pushing to publish (vrocky)?
-   └─ Run: git credential fill
-      ├─ Shows roosterslab → Wrong account!
-      │  └─ Setup vrocky credentials:
-      │     1. Create PAT on GitHub (as vrocky)
-      │     2. Store with: git credential approve
-      │
-      └─ Shows vrocky → Token may be invalid
-         └─ Generate new PAT and update
+Push fails?
+  │
+  ├── "Authentication failed"
+  │     └── Git Credential Manager prompt should appear
+  │         If not: git credential reject → retry push
+  │
+  ├── "Permission denied"
+  │     └── Check you have write access to the repo/branch
+  │         For publish remote: may need separate vrocky account token
+  │
+  └── "Remote rejected"
+        └── Pull first: git pull --rebase origin <branch>
+            Then retry push
 ```
 
 ---
 
-## Best Practices
-
-1. **Always Pull Before Push**
-   ```bash
-   git pull origin website-main
-   # resolve conflicts if any
-   git push origin website-main
-   ```
-
-2. **Never Force Push to Main Branches** (unless emergency)
-   - Coordinate with team
-   - Document the reason
-   - Notify all developers
-
-3. **Keep Submodules in Sync**
-   ```bash
-   # Weekly maintenance
-   git submodule update --remote
-   git add website visiting-card-dev
-   git commit -m "Update submodules to latest"
-   ```
-
-4. **Test Before Publishing**
-   ```bash
-   # Test locally first
-   npm run build
-   npm run preview
-
-   # Then push to origin
-   git push origin website-main
-
-   # Only after verification, push to publish
-   git push publish website-main:main
-   ```
-
----
-
-*Comprehensive workflow documentation*
-*Last Updated: 2026-02-16*
+*Last updated: 2026-03-04*
