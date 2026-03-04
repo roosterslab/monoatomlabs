@@ -59,6 +59,162 @@ const CardForm = ({ data, onChange }) => {
           Card Style
         </h3>
         <div className="space-y-4">
+          {/* Font Sizes */}
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">Front Card Fonts</p>
+            <div className="space-y-3">
+              {[
+                { label: 'Company Name', key: 'fsCompany' },
+                { label: 'Tagline', key: 'fsTagline' },
+              ].map(({ label, key }) => (
+                <div key={key}>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs font-medium text-gray-400">{label}</label>
+                    <span className="text-xs text-primary-400 font-mono">{Math.round((data[key] || 1) * 100)}%</span>
+                  </div>
+                  <input
+                    type="range" min="0.6" max="1.5" step="0.05"
+                    value={data[key] || 1}
+                    onChange={(e) => onChange({ ...data, [key]: parseFloat(e.target.value) })}
+                    className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">Back Card Fonts</p>
+            <div className="space-y-3">
+              {[
+                { label: 'Person Name', key: 'fsName' },
+                { label: 'Title / Role', key: 'fsRole' },
+                { label: 'Contact Values', key: 'fsContact' },
+                { label: 'Field Labels', key: 'fsLabels' },
+                { label: 'Badges & QR Text', key: 'fsBadges' },
+              ].map(({ label, key }) => (
+                <div key={key}>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs font-medium text-gray-400">{label}</label>
+                    <span className="text-xs text-primary-400 font-mono">{Math.round((data[key] || 1) * 100)}%</span>
+                  </div>
+                  <input
+                    type="range" min="0.6" max="1.5" step="0.05"
+                    value={data[key] || 1}
+                    onChange={(e) => onChange({ ...data, [key]: parseFloat(e.target.value) })}
+                    className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="mt-3">
+              <div className="flex justify-between items-center mb-1">
+                <label className="text-xs font-medium text-gray-400">Contact Letter Spacing</label>
+                <span className="text-xs text-primary-400 font-mono">{(data.lsContact ?? 0).toFixed(2)}em</span>
+              </div>
+              <input
+                type="range" min="0" max="0.3" step="0.01"
+                value={data.lsContact ?? 0}
+                onChange={(e) => onChange({ ...data, lsContact: parseFloat(e.target.value) })}
+                className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+              />
+              <div className="flex justify-between text-xs text-gray-500 mt-1">
+                <span>Tight</span>
+                <span>Wide</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Padding Sliders */}
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">Spacing</p>
+            <div className="space-y-3">
+              {[
+                { label: 'Front — Top / Bottom', key: 'padFrontV', min: 0.2, max: 2.5, def: 0.875 },
+                { label: 'Front — Left / Right',  key: 'padFrontH', min: 0.2, max: 3,   def: 1.5   },
+                { label: 'Back — Top / Bottom',  key: 'padBackV',  min: 0.2, max: 2.5, def: 0.875 },
+                { label: 'Back — Left / Right',  key: 'padBackH',  min: 0.2, max: 3,   def: 1.5   },
+              ].map(({ label, key, min, max, def }) => (
+                <div key={key}>
+                  <div className="flex justify-between items-center mb-1">
+                    <label className="text-xs font-medium text-gray-400">{label}</label>
+                    <span className="text-xs text-primary-400 font-mono">{(data[key] ?? def).toFixed(2)}rem</span>
+                  </div>
+                  <input
+                    type="range" min={min} max={max} step="0.05"
+                    value={data[key] ?? def}
+                    onChange={(e) => onChange({ ...data, [key]: parseFloat(e.target.value) })}
+                    className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                  />
+                </div>
+              ))}
+
+              {/* Back card structural sliders */}
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-xs font-medium text-gray-400">Back — Text / QR Gap</label>
+                  <span className="text-xs text-primary-400 font-mono">{(data.sectionGap ?? 0)}px</span>
+                </div>
+                <input
+                  type="range" min="0" max="32" step="1"
+                  value={data.sectionGap ?? 0}
+                  onChange={(e) => onChange({ ...data, sectionGap: parseInt(e.target.value) })}
+                  className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-xs font-medium text-gray-400">Back — Left Bar Thickness</label>
+                  <span className="text-xs text-primary-400 font-mono">{(data.sideBarWidth ?? 12)}px</span>
+                </div>
+                <input
+                  type="range" min="0" max="32" step="1"
+                  value={data.sideBarWidth ?? 12}
+                  onChange={(e) => onChange({ ...data, sideBarWidth: parseInt(e.target.value) })}
+                  className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-1">
+                  <label className="text-xs font-medium text-gray-400">Back — QR Right Margin</label>
+                  <span className="text-xs text-primary-400 font-mono">{(data.qrPadRight ?? 0.75).toFixed(2)}rem</span>
+                </div>
+                <input
+                  type="range" min="0" max="3" step="0.05"
+                  value={data.qrPadRight ?? 0.75}
+                  onChange={(e) => onChange({ ...data, qrPadRight: parseFloat(e.target.value) })}
+                  className="w-full h-1.5 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>Flush</span>
+                  <span>Pull In</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-400 mb-2">
+              Logo Lightness
+              <span className="ml-2 text-primary-400 font-mono">{Math.round((data.logoOpacity ?? 0.8) * 100)}%</span>
+            </label>
+            <input
+              type="range"
+              min="0.05"
+              max="1"
+              step="0.05"
+              value={data.logoOpacity ?? 0.8}
+              onChange={(e) => onChange({ ...data, logoOpacity: parseFloat(e.target.value) })}
+              className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-primary-500"
+            />
+            <div className="flex justify-between text-xs text-gray-500 mt-1">
+              <span>Subtle</span>
+              <span>Bold</span>
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-400 mb-2">
               Border Style
