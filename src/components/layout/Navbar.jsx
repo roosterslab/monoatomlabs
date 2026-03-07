@@ -145,7 +145,7 @@ const Navbar = () => {
                                 theme="dark"
                                 className="h-9 px-4 text-xs shadow-none"
                             >
-                                Contact Us
+                                Innovate With Us
                             </Button>
                         </Link>
                     </div>
@@ -216,7 +216,7 @@ const Navbar = () => {
                                     theme="dark"
                                     className="h-9 px-4 text-xs shadow-none w-full"
                                 >
-                                    Contact Us
+                                    Innovate With Us
                                 </Button>
                             </Link>
                         </div>

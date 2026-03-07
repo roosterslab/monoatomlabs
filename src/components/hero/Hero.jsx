@@ -41,7 +41,7 @@ const Hero = () => {
                 </h1>
 
                 <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mb-12 font-light leading-relaxed">
-                    We structure Graphene at atomic level to make impossible to possible.
+                    We engineer Graphene at the atomic level to make the impossible possible.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-20">
