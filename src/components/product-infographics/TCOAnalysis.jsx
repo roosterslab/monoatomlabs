@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, TrendingDown, DollarSign, Clock, AlertCircle, ArrowDown, PieChart, Coins, BarChart4 } from 'lucide-react';
+import { TrendingDown, DollarSign, Clock, AlertCircle, Coins } from 'lucide-react';
 
 /**
  * Total Cost of Ownership Analysis Component
@@ -15,8 +15,43 @@ const TCOAnalysis = ({
     { label: 'Reduced Maintenance', value: '-40%', color: 'green' },
     { label: 'Longevity Multiplier', value: '2.5x', color: 'blue' },
   ],
-  theme = 'light'
+  theme = 'light',
+  copy: copyOverrides,
 }) => {
+
+  const defaultCopy = {
+    badgeLabel: 'Cost Analysis',
+    title: 'Total Cost of Ownership',
+    subtitle: 'A comparative 5-year outlook on capital and operational expenditure.',
+    projectedSavingsLabel: 'Projected Savings',
+    traditionalLabel: 'Traditional',
+    maintenanceLabel: 'Maintenance',
+    maintenanceValue: 'High',
+    lifecycleLabel: 'Lifecycle',
+    lifecycleValue: 'Standard',
+    withProductLabelTemplate: 'With {productName}',
+    netValueCreatedLabel: 'Net Value Created',
+    directCapitalRetainedTemplate: 'Direct capital retained over {timeframe}.',
+    paybackLabel: 'Payback:',
+    breakdownHeaders: {
+      costCategory: 'Cost Category',
+      standard: 'Standard',
+      usingProductTemplate: 'Using {productName}',
+      delta: 'Delta',
+    },
+  };
+
+  const copy = { ...defaultCopy, ...(copyOverrides || {}) };
+  copy.breakdownHeaders = { ...defaultCopy.breakdownHeaders, ...(copyOverrides?.breakdownHeaders || {}) };
+
+  const formatTemplate = (template, vars) => {
+    if (typeof template !== 'string') return template;
+    return template.replace(/\{(\w+)\}/g, (_match, key) => {
+      const value = vars?.[key];
+      return value == null ? '' : String(value);
+    });
+  };
+
   const isDark = theme === 'dark';
   const bgClass = isDark ? 'bg-neutral-900' : 'bg-white';
   const textClass = isDark ? 'text-white' : 'text-neutral-900';
@@ -42,18 +77,18 @@ const TCOAnalysis = ({
           <div>
             <div className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-lg mb-4 ${isDark ? 'bg-green-900/30 text-green-400' : 'bg-green-50 text-green-700'}`}>
               <Coins className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">Cost Analysis</span>
+              <span className="text-xs font-bold uppercase tracking-wider">{copy.badgeLabel}</span>
             </div>
             <h3 className={`text-3xl lg:text-4xl font-display font-medium ${textClass} mb-2`}>
-              Total Cost of Ownership
+              {copy.title}
             </h3>
             <p className={`text-lg ${subtextClass} max-w-xl`}>
-              A comparative 5-year outlook on capital and operational expenditure.
+              {copy.subtitle}
             </p>
           </div>
           {/* Summary Stat */}
           <div className={`hidden md:flex flex-col items-end`}>
-            <div className="text-sm font-bold uppercase tracking-widest text-green-500 mb-1">Projected Savings</div>
+            <div className="text-sm font-bold uppercase tracking-widest text-green-500 mb-1">{copy.projectedSavingsLabel}</div>
             <div className={`text-5xl font-display font-bold ${isDark ? 'text-white' : 'text-neutral-900'}`}>
               {savingsPercentage}%
             </div>
@@ -65,7 +100,7 @@ const TCOAnalysis = ({
           {/* Traditional Card */}
           <div className={`p-8 rounded-2xl border ${borderClass} ${isDark ? 'bg-neutral-800/30 hover:bg-neutral-800/50' : 'bg-neutral-50 hover:bg-white hover:shadow-lg'} transition-all duration-300 group`}>
             <div className="flex items-center justify-between mb-8 group-hover:opacity-100 opacity-60 transition-opacity">
-              <div className="text-xs font-bold uppercase tracking-widest text-neutral-500">Traditional</div>
+              <div className="text-xs font-bold uppercase tracking-widest text-neutral-500">{copy.traditionalLabel}</div>
               <AlertCircle className="w-5 h-5 text-neutral-400 group-hover:text-red-400 transition-colors" />
             </div>
             <div className={`text-3xl lg:text-4xl font-display font-medium ${textClass} mb-2 group-hover:scale-105 origin-left transition-transform`}>
@@ -76,12 +111,12 @@ const TCOAnalysis = ({
             </div>
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className={subtextClass}>Maintenance</span>
-                <span className={`font-mono ${textClass}`}>High</span>
+                <span className={subtextClass}>{copy.maintenanceLabel}</span>
+                <span className={`font-mono ${textClass}`}>{copy.maintenanceValue}</span>
               </div>
               <div className="flex justify-between text-xs">
-                <span className={subtextClass}>Lifecycle</span>
-                <span className={`font-mono ${textClass}`}>Standard</span>
+                <span className={subtextClass}>{copy.lifecycleLabel}</span>
+                <span className={`font-mono ${textClass}`}>{copy.lifecycleValue}</span>
               </div>
             </div>
           </div>
@@ -95,7 +130,7 @@ const TCOAnalysis = ({
 
               <div className="relative z-10">
                 <div className="flex items-center justify-between mb-8">
-                  <div className="text-xs font-bold uppercase tracking-widest text-indigo-500">With {productName}</div>
+                  <div className="text-xs font-bold uppercase tracking-widest text-indigo-500">{formatTemplate(copy.withProductLabelTemplate, { productName })}</div>
                   <div className="p-1.5 bg-indigo-100 dark:bg-indigo-900/50 rounded text-indigo-600 dark:text-indigo-400">
                     <TrendingDown className="w-4 h-4" />
                   </div>
@@ -124,17 +159,17 @@ const TCOAnalysis = ({
           <div className={`p-8 rounded-2xl border ${borderClass} ${isDark ? 'bg-green-900/10 border-green-800/30' : 'bg-green-50 border-green-100'} flex flex-col justify-center relative overflow-hidden`}>
             <div className="absolute inset-0 bg-green-500/5 pulse-slow"></div>
             <div className="relative z-10">
-              <div className="text-xs font-bold uppercase tracking-widest text-green-600 mb-4">Net Value Created</div>
+              <div className="text-xs font-bold uppercase tracking-widest text-green-600 mb-4">{copy.netValueCreatedLabel}</div>
               <div className={`text-4xl font-display font-bold text-green-500 mb-2`}>
                 ₹{savings.toLocaleString()}
               </div>
               <div className={`text-sm ${isDark ? 'text-green-400' : 'text-green-700'} mb-8 opacity-80`}>
-                Direct capital retained over {timeframe}.
+                {formatTemplate(copy.directCapitalRetainedTemplate, { timeframe })}
               </div>
 
               <div className={`inline-flex items-center gap-2 text-xs font-mono px-3 py-2 rounded-lg ${isDark ? 'bg-green-900/30 text-green-300' : 'bg-green-100 text-green-800'}`}>
                 <Clock className="w-3.5 h-3.5" />
-                Payback: {productSolution.paybackPeriod || '< 18 mo'}
+                {copy.paybackLabel} {productSolution.paybackPeriod || '< 18 mo'}
               </div>
             </div>
           </div>
@@ -143,10 +178,10 @@ const TCOAnalysis = ({
         {/* Breakdown Table (Clean & Technical) */}
         <div className={`border ${borderClass} rounded-2xl overflow-hidden`}>
           <div className="grid grid-cols-12 bg-neutral-100 dark:bg-neutral-800/50 p-4 text-[10px] font-bold uppercase tracking-widest text-neutral-500">
-            <div className="col-span-4">Cost Category</div>
-            <div className="col-span-3 text-right">Standard</div>
-            <div className="col-span-3 text-right">Using {productName}</div>
-            <div className="col-span-2 text-right">Delta</div>
+            <div className="col-span-4">{copy.breakdownHeaders.costCategory}</div>
+            <div className="col-span-3 text-right">{copy.breakdownHeaders.standard}</div>
+            <div className="col-span-3 text-right">{formatTemplate(copy.breakdownHeaders.usingProductTemplate, { productName })}</div>
+            <div className="col-span-2 text-right">{copy.breakdownHeaders.delta}</div>
           </div>
           <div className="divide-y divide-neutral-200 dark:divide-neutral-800">
             {breakdown.map((item, index) => {

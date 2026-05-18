@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:client": "node build-client-package.js"
   },
   "dependencies": {
     "framer-motion": "^12.31.0",

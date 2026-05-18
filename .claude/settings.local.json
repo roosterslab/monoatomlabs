@@ -25,7 +25,22 @@
       "Bash(gh repo create:*)",
       "Bash(GIT_CURL_VERBOSE=1 GIT_TRACE=1 git push:*)",
       "Bash(git credential:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "Bash(gcloud auth:*)",
+      "Bash(gcloud artifacts:*)",
+      "Bash(gcloud run:*)",
+      "Bash(terraform init:*)",
+      "Bash(GOOGLE_APPLICATION_CREDENTIALS=\"C:/Users/globql-ws/Documents/projects-2/cloud-run-static-html/.credentials/dev-sa-key.json\" terraform plan)",
+      "Bash(docker:*)",
+      "Bash(gcloud builds:*)",
+      "Bash(gcloud beta:*)",
+      "Bash(python -c \":*)",
+      "Bash(gsutil cat:*)",
+      "Bash(gcloud storage:*)",
+      "Bash(npm --version)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\globql-ws\\\\Documents\\\\project-5\\\\grafillium\\\\infrastructure\\\\deploy.ps1\" 2>&1)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\globql-ws\\\\Documents\\\\project-5\\\\nexerg\\\\infrastructure\\\\deploy.ps1\" 2>&1)",
+      "Bash(powershell -ExecutionPolicy Bypass -File \"C:\\\\Users\\\\globql-ws\\\\Documents\\\\project-5\\\\spi-industries-dev\\\\infrastructure\\\\deploy.ps1\" 2>&1)"
     ]
   }
 }

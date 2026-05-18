@@ -8,6 +8,7 @@ import { Check, Layers, BarChart3, Timer, HardHat, TrendingUp } from 'lucide-rea
 import ProductLightbox from '../../components/ui/ProductLightbox';
 import ProductHero from '../../components/ui/ProductHero';
 import { products } from '../../data/content';
+import { productGraphacretePresentation } from '../../presentation/pages/product-graphacrete.copy';
 
 // Lazy load infographic components (only loaded when tab is viewed)
 const GraphacreteROICalculator = lazy(() => import('../../components/product-infographics').then(m => ({ default: m.GraphacreteROICalculator })));
@@ -64,6 +65,8 @@ const SpecItem = ({ label, value, subtext }) => (
 );
 
 const Graphacrete = () => {
+  const copy = productGraphacretePresentation;
+
   // Tab Content Organization
   const tabs = [
     {
@@ -74,8 +77,8 @@ const Graphacrete = () => {
           <div className="space-y-24 mt-24">
             {/* Hero Section */}
             <ProductHero
-              title="Reinforcing the future of construction with graphene."
-              subtitle="Graphacrete is a next-generation concrete admixture that utilizes graphene nano-platelets to significantly enhance structural integrity while reducing cement consumption and carbon footprint."
+              title={copy.hero.title}
+              subtitle={copy.hero.subtitle}
               category="Commercial Ready"
               categoryColor="bg-green-400"
               images={[
@@ -86,8 +89,8 @@ const Graphacrete = () => {
                 '/images/graphacrete_lifecycle_site_result.png'
               ]}
               buttons={[
-                { text: 'Request Technical Data', link: '/contact', variant: 'primary' },
-                { text: 'View Cost Analysis', link: '#impact', variant: 'secondary' }
+                { text: copy.hero.primaryButtonText, link: '/contact', variant: 'primary' },
+                { text: copy.hero.secondaryButtonText, link: '#impact', variant: 'secondary' }
               ]}
             />
 
@@ -627,8 +630,8 @@ const Graphacrete = () => {
     <div className="min-h-screen">
       <PageHeader
         category="Construction"
-        title="Graphacrete"
-        subtitle="A high-performance graphene nano-platelet additive that transforms standard concrete grades into superior, high-strength materials with reduced cement usage."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />

@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import PageHeader from '../../../components/ui/PageHeader';
 import Button from '../../../components/ui/Button';
+import { pipelineOverviewPresentation } from '../../../presentation/pages/pipeline-overview.copy';
 
 // --- DATA SOURCE ---
 // Product Images (Icons + Studio photos for slideshow)
@@ -438,6 +439,8 @@ const PipelineCard = ({ item, onClick }) => {
 };
 
 const PipelineOverview = () => {
+  const copy = pipelineOverviewPresentation;
+
   const [filter, setFilter] = useState('all'); // all, r&d, pilot
   const [selectedProject, setSelectedProject] = useState(null);
 
@@ -449,8 +452,8 @@ const PipelineOverview = () => {
     <div className="min-h-screen">
       <PageHeader
         category="R&D"
-        title="Innovation Pipeline"
-        subtitle="Exploring the frontiers of material science. Discover our next-generation technologies currently in development."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       {/* Floating Filter Bar */}

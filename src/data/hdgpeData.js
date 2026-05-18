@@ -1,4 +1,5 @@
 import { Package, TrendingUp, Shield, Zap, Factory, Wrench } from 'lucide-react';
+import { getCalculatorOverrides, mergeInputConfigs } from '../utils/runtimeOverrides';
 
 /**
  * HD-G-PE Product Infographic Data
@@ -8,7 +9,7 @@ import { Package, TrendingUp, Shield, Zap, Factory, Wrench } from 'lucide-react'
 // ROI Calculator Configuration — v3
 export const roiCalculatorConfig = {
   productName: 'HD-G-PE',
-  defaultInputs: {
+  defaultInputs: mergeInputConfigs({
     annualProduction: {
       label: 'Annual Production (Tons)',
       logSlider: true,
@@ -36,8 +37,8 @@ export const roiCalculatorConfig = {
       ],
       default: 'pipes'
     }
-  },
-  secondaryInputs: {
+  }, getCalculatorOverrides('HD-G-PE')?.defaultInputs),
+  secondaryInputs: mergeInputConfigs({
     analysisPeriod: {
       label: 'Analysis Period',
       type: 'buttongroup',
@@ -56,8 +57,10 @@ export const roiCalculatorConfig = {
       unit: '%',
       default: 2.0
     }
-  },
+  }, getCalculatorOverrides('HD-G-PE')?.secondaryInputs),
   calculations: (inputs) => {
+    const constants = getCalculatorOverrides('HD-G-PE')?.constants || {};
+
     const {
       annualProduction,
       dosagePercent,
@@ -66,8 +69,8 @@ export const roiCalculatorConfig = {
       qualityReturnRate = 2.0,
     } = inputs;
 
-    const HD_COST_PER_KG = 1200;          // ₹/kg masterbatch
-    const BASE_POLYMER_PER_TON = 100000;  // ₹100/kg × 1000 = ₹100,000/ton HDPE baseline
+    const HD_COST_PER_KG = constants.masterbatchPricePerKg ?? 1200;          // ₹/kg masterbatch
+    const BASE_POLYMER_PER_TON = constants.basePolymerCostPerTon ?? 100000;  // ₹100/kg × 1000 = ₹100,000/ton HDPE baseline
 
     // --- Additive cost ---
     const dosageKgPerTon = (dosagePercent / 100) * 1000;
@@ -78,7 +81,7 @@ export const roiCalculatorConfig = {
     // pipes:     sell enhanced pipe at 12% premium over base; no downgauging
     // packaging: no price premium (commodity), but 15% less material = 15% cost saving
     // molding:   15% premium for quality-grade resin + 10% material reduction
-    const appMap = {
+    const appMap = constants.appMap ?? {
       pipes:     { premiumPerTon: 12000, downgaugeFactor: 0.00, label: 'Pipes & Fittings' },
       packaging: { premiumPerTon:     0, downgaugeFactor: 0.15, label: 'Films & Packaging' },
       molding:   { premiumPerTon: 15000, downgaugeFactor: 0.10, label: 'Injection Molding' },
@@ -95,7 +98,8 @@ export const roiCalculatorConfig = {
     // --- Method B: ALL-IN ---
     // Net margin + quality/returns improvement (HDGPE reduces defects/returns by ~60%)
     const qualityReturnFraction = qualityReturnRate / 100;
-    const returnsSavingsPerTon = BASE_POLYMER_PER_TON * qualityReturnFraction * 0.60;
+    const defectReductionFactor = constants.defectReductionFactor ?? 0.60;
+    const returnsSavingsPerTon = BASE_POLYMER_PER_TON * qualityReturnFraction * defectReductionFactor;
     const annualReturnsSavings = returnsSavingsPerTon * annualProduction;
     const allInSavingsPerTon = netMarginPerTon + returnsSavingsPerTon;
     const allInSavingsTotal = netMarginSavingsTotal + annualReturnsSavings;
@@ -120,12 +124,13 @@ export const roiCalculatorConfig = {
 
     // --- Environmental: CO2 saved via material reduction ---
     const materialSavedTons = annualProduction * app.downgaugeFactor;
-    const co2SavedTons = Math.round(materialSavedTons * 1.8); // 1.8 kg CO2 per kg HDPE production
+    const co2KgPerKgHdpe = constants.co2KgPerKgHdpe ?? 1.8;
+    const co2SavedTons = Math.round(materialSavedTons * co2KgPerKgHdpe);
 
     return {
       additiveCostPerTon:      Math.round(additiveCostPerTon),
       annualAdditiveCost:      Math.round(annualAdditiveCost),
-      masterbatchPricePerKg:   HD_COST_PER_KG,                              // ₹1,200/kg
+      masterbatchPricePerKg:   HD_COST_PER_KG,
       dosageKgPerTon:          parseFloat(dosageKgPerTon.toFixed(1)),        // e.g. 5.0 kg/ton
       annualAdditiveKg:        Math.round(dosageKgPerTon * annualProduction), // total kg/yr
       grossBenefitPerTon:      Math.round(grossBenefitPerTon),

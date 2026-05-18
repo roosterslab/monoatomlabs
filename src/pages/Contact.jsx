@@ -4,6 +4,7 @@ import { Mail, Phone, MapPin, Briefcase, HelpCircle, Handshake, MessageSquare, F
 import PageHeader from '../components/ui/PageHeader';
 import Button from '../components/ui/Button';
 import { contentData } from '../utils/contentData';
+import { contactPresentation } from '../presentation/pages/contact.copy';
 
 const ContactBox = ({ icon: Icon, title, content, href, subtext }) => (
   <div className="group p-8 bg-white border border-neutral-200 rounded-2xl hover:border-blue-300 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 h-full">
@@ -35,6 +36,8 @@ const FAQItem = ({ question, answer }) => (
 );
 
 const Contact = () => {
+  const copy = contactPresentation;
+
   const data = contentData.contact;
   const [formState, setFormState] = useState('idle'); // idle, submitting, success
 
@@ -51,8 +54,8 @@ const Contact = () => {
     <div className="min-h-screen">
       <PageHeader
         category="Connect"
-        title="Contact Us"
-        subtitle="Get in touch with our team for product inquiries, technical support, or partnership opportunities."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       {/* Main Content Container - Light Mode */}

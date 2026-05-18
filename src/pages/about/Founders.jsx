@@ -3,14 +3,17 @@ import { Link } from 'react-router-dom';
 import PageHeader from '../../components/ui/PageHeader';
 import SectionHeading from '../../components/ui/SectionHeading';
 import { Users, GraduationCap, Award, Briefcase, Globe } from 'lucide-react';
+import { aboutFoundersPresentation } from '../../presentation/pages/about-founders.copy';
 
 const Founders = () => {
+  const copy = aboutFoundersPresentation;
+
   return (
     <div className="min-h-screen">
       <PageHeader
         category="Leadership"
-        title="Founders & Team"
-        subtitle="Monoatom Labs is built on decades of innovation expertise, combining deep scientific knowledge with proven industrial manufacturing capabilities."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       {/* Leadership Introduction */}

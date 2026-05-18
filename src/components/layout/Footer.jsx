@@ -4,9 +4,11 @@ import { MapPin, Mail, Phone } from 'lucide-react';
 import Button from '../ui/Button';
 import MonochromeGrid from '../hero/MonochromeGrid';
 import Logo from '../Logo';
+import { isHiddenProduct } from '../../utils/productVisibility';
 
 const Footer = () => {
     const location = useLocation();
+    const showRustene = !isHiddenProduct('rustene');
 
     const handleLogoClick = (e) => {
         // If already on home page, scroll to top
@@ -97,7 +99,9 @@ const Footer = () => {
                         <h4 className="font-bold mb-4 uppercase tracking-wider text-xs text-neutral-500">Innovation Pipeline</h4>
                         <ul className="space-y-2.5 text-sm text-neutral-400">
                             <li><Link to="/products/pipeline" className="hover:text-white transition-colors">Overview</Link></li>
-                            <li><Link to="/products/pipeline/rustene" className="hover:text-white transition-colors">Rustene</Link></li>
+                                                        {showRustene && (
+                                                            <li><Link to="/products/pipeline/rustene" className="hover:text-white transition-colors">Rustene</Link></li>
+                                                        )}
                             <li><Link to="/products/pipeline/graphyre" className="hover:text-white transition-colors">Graphyre</Link></li>
                             <li><Link to="/products/pipeline/graphosite" className="hover:text-white transition-colors">Graphosite</Link></li>
                             <li><Link to="/products/pipeline/thermaphene" className="hover:text-white transition-colors">Thermaphene</Link></li>

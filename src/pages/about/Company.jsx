@@ -4,14 +4,17 @@ import PageHeader from '../../components/ui/PageHeader';
 import SectionHeading from '../../components/ui/SectionHeading';
 import Button from '../../components/ui/Button';
 import { Target, Eye, Globe, Zap, Droplets, Wind, Heart } from 'lucide-react';
+import { aboutCompanyPresentation } from '../../presentation/pages/about-company.copy';
 
 const Company = () => {
+  const copy = aboutCompanyPresentation;
+
   return (
     <div className="min-h-screen">
       <PageHeader
         category="Company"
-        title="About Monoatom Labs"
-        subtitle="We envision a world where breakthrough materials enable cleaner air, purer water, sustainable energy, and enhanced quality of life for everyone."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       {/* Tagline Hero */}

@@ -1,40 +1,21 @@
 import React from 'react';
 import { FlaskConical, Factory, CheckCircle } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
+import { aboutPresentation } from '../../presentation/pages/about.copy';
 
 const ThreePillars = () => {
-    const pillars = [
-        {
-            icon: FlaskConical,
-            title: 'Scientific Excellence',
-            items: [
-                'IISc, IIT, NCL partnerships',
-                '6× President of India Awardee',
-                'MIT TR35, NASA recognized'
-            ],
-            color: 'blue'
-        },
-        {
-            icon: Factory,
-            title: 'Industrial Scale',
-            items: [
-                'Manufacturing-ready processes',
-                '5+ commercial products',
-                'Field-scale pilot trials'
-            ],
-            color: 'emerald'
-        },
-        {
-            icon: CheckCircle,
-            title: 'Proven Performance',
-            items: [
-                'NABL certified results',
-                'Field-tested applications',
-                '60-70% cost savings'
-            ],
-            color: 'purple'
-        }
-    ];
+    const copy = aboutPresentation;
+
+    const iconMap = {
+        flask: FlaskConical,
+        factory: Factory,
+        check: CheckCircle
+    };
+
+    const pillars = (copy.threePillars?.pillars || []).map((pillar) => ({
+        ...pillar,
+        icon: iconMap[pillar.iconKey] || FlaskConical
+    }));
 
     const getColorClasses = (color) => {
         const colors = {
@@ -64,7 +45,7 @@ const ThreePillars = () => {
         <section className="py-24 px-6 bg-white border-b border-neutral-200">
             <div className="max-w-7xl mx-auto">
                 <h2 className="text-4xl md:text-5xl font-display font-medium text-center mb-16 text-neutral-900">
-                    Why Monoatom Labs is Different
+                    {copy.threePillars.heading}
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12">

@@ -5,6 +5,7 @@ import ProductLightbox from '../ui/ProductLightbox';
 import Button from '../ui/Button';
 import SectionHeading from '../ui/SectionHeading';
 import { products as productsData } from '../../data/content';
+import { filterVisibleProducts } from '../../utils/productVisibility';
 
 const commercialProducts = [
     {
@@ -53,7 +54,7 @@ const commercialProducts = [
     }
 ];
 
-const pipelineProducts = [
+const pipelineProducts = filterVisibleProducts([
     { id: 'rustene', title: 'Rustene', category: 'Anti-Corrosion', status: 'R&D Pipeline', path: '/products/pipeline/rustene', image: '/images/pipeline/studio/Rustene.png' },
     { id: 'graphyre', title: 'Graphyre', category: 'Performance Tyres', status: 'R&D Pipeline', path: '/products/pipeline/graphyre', image: '/images/pipeline/studio/Graphyre.png' },
     { id: 'graphosite', title: 'Graphosite', category: 'Structural Composites', status: 'R&D Pipeline', path: '/products/pipeline/graphosite', image: '/images/pipeline/studio/Graphosite.png' },
@@ -65,7 +66,7 @@ const pipelineProducts = [
     { id: 'atmospheric-harvesting', title: 'Aerophenter', category: 'Atmospheric Water', status: 'Pilot Trial', path: '/products/pipeline/atmospheric-harvesting', image: '/images/pipeline/studio/Gryogen.png' },
     { id: 'graphene-glass-fibres', title: 'Glasphene', category: 'Glass Fibres', status: 'Pilot Trial', path: '/products/pipeline/graphene-glass-fibres', image: '/images/pipeline/studio/Glasephene.png' },
     { id: 'battery-storage', title: 'Voltaphene', category: 'Battery Storage', status: 'Pilot Trial', path: '/products/pipeline/battery-storage', image: '/images/pipeline/studio/Voltaphene.png' },
-];
+]);
 
 const PipelineTile = ({ product }) => (
     <Link to={product.path} className="group block">
@@ -88,7 +89,15 @@ const PipelineTile = ({ product }) => (
     </Link>
 );
 
-const ProductsSection = () => {
+const defaultCopy = {
+    sectionHeading: {
+        number: '02',
+        title: 'Product Suite',
+        subtitle: 'Commercially viable graphene solutions — from market-ready products to the next generation in development.',
+    },
+};
+
+const ProductsSection = ({ copy = defaultCopy }) => {
     const [activeProduct, setActiveProduct] = useState(0);
     const [activeTab, setActiveTab] = useState('commercial');
 
@@ -99,9 +108,9 @@ const ProductsSection = () => {
 
             <div className="max-w-7xl mx-auto relative z-10">
                 <SectionHeading
-                    number="02"
-                    title="Product Suite"
-                    subtitle="Commercially viable graphene solutions — from market-ready products to the next generation in development."
+                    number={copy.sectionHeading?.number ?? defaultCopy.sectionHeading.number}
+                    title={copy.sectionHeading?.title ?? defaultCopy.sectionHeading.title}
+                    subtitle={copy.sectionHeading?.subtitle ?? defaultCopy.sectionHeading.subtitle}
                     theme="light"
                 />
 
@@ -113,7 +122,7 @@ const ProductsSection = () => {
                     >
                         <span className="w-2 h-2 rounded-full bg-green-500"></span>
                         Commercial Ready
-                        <span className="text-xs font-mono text-neutral-400">4</span>
+                        <span className="text-xs font-mono text-neutral-400">{commercialProducts.length}</span>
                     </button>
                     <button
                         onClick={() => setActiveTab('pipeline')}
@@ -121,7 +130,7 @@ const ProductsSection = () => {
                     >
                         <FlaskConical className="w-3.5 h-3.5" />
                         In Development
-                        <span className="text-xs font-mono text-neutral-400">11</span>
+                        <span className="text-xs font-mono text-neutral-400">{pipelineProducts.length}</span>
                     </button>
                 </div>
 

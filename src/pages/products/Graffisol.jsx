@@ -8,6 +8,7 @@ import { Sun, Thermometer, Zap, Clock, Check, BarChart3, ShieldCheck, MousePoint
 import { products } from '../../data/content';
 import ProductLightbox from '../../components/ui/ProductLightbox';
 import ProductHero from '../../components/ui/ProductHero';
+import { productGraffisolPresentation } from '../../presentation/pages/product-graffisol.copy';
 
 // Import all infographic components
 import {
@@ -53,6 +54,8 @@ const SpecItem = ({ label, value, subtext }) => (
 );
 
 const Graffisol = () => {
+  const copy = productGraffisolPresentation;
+
   // Tab Content Organization
   const tabs = [
     {
@@ -62,8 +65,8 @@ const Graffisol = () => {
         <div className="space-y-24 mt-24">
           {/* Hero Section */}
           <ProductHero
-            title="Unlock the true potential of your solar assets."
-            subtitle="Graffisol is a transparent graphene nanocoating that boosts energy output by up to 12% through anti-reflective properties, thermal regulation, and self-cleaning capabilities."
+            title={copy.hero.title}
+            subtitle={copy.hero.subtitle}
             category="Solar Optimization"
             categoryColor="bg-yellow-400 animate-pulse"
             images={[
@@ -74,8 +77,8 @@ const Graffisol = () => {
               '/images/graffisol_lifecycle_site_result.png'
             ]}
             buttons={[
-              { text: 'Request Datasheet', link: '/contact', variant: 'primary' },
-              { text: 'View ROI Analysis', link: '#impact', variant: 'secondary' }
+              { text: copy.hero.primaryButtonText, link: '/contact', variant: 'primary' },
+              { text: copy.hero.secondaryButtonText, link: '#impact', variant: 'secondary' }
             ]}
           />
 
@@ -536,8 +539,8 @@ const Graffisol = () => {
     <div className="min-h-screen">
       <PageHeader
         category="Solar Energy"
-        title="Graffisol"
-        subtitle="Next-generation graphene nanocoating that enhances photon absorption, facilitates thermal management, and provides self-cleaning properties for solar panels."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />

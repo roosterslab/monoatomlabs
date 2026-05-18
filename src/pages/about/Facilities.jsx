@@ -2,6 +2,7 @@ import React from 'react';
 import PageHeader from '../../components/ui/PageHeader';
 import SectionHeading from '../../components/ui/SectionHeading';
 import { Microscope, FlaskConical, Settings, ClipboardCheck, Building2 } from 'lucide-react';
+import { aboutFacilitiesPresentation } from '../../presentation/pages/about-facilities.copy';
 
 const CapabilityBlock = ({ icon: Icon, title, items }) => (
   <div className="p-8 bg-neutral-50 border border-neutral-200 flex flex-col h-full shadow-sm hover:border-neutral-300 transition-colors">
@@ -19,12 +20,14 @@ const CapabilityBlock = ({ icon: Icon, title, items }) => (
 );
 
 const Facilities = () => {
+  const copy = aboutFacilitiesPresentation;
+
   return (
     <div className="min-h-screen">
       <PageHeader
         category="Infrastructure"
-        title="Facilities & Capabilities"
-        subtitle="Advanced research and testing facilities enabling breakthrough nanomaterial innovations from fundamental research to commercial production."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       {/* Introduction */}

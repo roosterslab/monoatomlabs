@@ -1,6 +1,91 @@
 import React from 'react';
 import { Rocket, FlaskConical, Package, CircleDot, ArrowRight } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
+import { filterVisibleProducts } from '../../utils/productVisibility';
+
+const defaultInnovationPipelineCopy = {
+    sectionHeading: {
+        number: '08',
+        title: 'Innovation Pipeline',
+        subtitle: 'Pushing the boundaries of material science from lab to market.',
+        theme: 'light',
+    },
+    phases: [
+        {
+            icon: 'Package',
+            title: 'Market Ready',
+            subtitle: 'Deployed & generating revenue',
+            color: 'emerald',
+            step: 1,
+            products: [
+                { name: 'Graphacrete', category: 'Construction', status: 'READY', icon: '🏗️' },
+                { name: 'Graffisol', category: 'Solar Yield', status: 'READY', icon: '☀️' },
+                { name: 'Ceraphene', category: 'Coatings', status: 'READY', icon: '💎' },
+                { name: 'HD-G-PE', category: 'Polymers', status: 'READY', icon: '📦' },
+            ],
+        },
+        {
+            icon: 'Rocket',
+            title: 'In Pipeline',
+            subtitle: 'Scaling for industrial pilots',
+            color: 'blue',
+            step: 2,
+            products: [
+                { name: 'Rustene', category: 'Anti-Corrosion', status: 'DEV', icon: '🛡️' },
+                { name: 'Graphyre', category: 'Automotive', status: 'DEV', icon: '🚗' },
+                { name: 'Thermaphene', category: 'Textiles', status: 'DEV', icon: '🔥' },
+                { name: 'Armophene', category: 'Defense', status: 'DEV', icon: '🎖️' },
+            ],
+        },
+        {
+            icon: 'FlaskConical',
+            title: 'Future Pilots',
+            subtitle: 'Breakthrough R&D Concepts',
+            color: 'purple',
+            step: 3,
+            products: [
+                { name: 'H₂ Membranes', category: 'Energy', status: 'PILOT', icon: '⚡' },
+                { name: 'Desalination', category: 'Water', status: 'PILOT', icon: '💧' },
+                { name: 'Li-Ion+', category: 'Storage', status: 'PILOT', icon: '🔋' },
+                { name: 'Bio-Sensors', category: 'Medical', status: 'PILOT', icon: '🧬' },
+            ],
+        },
+    ],
+    bottomBanner: {
+        title: 'The Future is Built on Graphene',
+        description:
+            'We are continuously expanding our portfolio. Have a specific challenge? Our materials science team can engineer a solution.',
+        buttonLabel: 'View Tech Roadmap',
+    },
+    labels: {
+        stepPrefix: 'Step',
+    },
+};
+
+function mergeCopy(defaults, overrides) {
+    if (!overrides) return defaults;
+
+    const out = { ...defaults };
+    for (const key of Object.keys(overrides)) {
+        const overrideValue = overrides[key];
+        const defaultValue = defaults[key];
+
+        if (
+            overrideValue &&
+            typeof overrideValue === 'object' &&
+            !Array.isArray(overrideValue) &&
+            defaultValue &&
+            typeof defaultValue === 'object' &&
+            !Array.isArray(defaultValue)
+        ) {
+            out[key] = mergeCopy(defaultValue, overrideValue);
+        } else {
+            out[key] = overrideValue;
+        }
+    }
+
+    return out;
+}
 
 const ProductStrip = ({ name, category, status, icon, color }) => (
     <div className={`group flex items-center gap-4 bg-white border border-neutral-100 rounded-xl p-4 hover:border-${color}-500 hover:shadow-lg transition-all duration-300 cursor-default`}>
@@ -19,7 +104,7 @@ const ProductStrip = ({ name, category, status, icon, color }) => (
     </div>
 );
 
-const PhaseColumn = ({ icon: Icon, title, subtitle, products, color, step, isLast }) => (
+const PhaseColumn = ({ icon: Icon, title, subtitle, products, color, step, isLast, stepPrefix = 'Step' }) => (
     <div className="relative">
         {/* Connector Line (Desktop) */}
         {!isLast && (
@@ -33,7 +118,7 @@ const PhaseColumn = ({ icon: Icon, title, subtitle, products, color, step, isLas
             </div>
 
             <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full bg-${color}-50 text-${color}-700 text-xs font-bold uppercase tracking-wider mb-2`}>
-                <CircleDot className="w-3 h-3" /> Step 0{step}
+                <CircleDot className="w-3 h-3" /> {stepPrefix} 0{step}
             </div>
 
             <h3 className="text-2xl font-display font-bold text-neutral-900">{title}</h3>
@@ -50,69 +135,50 @@ const PhaseColumn = ({ icon: Icon, title, subtitle, products, color, step, isLas
     </div>
 );
 
-const InnovationPipeline = () => {
-    const marketReady = [
-        { name: "Graphacrete", category: "Construction", status: "READY", icon: "🏗️" },
-        { name: "Graffisol", category: "Solar Yield", status: "READY", icon: "☀️" },
-        { name: "Ceraphene", category: "Coatings", status: "READY", icon: "💎" },
-        { name: "HD-G-PE", category: "Polymers", status: "READY", icon: "📦" }
-    ];
+const InnovationPipeline = ({ copy: copyOverrides }) => {
+    const copy = mergeCopy(defaultInnovationPipelineCopy, copyOverrides);
 
-    const pipeline = [
-        { name: "Rustene", category: "Anti-Corrosion", status: "DEV", icon: "🛡️" },
-        { name: "Graphyre", category: "Automotive", status: "DEV", icon: "🚗" },
-        { name: "Thermaphene", category: "Textiles", status: "DEV", icon: "🔥" },
-        { name: "Armophene", category: "Defense", status: "DEV", icon: "🎖️" }
-    ];
-
-    const pilots = [
-        { name: "H₂ Membranes", category: "Energy", status: "PILOT", icon: "⚡" },
-        { name: "Desalination", category: "Water", status: "PILOT", icon: "💧" },
-        { name: "Li-Ion+", category: "Storage", status: "PILOT", icon: "🔋" },
-        { name: "Bio-Sensors", category: "Medical", status: "PILOT", icon: "🧬" }
-    ];
+    const iconMap = { Package, Rocket, FlaskConical };
+    const phases = Array.isArray(copy.phases) ? copy.phases : defaultInnovationPipelineCopy.phases;
+    const visiblePhases = phases.map((phase) => ({
+        ...phase,
+        products: filterVisibleProducts(phase?.products),
+    }));
 
     return (
         <section className="py-24 px-6 bg-white border-b border-neutral-100 overflow-hidden">
             <div className="max-w-7xl mx-auto">
                 <SectionHeading
-                    number="08"
-                    title="Innovation Pipeline"
-                    subtitle="Pushing the boundaries of material science from lab to market."
-                    theme="light"
+                    number={copy.sectionHeading?.number}
+                    title={copy.sectionHeading?.title}
+                    subtitle={copy.sectionHeading?.subtitle}
+                    theme={copy.sectionHeading?.theme}
                 />
 
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 mt-16 relative">
                     {/* Background Grid for Tech Feel */}
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-50 pointer-events-none"></div>
 
-                    <PhaseColumn
-                        icon={Package}
-                        title="Market Ready"
-                        subtitle="Deployed & generating revenue"
-                        products={marketReady}
-                        color="emerald"
-                        step={1}
-                    />
+                    {visiblePhases.map((phase, index) => {
+                        const Icon =
+                            typeof phase.icon === 'string'
+                                ? iconMap[phase.icon]
+                                : phase.icon;
 
-                    <PhaseColumn
-                        icon={Rocket}
-                        title="In Pipeline"
-                        subtitle="Scaling for industrial pilots"
-                        products={pipeline}
-                        color="blue"
-                        step={2}
-                    />
-
-                    <PhaseColumn
-                        icon={FlaskConical}
-                        title="Future Pilots"
-                        subtitle="Breakthrough R&D Concepts"
-                        products={pilots}
-                        color="purple"
-                        step={3}
-                        isLast={true}
-                    />
+                        return (
+                            <PhaseColumn
+                                key={index}
+                                icon={Icon}
+                                title={phase.title}
+                                subtitle={phase.subtitle}
+                                products={phase.products}
+                                color={phase.color}
+                                step={phase.step}
+                                isLast={index === visiblePhases.length - 1}
+                                stepPrefix={copy.labels?.stepPrefix}
+                            />
+                        );
+                    })}
                 </div>
 
                 {/* Bottom Stats Banner */}
@@ -122,13 +188,13 @@ const InnovationPipeline = () => {
 
                     <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
                         <div>
-                            <h3 className="text-3xl font-display font-bold mb-2">The Future is Built on Graphene</h3>
+                            <h3 className="text-3xl font-display font-bold mb-2">{copy.bottomBanner?.title}</h3>
                             <p className="text-neutral-400 max-w-xl">
-                                We are continuously expanding our portfolio. Have a specific challenge? Our materials science team can engineer a solution.
+                                {copy.bottomBanner?.description}
                             </p>
                         </div>
                         <button className="flex items-center gap-3 px-8 py-4 bg-white text-neutral-900 font-bold rounded-xl hover:bg-neutral-200 transition-colors">
-                            View Tech Roadmap <ArrowRight className="w-5 h-5" />
+                            {copy.bottomBanner?.buttonLabel} <ArrowRight className="w-5 h-5" />
                         </button>
                     </div>
                 </div>

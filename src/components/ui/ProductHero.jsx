@@ -8,12 +8,25 @@ const ProductHero = ({
     subtitle,
     category,
     categoryColor = "bg-white",
+    categoryTone,
     images = [],
     buttons = [],
     className = "",
     theme = "dark"
 }) => {
     const isLight = theme === 'light';
+
+    const toneMap = {
+        commercial: 'bg-green-400',
+        success: 'bg-green-400',
+        pipeline: 'bg-amber-400',
+        warning: 'bg-amber-400',
+        info: 'bg-brand-600',
+        brand: 'bg-brand-600',
+        neutral: 'bg-neutral-400',
+    };
+
+    const resolvedCategoryColor = categoryTone ? (toneMap[categoryTone] || categoryColor) : categoryColor;
 
     return (
         <section className={`relative overflow-hidden rounded-3xl ${isLight ? 'bg-neutral-50 text-neutral-900' : 'bg-black text-white'} isolate ${className}`}>
@@ -41,7 +54,7 @@ const ProductHero = ({
                             ? 'bg-white/50 border-neutral-200 text-neutral-500'
                             : 'bg-white/10 border-white/20 text-white'
                         }`}>
-                        <span className={`w-2 h-2 rounded-full ${categoryColor}`}></span>
+                        <span className={`w-2 h-2 rounded-full ${resolvedCategoryColor}`}></span>
                         {category}
                     </div>
                 )}

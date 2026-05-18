@@ -1,0 +1,61 @@
+export const technologyPlatformPresentation = {
+  hero: {
+    title: 'Technology Platform',
+    subtitle: 'Advanced graphene technology platform enabling breakthrough material innovations',
+  },
+  sections: {
+    platform: {
+      heading: 'Our Technology Platform',
+      body:
+        'Monoatom Labs has developed a comprehensive technology platform that enables the rapid development, validation, and commercialization of graphene-based solutions across multiple industries.',
+    },
+    capabilities: {
+      heading: 'Core Capabilities',
+      items: [
+        {
+          title: 'Graphene Synthesis',
+          body:
+            'Advanced synthesis methods for high-quality graphene production with controlled properties and scalable processes.',
+        },
+        {
+          title: 'Functionalization',
+          body:
+            'Proprietary techniques for functionalizing graphene to achieve specific performance characteristics for diverse applications.',
+        },
+        {
+          title: 'Dispersion Technology',
+          body: 'Advanced dispersion methods ensuring uniform distribution of graphene in various matrices and substrates.',
+        },
+        {
+          title: 'Application Engineering',
+          body:
+            'Expertise in adapting graphene technology to specific industrial applications and manufacturing processes.',
+        },
+      ],
+    },
+    process: {
+      heading: 'Innovation Process',
+      steps: [
+        {
+          title: '1. Research & Development',
+          body: 'Breakthrough material formulations through advanced research and scientific expertise',
+        },
+        { title: '2. Validation & Testing',
+          body: 'NABL-certified laboratory testing and real-world field trials',
+        },
+        {
+          title: '3. Scale-Up & Manufacturing',
+          body: 'Pilot-scale production and process optimization for commercial deployment',
+        },
+        { title: '4. Commercial Launch', body: 'Market deployment with comprehensive technical support and ongoing innovation' },
+      ],
+    },
+    learnMore: {
+      heading: 'Learn More',
+      pilotProjectsLinkLabel: '→ Pilot Projects',
+      capabilitiesLinkLabel: '→ Technical Capabilities',
+      productsLinkLabel: '→ Our Products',
+      partnershipLinkLabel: '→ Partnership Opportunities',
+    },
+  },
+}

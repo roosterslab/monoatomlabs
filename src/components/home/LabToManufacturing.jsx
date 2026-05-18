@@ -5,34 +5,49 @@ import SectionHeading from '../ui/SectionHeading';
 import Button from '../ui/Button';
 // Background now global in MainLayout
 
-const LabToManufacturing = () => {
+const defaultCopy = {
+    badge: 'From Lab to Manufacturing',
+    titleLine1: "We Don't Just Innovate",
+    titleLine2: 'We Scale to Market',
+    description:
+        "We don't just innovate in the lab—we ensure every breakthrough can scale from prototype to mass manufacturing. Our approach bridges deep-tech expertise with real-world industrial deployment, supply-chain integration, and national-scale production.",
+    stages: [
+        { title: 'Lab Prototype', description: 'Breakthrough innovation' },
+        { title: 'Field Validation', description: 'Real-world testing' },
+        { title: 'Scale-Up', description: 'Process optimization' },
+        { title: 'Mass Production', description: 'Industrial scale' },
+    ],
+};
+
+const LabToManufacturing = ({ copy = defaultCopy }) => {
+
     const journeyStages = [
         {
             number: '1',
             icon: FlaskConical,
-            title: 'Lab Prototype',
-            description: 'Breakthrough innovation',
+            title: copy.stages?.[0]?.title ?? defaultCopy.stages[0].title,
+            description: copy.stages?.[0]?.description ?? defaultCopy.stages[0].description,
             color: 'blue'
         },
         {
             number: '2',
             icon: CheckCircle2,
-            title: 'Field Validation',
-            description: 'Real-world testing',
+            title: copy.stages?.[1]?.title ?? defaultCopy.stages[1].title,
+            description: copy.stages?.[1]?.description ?? defaultCopy.stages[1].description,
             color: 'indigo'
         },
         {
             number: '3',
             icon: TrendingUp,
-            title: 'Scale-Up',
-            description: 'Process optimization',
+            title: copy.stages?.[2]?.title ?? defaultCopy.stages[2].title,
+            description: copy.stages?.[2]?.description ?? defaultCopy.stages[2].description,
             color: 'purple'
         },
         {
             number: '4',
             icon: Factory,
-            title: 'Mass Production',
-            description: 'Industrial scale',
+            title: copy.stages?.[3]?.title ?? defaultCopy.stages[3].title,
+            description: copy.stages?.[3]?.description ?? defaultCopy.stages[3].description,
             color: 'emerald'
         }
     ];
@@ -81,18 +96,16 @@ const LabToManufacturing = () => {
             {/* Section Header */}
             <div className="text-center mb-16">
                 <div className="inline-block bg-white/5 backdrop-blur-md border border-white/10 rounded-full px-6 py-2 text-neutral-200 font-semibold mb-6">
-                    From Lab to Manufacturing
+                    {copy.badge ?? defaultCopy.badge}
                 </div>
 
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-medium mb-6 leading-tight tracking-tight text-white">
-                    We Don't Just Innovate<br />
-                    <span className="text-neutral-400">We Scale to Market</span>
+                    {copy.titleLine1 ?? defaultCopy.titleLine1}<br />
+                    <span className="text-neutral-400">{copy.titleLine2 ?? defaultCopy.titleLine2}</span>
                 </h2>
 
                 <p className="text-xl md:text-2xl leading-relaxed max-w-5xl mx-auto text-neutral-300 font-light">
-                    We don't just innovate in the lab—we ensure every breakthrough can scale from prototype
-                    to mass manufacturing. Our approach bridges deep-tech expertise with real-world industrial
-                    deployment, supply-chain integration, and national-scale production.
+                    {copy.description ?? defaultCopy.description}
                 </p>
             </div>
 

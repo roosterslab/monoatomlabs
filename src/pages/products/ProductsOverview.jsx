@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Beaker, Shield, Zap, Layers, Wind, Droplets, Battery, Activity, Thermometer, Cpu, Box, Sun, ShieldCheck } from 'lucide-react';
 import PageHeader from '../../components/ui/PageHeader';
 import { products } from '../../data/content';
+import { productsOverviewPresentation } from '../../presentation/pages/products-overview.copy';
 
 // --- ALL PRODUCT DATA ---
 const allProducts = [
@@ -311,6 +312,8 @@ const ProductCard = ({ item }) => {
 
 // --- PAGE ---
 const ProductsOverview = () => {
+    const copy = productsOverviewPresentation;
+
     const [filter, setFilter] = useState('all');
 
     const filtered = filter === 'all' ? allProducts : allProducts.filter(p => p.type === filter);
@@ -321,8 +324,8 @@ const ProductsOverview = () => {
         <div className="min-h-screen">
             <PageHeader
                 category="Portfolio"
-                title="All Products"
-                subtitle="Market-available graphene solutions and next-generation innovations — from commercial deployments to cutting-edge R&D."
+                title={copy.pageHeader.title}
+                subtitle={copy.pageHeader.subtitle}
                 transparent={true}
             />
 

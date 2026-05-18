@@ -4,32 +4,80 @@ import { Shield, Repeat, Zap, Factory, ArrowRight, Network, Bot, Leaf, Truck, Pa
 import Button from '../ui/Button';
 import SectionHeading from '../ui/SectionHeading';
 
-const Industry40Enabler = () => {
+const defaultCopy = {
+    badge: '01 — Industry 4.0 Enabler',
+    titleAccent: 'Advanced',
+    titleLine1: 'Materials for the',
+    titleLine2: '4th Industrial Revolution',
+    valueProp: {
+        before: 'Our breakthrough materials deliver',
+        emphasis: 'superior strength, conductivity, and durability',
+        after: '—essential building blocks for smart manufacturing and autonomous systems.',
+    },
+    features: [
+        {
+            title: 'Ultra Strong but Light',
+            description:
+                '200x stronger than steel at a fraction of the weight — enabling structures that were previously impossible to build.',
+        },
+        {
+            title: 'Super Hard but Flexible',
+            description:
+                'The hardest material known, yet it bends without breaking — delivering durability and adaptability at the atomic scale.',
+        },
+        {
+            title: 'Highly Conductive but Stable',
+            description:
+                'Exceptional electrical and thermal conductivity with outstanding chemical stability — performing reliably in extreme conditions.',
+        },
+    ],
+    applicationsTitle: 'Applications',
+    applications: [
+        'Smart Manufacturing & Automation',
+        'IoT-Enabled Infrastructure',
+        'Advanced Robotics & Composites',
+        'Clean Energy Systems',
+        'Next-Gen Transportation',
+        'Digital Supply Chains',
+    ],
+    differentiator: {
+        headingLine1: 'From Lab Prototype to',
+        headingHighlight: 'Mass Manufacturing',
+        description:
+            'Unlike academic research that never leaves the lab, we ensure every innovation scales. Our approach bridges deep-tech expertise with real-world deployment.',
+        ctaLabel: 'View Solutions',
+        ctaTo: '/products',
+    },
+    tagline: 'Building the material foundation for tomorrow',
+};
+
+const Industry40Enabler = ({ copy = defaultCopy }) => {
+
     const industry40Features = [
         {
             icon: Shield,
-            title: 'Ultra Strong but Light',
-            description: '200x stronger than steel at a fraction of the weight — enabling structures that were previously impossible to build.'
+            title: copy.features?.[0]?.title ?? defaultCopy.features[0].title,
+            description: copy.features?.[0]?.description ?? defaultCopy.features[0].description,
         },
         {
             icon: Repeat,
-            title: 'Super Hard but Flexible',
-            description: 'The hardest material known, yet it bends without breaking — delivering durability and adaptability at the atomic scale.'
+            title: copy.features?.[1]?.title ?? defaultCopy.features[1].title,
+            description: copy.features?.[1]?.description ?? defaultCopy.features[1].description,
         },
         {
             icon: Zap,
-            title: 'Highly Conductive but Stable',
-            description: 'Exceptional electrical and thermal conductivity with outstanding chemical stability — performing reliably in extreme conditions.'
+            title: copy.features?.[2]?.title ?? defaultCopy.features[2].title,
+            description: copy.features?.[2]?.description ?? defaultCopy.features[2].description,
         }
     ];
 
     const industry40Applications = [
-        { title: 'Smart Manufacturing & Automation', icon: Factory },
-        { title: 'IoT-Enabled Infrastructure', icon: Network },
-        { title: 'Advanced Robotics & Composites', icon: Bot },
-        { title: 'Clean Energy Systems', icon: Leaf },
-        { title: 'Next-Gen Transportation', icon: Truck },
-        { title: 'Digital Supply Chains', icon: Package }
+        { title: copy.applications?.[0] ?? defaultCopy.applications[0], icon: Factory },
+        { title: copy.applications?.[1] ?? defaultCopy.applications[1], icon: Network },
+        { title: copy.applications?.[2] ?? defaultCopy.applications[2], icon: Bot },
+        { title: copy.applications?.[3] ?? defaultCopy.applications[3], icon: Leaf },
+        { title: copy.applications?.[4] ?? defaultCopy.applications[4], icon: Truck },
+        { title: copy.applications?.[5] ?? defaultCopy.applications[5], icon: Package }
     ];
 
     return (
@@ -43,12 +91,12 @@ const Industry40Enabler = () => {
                 <div className="mb-20">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-mono font-medium tracking-wider uppercase mb-6">
                         <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                        01 — Industry 4.0 Enabler
+                        {copy.badge ?? defaultCopy.badge}
                     </div>
 
                     <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-display font-medium tracking-tight text-neutral-900 leading-[1.1] mb-6 max-w-4xl">
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">Advanced</span> Materials for the
-                        <br className="hidden md:block" /> 4th Industrial Revolution
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-800">{copy.titleAccent ?? defaultCopy.titleAccent}</span> {copy.titleLine1 ?? defaultCopy.titleLine1}
+                        <br className="hidden md:block" /> {copy.titleLine2 ?? defaultCopy.titleLine2}
                     </h2>
                 </div>
 
@@ -56,7 +104,9 @@ const Industry40Enabler = () => {
                 <div className="grid md:grid-cols-12 gap-12 mb-24">
                     <div className="md:col-span-8">
                         <p className="text-2xl md:text-3xl leading-relaxed text-neutral-600 font-light">
-                            Our breakthrough materials deliver <span className="text-neutral-900 font-medium border-b-2 border-blue-200">superior strength, conductivity, and durability</span>—essential building blocks for smart manufacturing and autonomous systems.
+                            {copy.valueProp?.before ?? defaultCopy.valueProp.before}{' '}
+                            <span className="text-neutral-900 font-medium border-b-2 border-blue-200">{copy.valueProp?.emphasis ?? defaultCopy.valueProp.emphasis}</span>
+                            {copy.valueProp?.after ?? defaultCopy.valueProp.after}
                         </p>
                     </div>
                     <div className="md:col-span-4 flex items-end">
@@ -88,7 +138,7 @@ const Industry40Enabler = () => {
                     {/* Left: Applications Specs Grid */}
                     <div>
                         <h3 className="text-sm font-mono font-semibold text-neutral-400 uppercase tracking-widest mb-8">
-                            Applications
+                            {copy.applicationsTitle ?? defaultCopy.applicationsTitle}
                         </h3>
                         <div className="grid grid-cols-1 gap-3">
                             {industry40Applications.map((app, index) => {
@@ -126,13 +176,13 @@ const Industry40Enabler = () => {
                                 </h3>
 
                                 <p className="text-neutral-300 leading-relaxed font-light mb-10">
-                                    Unlike academic research that never leaves the lab, we ensure every innovation scales. Our approach bridges deep-tech expertise with real-world deployment.
+                                    {copy.differentiator?.description ?? defaultCopy.differentiator.description}
                                 </p>
 
                                 <div className="mt-auto pt-8 border-t border-white/10 flex flex-wrap gap-4">
-                                    <Link to="/products">
+                                    <Link to={copy.differentiator?.ctaTo ?? defaultCopy.differentiator.ctaTo}>
                                         <Button variant="primary" theme="dark" icon={ArrowRight}>
-                                            View Solutions
+                                            {copy.differentiator?.ctaLabel ?? defaultCopy.differentiator.ctaLabel}
                                         </Button>
                                     </Link>
                                 </div>
@@ -144,7 +194,7 @@ const Industry40Enabler = () => {
                 {/* Bottom Tagline */}
                 <div className="text-center pt-8 border-t border-neutral-100">
                     <p className="text-sm font-mono text-neutral-400 uppercase tracking-widest">
-                        Building the material foundation for tomorrow
+                        {copy.tagline ?? defaultCopy.tagline}
                     </p>
                 </div>
             </div>

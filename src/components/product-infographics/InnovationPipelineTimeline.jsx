@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Rocket, Zap, CheckCircle2, Clock } from 'lucide-react';
+import { mapWithVisibleProducts } from '../../utils/productVisibility';
 
 const InnovationPipelineTimeline = () => {
-  const timeline = [
+  const timeline = mapWithVisibleProducts([
     {
       phase: 'Commercial Ready',
       status: 'active',
@@ -61,7 +62,7 @@ const InnovationPipelineTimeline = () => {
         { name: 'Energy Storage', description: 'Next-gen supercapacitors', status: 'Early research' },
       ],
     },
-  ];
+  ]);
 
   return (
     <section className="relative py-24 px-6 bg-black overflow-hidden">

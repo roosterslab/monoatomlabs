@@ -10,6 +10,74 @@ import Button from '../ui/Button';
  * ProductPage Component
  * Template for product pages with structured content sections
  */
+
+const defaultProductPageCopy = {
+  hero: {
+    primaryCtaLabel: 'Request Quote',
+    secondaryCtaLabel: 'Download Technical Data',
+  },
+  overview: {
+    fallbackTitle: 'Product Overview',
+  },
+  benefits: {
+    title: 'Key Benefits',
+    subtitle: null,
+  },
+  specifications: {
+    title: 'Technical Specifications',
+  },
+  applications: {
+    title: 'Applications',
+    subtitle: 'Versatile solutions across multiple industries',
+  },
+  competitive: {
+    fallbackTitle: 'Competitive Advantage',
+    subtitleTemplate: 'See how {productName} compares to alternatives',
+  },
+  faqs: {
+    title: 'Frequently Asked Questions',
+  },
+  cta: {
+    titleTemplate: 'Ready to Experience {productName}?',
+    subtitle: 'Contact our team to learn more or request a quote',
+    primaryButtonLabel: 'Contact Sales',
+    secondaryButtonLabel: 'Technical Support',
+  },
+};
+
+function mergeCopy(defaults, overrides) {
+  if (!overrides) return defaults;
+
+  const out = { ...defaults };
+  for (const key of Object.keys(overrides)) {
+    const overrideValue = overrides[key];
+    const defaultValue = defaults[key];
+
+    if (
+      overrideValue &&
+      typeof overrideValue === 'object' &&
+      !Array.isArray(overrideValue) &&
+      defaultValue &&
+      typeof defaultValue === 'object' &&
+      !Array.isArray(defaultValue)
+    ) {
+      out[key] = mergeCopy(defaultValue, overrideValue);
+    } else {
+      out[key] = overrideValue;
+    }
+  }
+
+  return out;
+}
+
+function formatTemplate(template, vars) {
+  if (typeof template !== 'string') return template;
+  return template.replace(/\{(\w+)\}/g, (_match, key) => {
+    const value = vars?.[key];
+    return value == null ? '' : String(value);
+  });
+}
+
 const ProductPage = ({
   product,
   showHero = true,
@@ -18,9 +86,12 @@ const ProductPage = ({
   showApplications = true,
   showComparison = true,
   showCTA = true,
-  className = ''
+  className = '',
+  copy: copyOverrides,
 }) => {
   if (!product) return null;
+
+  const copy = mergeCopy(defaultProductPageCopy, copyOverrides);
 
   return (
     <div className={`product-page ${className}`}>
@@ -86,10 +157,10 @@ const ProductPage = ({
               {/* CTA Buttons */}
               <div className="flex flex-wrap gap-4 mt-8">
                 <Button variant="primary" size="lg">
-                  Request Quote
+                  {copy.hero.primaryCtaLabel}
                 </Button>
                 <Button variant="outline" size="lg">
-                  Download Technical Data
+                  {copy.hero.secondaryCtaLabel}
                 </Button>
               </div>
             </motion.div>
@@ -100,7 +171,7 @@ const ProductPage = ({
       {/* Product Overview */}
       {product.overview && (
         <ContentSection
-          title={product.overview.title || 'Product Overview'}
+          title={product.overview.title || copy.overview.fallbackTitle}
           content={product.overview.content}
           className="bg-white"
         />
@@ -111,10 +182,10 @@ const ProductPage = ({
         <section className="py-16 bg-slate-50">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Key Benefits
+              {copy.benefits.title}
             </h2>
             <p className="text-lg text-slate-600 mb-12 max-w-3xl">
-              {product.shortDescription}
+              {copy.benefits.subtitle ?? product.shortDescription}
             </p>
             <FeatureList
               features={product.benefits}
@@ -139,7 +210,7 @@ const ProductPage = ({
         <section className="py-16 bg-slate-50">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-12">
-              Technical Specifications
+              {copy.specifications.title}
             </h2>
             <SpecTable
               specifications={product.specifications}
@@ -154,10 +225,10 @@ const ProductPage = ({
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Applications
+              {copy.applications.title}
             </h2>
             <p className="text-lg text-slate-600 mb-12">
-              Versatile solutions across multiple industries
+              {copy.applications.subtitle}
             </p>
             <FeatureList
               features={product.applications.map(app => ({ title: app }))}
@@ -173,10 +244,10 @@ const ProductPage = ({
         <section className="py-16 bg-slate-900 text-white">
           <div className="container mx-auto px-6">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {product.competitive.title || 'Competitive Advantage'}
+              {product.competitive.title || copy.competitive.fallbackTitle}
             </h2>
             <p className="text-lg text-slate-300 mb-12">
-              See how {product.name} compares to alternatives
+              {formatTemplate(copy.competitive.subtitleTemplate, { productName: product.name })}
             </p>
             {product.competitive.tables.map((table, index) => (
               <ComparisonTable
@@ -214,7 +285,7 @@ const ProductPage = ({
         <section className="py-16 bg-white">
           <div className="container mx-auto px-6 max-w-4xl">
             <h2 className="text-3xl md:text-4xl font-bold mb-12">
-              Frequently Asked Questions
+              {copy.faqs.title}
             </h2>
             <div className="space-y-6">
               {product.faqs.map((faq, index) => (
@@ -251,17 +322,17 @@ const ProductPage = ({
               className="max-w-3xl mx-auto"
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                Ready to Experience {product.name}?
+                {formatTemplate(copy.cta.titleTemplate, { productName: product.name })}
               </h2>
               <p className="text-xl mb-8 text-blue-100">
-                Contact our team to learn more or request a quote
+                {copy.cta.subtitle}
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button variant="white" size="lg">
-                  Contact Sales
+                  {copy.cta.primaryButtonLabel}
                 </Button>
                 <Button variant="outline-white" size="lg">
-                  Technical Support
+                  {copy.cta.secondaryButtonLabel}
                 </Button>
               </div>
             </motion.div>

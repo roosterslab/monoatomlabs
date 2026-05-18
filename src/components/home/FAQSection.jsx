@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronDown, CheckCircle2, Shield, Clock, TrendingUp, HelpCircle, AlertCircle } from 'lucide-react';
 import SectionHeading from '../ui/SectionHeading';
 
+
 const FAQItem = ({ question, answer, icon: Icon, isOpen, onClick }) => (
     <div className={`group border border-neutral-200 rounded-xl overflow-hidden transition-all duration-300 ${isOpen ? 'bg-white shadow-xl ring-1 ring-neutral-200' : 'bg-white hover:border-neutral-300'}`}>
         <button
@@ -35,72 +36,137 @@ const FAQItem = ({ question, answer, icon: Icon, isOpen, onClick }) => (
     </div>
 );
 
-const ObjectionCard = ({ title, response, color }) => (
-    <div className={`relative overflow-hidden bg-white border border-neutral-200 p-6 rounded-2xl hover:border-${color}-200 hover:shadow-lg transition-all duration-300 group`}>
-        <div className={`absolute top-0 right-0 w-32 h-32 bg-${color}-50 rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 group-hover:bg-${color}-100 transition-colors`}></div>
+const objectionColorClass = {
+    rose: {
+        hoverBorder: 'hover:border-rose-200',
+        blob: 'bg-rose-50 group-hover:bg-rose-100',
+        icon: 'text-rose-500',
+        border: 'border-rose-200 group-hover:border-rose-400',
+    },
+    amber: {
+        hoverBorder: 'hover:border-amber-200',
+        blob: 'bg-amber-50 group-hover:bg-amber-100',
+        icon: 'text-amber-500',
+        border: 'border-amber-200 group-hover:border-amber-400',
+    },
+    cyan: {
+        hoverBorder: 'hover:border-cyan-200',
+        blob: 'bg-cyan-50 group-hover:bg-cyan-100',
+        icon: 'text-cyan-500',
+        border: 'border-cyan-200 group-hover:border-cyan-400',
+    },
+    purple: {
+        hoverBorder: 'hover:border-purple-200',
+        blob: 'bg-purple-50 group-hover:bg-purple-100',
+        icon: 'text-purple-500',
+        border: 'border-purple-200 group-hover:border-purple-400',
+    },
+};
 
-        <h4 className="font-display font-bold text-lg mb-4 text-neutral-900 flex items-center gap-2">
-            <AlertCircle className={`w-5 h-5 text-${color}-500`} />
-            {title}
-        </h4>
+const ObjectionCard = ({ title, response, color }) => {
+    const c = objectionColorClass[color] || objectionColorClass.purple;
 
-        <div className={`relative pl-4 border-l-2 border-${color}-200 group-hover:border-${color}-400 transition-colors`}>
-            <p className="text-neutral-600 text-sm leading-relaxed">
-                <span className="text-neutral-900 font-bold block mb-1">Reality:</span>
-                {response}
-            </p>
+    return (
+        <div
+            className={`relative overflow-hidden bg-white border border-neutral-200 p-6 rounded-2xl ${c.hoverBorder} hover:shadow-lg transition-all duration-300 group`}
+        >
+            <div
+                className={`absolute top-0 right-0 w-32 h-32 ${c.blob} rounded-full blur-[40px] -translate-y-1/2 translate-x-1/2 transition-colors`}
+            ></div>
+
+            <h4 className="font-display font-bold text-lg mb-4 text-neutral-900 flex items-center gap-2">
+                <AlertCircle className={`w-5 h-5 ${c.icon}`} />
+                {title}
+            </h4>
+
+            <div className={`relative pl-4 border-l-2 ${c.border} transition-colors`}>
+                <p className="text-neutral-600 text-sm leading-relaxed">
+                    <span className="text-neutral-900 font-bold block mb-1">Reality:</span>
+                    {response}
+                </p>
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
-const FAQSection = () => {
+const defaultCopy = {
+    sectionHeading: {
+        number: '11',
+        title: 'Knowledge Base',
+        subtitle: 'Expert answers to technical and commercial questions.',
+    },
+    concernsTitle: 'Common Concerns',
+    faqs: [
+        {
+            question: 'How long does it take to see ROI from your products?',
+            answer:
+                'Most customers see positive ROI within 18 months on average. Graffisol (solar coating) typically pays back in 18 months, while Graphacrete shows immediate cost savings through cement reduction. We provide detailed ROI calculators and pilot programs to verify results.',
+            icon: 'TrendingUp',
+        },
+        {
+            question: 'Are your products certified and tested?',
+            answer:
+                'Yes, all our products undergo rigorous NABL-certified testing. We maintain two state-of-the-art R&D and testing facilities with ISO-standard equipment. Our products are validated through both lab testing and real-world field trials.',
+            icon: 'Shield',
+        },
+        {
+            question: 'What is the minimum order quantity?',
+            answer:
+                'We offer flexible order quantities to suit different project sizes. For pilot programs, we can start with small batches (kg-scale). For full-scale deployment, we have ton-scale manufacturing capabilities.',
+            icon: 'Clock',
+        },
+        {
+            question: 'Do you provide on-site technical support?',
+            answer:
+                'Absolutely! We provide comprehensive technical support including on-site training, application guidelines, troubleshooting assistance, and ongoing consultation to ensure optimal performance.',
+            icon: 'CheckCircle2',
+        },
+    ],
+    objections: [
+        {
+            title: '"Graphene is too expensive"',
+            response:
+                'Our ultra-low dosage (0.05%) makes it highly cost-effective per unit, often reducing total material costs by displacing expensive additives.',
+            color: 'rose',
+        },
+        {
+            title: '"It\'s not proven at scale"',
+            response:
+                'We operate a ton-scale facility and have deployed successfully in major infrastructure projects. We are not a lab experiment; we are an industrial supplier.',
+            color: 'amber',
+        },
+        {
+            title: '"Integration is complex"',
+            response:
+                'Our products are designed as drop-in additives. No major machinery changes are required. We provide the dosing protocols.',
+            color: 'cyan',
+        },
+        {
+            title: '"ROI is uncertain"',
+            response:
+                'We offer performance warranties and pilot programs to validate ROI on your specific site before you commit to a full contract.',
+            color: 'purple',
+        },
+    ],
+};
+
+const FAQSection = ({ copy = defaultCopy }) => {
     const [openIndex, setOpenIndex] = useState(0);
 
-    const faqs = [
-        {
-            question: "How long does it take to see ROI from your products?",
-            answer: "Most customers see positive ROI within 18 months on average. Graffisol (solar coating) typically pays back in 18 months, while Graphacrete shows immediate cost savings through cement reduction. We provide detailed ROI calculators and pilot programs to verify results.",
-            icon: TrendingUp
-        },
-        {
-            question: "Are your products certified and tested?",
-            answer: "Yes, all our products undergo rigorous NABL-certified testing. We maintain two state-of-the-art R&D and testing facilities with ISO-standard equipment. Our products are validated through both lab testing and real-world field trials.",
-            icon: Shield
-        },
-        {
-            question: "What is the minimum order quantity?",
-            answer: "We offer flexible order quantities to suit different project sizes. For pilot programs, we can start with small batches (kg-scale). For full-scale deployment, we have ton-scale manufacturing capabilities.",
-            icon: Clock
-        },
-        {
-            question: "Do you provide on-site technical support?",
-            answer: "Absolutely! We provide comprehensive technical support including on-site training, application guidelines, troubleshooting assistance, and ongoing consultation to ensure optimal performance.",
-            icon: CheckCircle2
-        }
-    ];
+    const iconByKey = {
+        TrendingUp,
+        Shield,
+        Clock,
+        CheckCircle2,
+    };
 
-    const objections = [
-        {
-            title: "\"Graphene is too expensive\"",
-            response: "Our ultra-low dosage (0.05%) makes it highly cost-effective per unit, often reducing total material costs by displacing expensive additives.",
-            color: "rose"
-        },
-        {
-            title: "\"It's not proven at scale\"",
-            response: "We operate a ton-scale facility and have deployed successfully in major infrastructure projects. We are not a lab experiment; we are an industrial supplier.",
-            color: "amber"
-        },
-        {
-            title: "\"Integration is complex\"",
-            response: "Our products are designed as drop-in additives. No major machinery changes are required. We provide the dosing protocols.",
-            color: "cyan"
-        },
-        {
-            title: "\"ROI is uncertain\"",
-            response: "We offer performance warranties and pilot programs to validate ROI on your specific site before you commit to a full contract.",
-            color: "purple"
-        }
-    ];
+    const faqs = ((copy.faqs ?? defaultCopy.faqs) || []).map((item) => ({
+        question: item.question,
+        answer: item.answer,
+        icon: iconByKey[item.icon] ?? HelpCircle,
+    }));
+
+    const objections = copy.objections ?? defaultCopy.objections;
 
     return (
         <section className="py-24 px-6 bg-white border-b border-neutral-200">
@@ -109,16 +175,16 @@ const FAQSection = () => {
                     {/* Left Column: Header & Objections */}
                     <div className="lg:col-span-5 space-y-8">
                         <SectionHeading
-                            number="11"
-                            title="Knowledge Base"
-                            subtitle="Expert answers to technical and commercial questions."
+                            number={copy.sectionHeading?.number ?? '11'}
+                            title={copy.sectionHeading?.title ?? 'Knowledge Base'}
+                            subtitle={copy.sectionHeading?.subtitle ?? 'Expert answers to technical and commercial questions.'}
                             theme="light"
                         />
 
                         <div className="bg-neutral-50 border border-neutral-200 rounded-3xl p-8">
                             <h3 className="text-xl font-display font-medium text-neutral-900 mb-6 flex items-center gap-2">
                                 <HelpCircle className="w-5 h-5 text-neutral-500" />
-                                Common Concerns
+                                {copy.concernsTitle ?? 'Common Concerns'}
                             </h3>
                             <div className="space-y-4">
                                 {objections.map((obj, i) => (

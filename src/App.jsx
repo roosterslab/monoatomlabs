@@ -9,35 +9,50 @@ const PageLoader = () => (
 );
 
 // Eagerly load frequently visited pages for instant navigation
-import Home from './pages/Home';
-import About from './pages/About';
-import ProductsOverview from './pages/products/ProductsOverview';
-import Contact from './pages/Contact';
+import Home from './presentation/pages/home';
+import About from './presentation/pages/about';
+import ProductsOverview from './presentation/pages/products-overview';
+import Contact from './presentation/pages/contact';
 
 // About sub-pages
-const Company = lazy(() => import('./pages/about/Company'));
-const Facilities = lazy(() => import('./pages/about/Facilities'));
-const Founders = lazy(() => import('./pages/about/Founders'));
+const Company = lazy(() => import('./presentation/pages/about-company'));
+const Facilities = lazy(() => import('./presentation/pages/about-facilities'));
+const Founders = lazy(() => import('./presentation/pages/about-founders'));
+
+// Industries
+const IndustriesOverview = lazy(() => import('./presentation/pages/industries-overview'))
+const IndustriesConstruction = lazy(() => import('./presentation/pages/industries-construction'))
+const IndustriesSolarEnergy = lazy(() => import('./presentation/pages/industries-solar-energy'))
+const IndustriesAutomotive = lazy(() => import('./presentation/pages/industries-automotive'))
+const IndustriesAdvancedMaterials = lazy(() => import('./presentation/pages/industries-advanced-materials'))
+
+// Technology
+const TechnologyPlatform = lazy(() => import('./presentation/pages/technology-platform'))
+const TechnologyCapabilities = lazy(() => import('./presentation/pages/technology-capabilities'))
+const TechnologyPilotProjects = lazy(() => import('./presentation/pages/technology-pilot-projects'))
+
+// Partnership
+const Partnership = lazy(() => import('./presentation/pages/partnership'))
 
 // Lazy load product detail pages (less frequently accessed)
-const Graphacrete = lazy(() => import('./pages/products/Graphacrete'));
-const Graffisol = lazy(() => import('./pages/products/Graffisol'));
-const Ceraphene = lazy(() => import('./pages/products/Ceraphene'));
-const HDGPE = lazy(() => import('./pages/products/HDGPE'));
+const Graphacrete = lazy(() => import('./presentation/pages/product-graphacrete'));
+const Graffisol = lazy(() => import('./presentation/pages/product-graffisol'));
+const Ceraphene = lazy(() => import('./presentation/pages/product-ceraphene'));
+const HDGPE = lazy(() => import('./presentation/pages/product-hdgpe'));
 
 // Pipeline Pages
-const PipelineOverview = lazy(() => import('./pages/products/pipeline/PipelineOverview'));
-const Rustene = lazy(() => import('./pages/products/pipeline/Rustene'));
-const Graphyre = lazy(() => import('./pages/products/pipeline/Graphyre'));
-const Graphosite = lazy(() => import('./pages/products/pipeline/Graphosite'));
-const Thermaphene = lazy(() => import('./pages/products/pipeline/Thermaphene'));
-const Armophene = lazy(() => import('./pages/products/pipeline/Armophene'));
-const HydrogenMembranes = lazy(() => import('./pages/products/pipeline/HydrogenMembranes'));
-const DesalinationMembranes = lazy(() => import('./pages/products/pipeline/DesalinationMembranes'));
-const AtmosphericHarvesting = lazy(() => import('./pages/products/pipeline/AtmosphericHarvesting'));
-const GrapheneGlassFibres = lazy(() => import('./pages/products/pipeline/GrapheneGlassFibres'));
-const BatteryStorage = lazy(() => import('./pages/products/pipeline/BatteryStorage'));
-const Graphenode = lazy(() => import('./pages/products/pipeline/Graphenode'));
+const PipelineOverview = lazy(() => import('./presentation/pages/pipeline-overview'));
+const Rustene = lazy(() => import('./presentation/pages/pipeline-rustene'));
+const Graphyre = lazy(() => import('./presentation/pages/pipeline-graphyre'));
+const Graphosite = lazy(() => import('./presentation/pages/pipeline-graphosite'));
+const Thermaphene = lazy(() => import('./presentation/pages/pipeline-thermaphene'));
+const Armophene = lazy(() => import('./presentation/pages/pipeline-armophene'));
+const HydrogenMembranes = lazy(() => import('./presentation/pages/pipeline-hydrogen-membranes'));
+const DesalinationMembranes = lazy(() => import('./presentation/pages/pipeline-desalination-membranes'));
+const AtmosphericHarvesting = lazy(() => import('./presentation/pages/pipeline-atmospheric-harvesting'));
+const GrapheneGlassFibres = lazy(() => import('./presentation/pages/pipeline-graphene-glass-fibres'));
+const BatteryStorage = lazy(() => import('./presentation/pages/pipeline-battery-storage'));
+const Graphenode = lazy(() => import('./presentation/pages/pipeline-graphenode'));
 
 
 function App() {
@@ -54,6 +69,20 @@ function App() {
                     <Route path="about/company" element={<Company />} />
                     <Route path="about/facilities" element={<Facilities />} />
                     <Route path="about/founders" element={<Founders />} />
+                    <Route path="about/founders-team" element={<Founders />} />
+
+                    {/* Industries Routes */}
+                    <Route path="industries" element={<IndustriesOverview />} />
+                    <Route path="industries/construction" element={<IndustriesConstruction />} />
+                    <Route path="industries/solar-energy" element={<IndustriesSolarEnergy />} />
+                    <Route path="industries/automotive" element={<IndustriesAutomotive />} />
+                    <Route path="industries/advanced-materials" element={<IndustriesAdvancedMaterials />} />
+
+                    {/* Technology Routes */}
+                    <Route path="technology" element={<Navigate to="/technology/platform" replace />} />
+                    <Route path="technology/platform" element={<TechnologyPlatform />} />
+                    <Route path="technology/capabilities" element={<TechnologyCapabilities />} />
+                    <Route path="technology/pilot-projects" element={<TechnologyPilotProjects />} />
 
                     {/* Product Routes */}
                     <Route path="products" element={<ProductsOverview />} />
@@ -78,6 +107,8 @@ function App() {
 
                     {/* Other Routes */}
                     <Route path="contact" element={<Contact />} />
+
+                    <Route path="partnership" element={<Partnership />} />
 
                     {/* Placeholder routes - redirect to contact */}
                     <Route path="privacy" element={<Contact />} />

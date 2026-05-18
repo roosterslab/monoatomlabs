@@ -8,6 +8,7 @@ import { Layers, ShieldCheck, Zap, Scale, ArrowUpRight, Hammer, Database, Recycl
 import ProductLightbox from '../../components/ui/ProductLightbox';
 import ProductHero from '../../components/ui/ProductHero';
 import { products } from '../../data/content';
+import { productHDGPEPresentation } from '../../presentation/pages/product-hdgpe.copy';
 
 // Import all infographic components
 import {
@@ -45,6 +46,8 @@ import {
 } from '../../data/hdgpeData';
 
 const HDGPE = () => {
+  const copy = productHDGPEPresentation;
+
   // Tab Content Organization
   const tabs = [
     {
@@ -54,8 +57,8 @@ const HDGPE = () => {
         <div className="space-y-24 mt-24">
           {/* Hero Section */}
           <ProductHero
-            title="Lighter. Stronger. Infinitely better."
-            subtitle="High-Density Graphene Polyethylene (HD-G-PE) redefines plastic performance. By integrating graphene at the molecular level, we achieve steel-like strength with the versatility of thermoplastics."
+            title={copy.hero.title}
+            subtitle={copy.hero.subtitle}
             category="Polymer Engineering"
             categoryColor="bg-blue-500"
             images={[
@@ -67,8 +70,8 @@ const HDGPE = () => {
               '/images/hdgpe_lifecycle_result.png'
             ]}
             buttons={[
-              { text: 'Request Datasheet', link: '/contact', variant: 'primary' },
-              { text: 'View Specs', link: '#specs', variant: 'secondary' }
+              { text: copy.hero.primaryButtonText, link: '/contact', variant: 'primary' },
+              { text: copy.hero.secondaryButtonText, link: '#specs', variant: 'secondary' }
             ]}
           />
 
@@ -495,8 +498,8 @@ const HDGPE = () => {
     <div className="min-h-screen">
       <PageHeader
         category="Material Science"
-        title="HD-G-PE"
-        subtitle="High-Density Graphene Polyethylene. The next evolution in thermoplastic performance."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />

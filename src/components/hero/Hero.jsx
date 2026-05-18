@@ -4,8 +4,11 @@ import { ArrowRight } from 'lucide-react';
 import Button from '../ui/Button';
 import StatCard from '../ui/StatCard';
 import GrapheneLatticeOptimized from './GrapheneLatticeOptimized';
+import { homePresentation } from '../../presentation/pages/home.copy';
 
 const Hero = () => {
+    const copy = homePresentation;
+
     return (
         <section className="relative pt-40 pb-24 md:pt-56 md:pb-40 px-6 bg-black overflow-hidden border-b border-neutral-800">
             {/* 3D GRAPHENE LATTICE CANVAS - OPTIMIZED */}
@@ -31,33 +34,33 @@ const Hero = () => {
                         WebkitBackgroundClip: 'text',
                         WebkitTextFillColor: 'transparent'
                     }}>
-                        Unlocking Trillion Dollar Economy
+                        {copy.hero.badge}
                     </span>
                 </div>
 
                 <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-medium text-white tracking-tighter leading-tight mb-8 drop-shadow-xl">
-                    The Future is <br />
-                    <span className="text-neutral-500">Graphene.</span>
+                    {copy.hero.headingLine1} <br />
+                    <span className="text-neutral-500">{copy.hero.headingHighlight}</span>
                 </h1>
 
                 <p className="text-xl md:text-2xl text-neutral-400 max-w-2xl mb-12 font-light leading-relaxed">
-                    We engineer Graphene at the atomic level to make the impossible possible.
+                    {copy.hero.tagline}
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 mb-20">
-                    <Link to="/products">
-                        <Button variant="primary" theme="dark" icon={ArrowRight}>Explore Products</Button>
+                    <Link to={copy.hero.ctaPrimary.to}>
+                        <Button variant="primary" theme="dark" icon={ArrowRight}>{copy.hero.ctaPrimary.label}</Button>
                     </Link>
-                    <Link to="/about">
-                        <Button variant="secondary" theme="dark">Learn About Us</Button>
+                    <Link to={copy.hero.ctaSecondary.to}>
+                        <Button variant="secondary" theme="dark">{copy.hero.ctaSecondary.label}</Button>
                     </Link>
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-neutral-800 pt-8">
-                    <StatCard value="10+" label="Breakthrough Innovations" theme="dark" />
-                    <StatCard value="5+" label="Commercial Products" theme="dark" />
-                    <StatCard value="2" label="Advanced Facilities" theme="dark" />
-                    <StatCard value="5" label="Pilot Technologies" theme="dark" />
+                    <StatCard value={copy.hero.stats.innovation.value} label={copy.hero.stats.innovation.label} theme="dark" />
+                    <StatCard value={copy.hero.stats.commercial.value} label={copy.hero.stats.commercial.label} theme="dark" />
+                    <StatCard value={copy.hero.stats.facilities.value} label={copy.hero.stats.facilities.label} theme="dark" />
+                    <StatCard value={copy.hero.stats.pilot.value} label={copy.hero.stats.pilot.label} theme="dark" />
                 </div>
 
             </div>

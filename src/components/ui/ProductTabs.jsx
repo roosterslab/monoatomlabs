@@ -7,6 +7,17 @@ import { LayoutGrid, TrendingUp, Settings, FileText, Microscope } from 'lucide-r
  */
 const ProductTabs = ({ tabs, defaultTab = 0 }) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSticky(window.scrollY > 100);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const tabIcons = {
     overview: LayoutGrid,
     benefits: TrendingUp,
@@ -18,7 +29,12 @@ const ProductTabs = ({ tabs, defaultTab = 0 }) => {
   return (
     <div className="bg-white">
       {/* Sticky Tab Navigation */}
-      <div className="sticky top-[112px] z-40 bg-white border-b border-neutral-200 shadow-sm transition-all duration-300">
+      <div
+        className={`transition-all duration-300 z-40 ${isSticky
+            ? 'fixed top-0 left-0 right-0 bg-white border-b border-neutral-200 shadow-sm'
+            : 'relative border-b border-neutral-200'
+          }`}
+      >
         <div className="max-w-7xl mx-auto">
           <div className="flex overflow-x-auto no-scrollbar">
             {tabs.map((tab, index) => {
@@ -28,10 +44,7 @@ const ProductTabs = ({ tabs, defaultTab = 0 }) => {
               return (
                 <button
                   key={index}
-                  onClick={() => {
-                    setActiveTab(index);
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
+                  onClick={() => setActiveTab(index)}
                   className={`
                     flex items-center space-x-3 px-8 py-5 text-sm uppercase tracking-widest transition-all duration-300 border-b-2 whitespace-nowrap outline-none
                     ${isActive

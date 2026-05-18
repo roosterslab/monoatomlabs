@@ -1,4 +1,5 @@
 import { Car, Shield, Sparkles, Droplet, TrendingUp, Wrench } from 'lucide-react';
+import { getCalculatorOverrides, mergeInputConfigs } from '../utils/runtimeOverrides';
 
 /**
  * Ceraphene Product Infographic Data
@@ -11,7 +12,7 @@ export const roiCalculatorConfig = {
   productName: 'Ceraphene',
 
   // Primary inputs — always visible
-  defaultInputs: {
+  defaultInputs: mergeInputConfigs({
     vehicleCount: {
       label: 'Vehicle Count',
       type: 'logslider',    // logarithmic 1–1000
@@ -50,10 +51,10 @@ export const roiCalculatorConfig = {
       default: 60,
       note: 'Ceraphene hydrophobic effect reduces wash frequency 40–70%.'
     }
-  },
+  }, getCalculatorOverrides('Ceraphene')?.defaultInputs),
 
   // Secondary inputs — accordion
-  secondaryInputs: {
+  secondaryInputs: mergeInputConfigs({
     analysisPeriod: {
       label: 'Analysis Period',
       type: 'buttongroup',
@@ -84,9 +85,11 @@ export const roiCalculatorConfig = {
       default: 1.5,
       note: 'Standard ceramic coating lifespan. Estimate — validate with supplier.'
     }
-  },
+  }, getCalculatorOverrides('Ceraphene')?.secondaryInputs),
 
   calculations: (inputs) => {
+    const constants = getCalculatorOverrides('Ceraphene')?.constants || {};
+
     const {
       vehicleCount             = 5,
       competitorCost           = 15000,
@@ -106,8 +109,8 @@ export const roiCalculatorConfig = {
      * - Paint correction avoided: ₹35,000 per vehicle over 4 years (typical fleet)
      * - Competitor durability: ~1.5 years (market estimate — not certified)
      */
-    const ceraphenePrice          = 5000;   // ₹/vehicle, fixed from brochure
-    const paintCorrectionPerYear  = 8750;   // ₹/vehicle/yr (₹35k per 4-year cycle avoided)
+    const ceraphenePrice          = constants.ceraphenePrice ?? 5000;   // ₹/vehicle, fixed from brochure
+    const paintCorrectionPerYear  = constants.paintCorrectionPerYear ?? 8750;   // ₹/vehicle/yr (₹35k per 4-year cycle avoided)
     const washReductionFrac       = washReductionPct / 100;
 
     // ── Annual effective cost per vehicle ──────────────────────────────────
@@ -146,20 +149,22 @@ export const roiCalculatorConfig = {
     const paybackLabel   = paybackMonths ? `${paybackMonths} months` : 'Immediate';
 
     // ── Environmental / wash stats ─────────────────────────────────────────
-    const annualWashesWithout   = Math.round(annualWashCostPerVehicle / 500);  // ~₹500/wash
+    const washCostPerWash       = constants.washCostPerWash ?? 500;
+    const annualWashesWithout   = Math.round(annualWashCostPerVehicle / washCostPerWash);
     const annualWashesWith      = Math.round(annualWashesWithout * (1 - washReductionFrac));
     const annualWashesSaved     = annualWashesWithout - annualWashesWith;
-    const waterSavedLitresPerVehicle = annualWashesSaved * 100; // ~100L per professional wash
+    const waterLitresPerWash    = constants.waterLitresPerWash ?? 100;
+    const waterSavedLitresPerVehicle = annualWashesSaved * waterLitresPerWash;
     const waterSavedTotal       = Math.round(waterSavedLitresPerVehicle * vehicleCount);
 
     // ── Product volume requirement ────────────────────────────────────────
     // Coverage: 30–40 ml/vehicle (TDS spec, mid-point = 35 ml)
-    const productMlPerVehicle = 35;
+    const productMlPerVehicle = constants.productMlPerVehicle ?? 35;
     const productMlTotal      = Math.round(productMlPerVehicle * vehicleCount);
 
     // ── Product cost split: coating material vs. professional application ──
     // ceraphenePrice (₹5,000) = product kit + professional installation service
-    const cerapheneProductCostPerVehicle = 2500;   // ₹/vehicle product-only (est.)
+    const cerapheneProductCostPerVehicle = constants.cerapheneProductCostPerVehicle ?? 2500;   // ₹/vehicle product-only (est.)
     const cerapheneProductCostTotal      = Math.round(cerapheneProductCostPerVehicle * vehicleCount);
     const cerapheneServiceCostPerVehicle = ceraphenePrice - cerapheneProductCostPerVehicle; // ₹2,500
     const cerapheneServiceCostTotal      = Math.round(cerapheneServiceCostPerVehicle * vehicleCount);

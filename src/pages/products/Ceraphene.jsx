@@ -8,6 +8,7 @@ import { ShieldCheck, Sparkles, TrendingDown, Clock, Check, Car, Droplets, Walle
 import ProductLightbox from '../../components/ui/ProductLightbox';
 import ProductHero from '../../components/ui/ProductHero';
 import { products } from '../../data/content';
+import { productCeraphenePresentation } from '../../presentation/pages/product-ceraphene.copy';
 
 // Import all infographic components
 import {
@@ -57,6 +58,8 @@ const FeatureRow = ({ icon: Icon, title, description }) => (
 );
 
 const Ceraphene = () => {
+  const copy = productCeraphenePresentation;
+
   // Tab Content Organization
   const tabs = [
     {
@@ -66,8 +69,8 @@ const Ceraphene = () => {
         <div className="space-y-24 mt-24">
           {/* Hero Section */}
           <ProductHero
-            title="Diamond-hard protection. Graphene performance."
-            subtitle="Ceraphene combines graphene-oxide nanotubes with ceramic compounds to create a 9H+ hardness shield that is lighter, stronger, and more hydrophobic than any competitor."
+            title={copy.hero.title}
+            subtitle={copy.hero.subtitle}
             category="Automotive & Marine"
             categoryColor="bg-blue-400"
             images={[
@@ -78,8 +81,8 @@ const Ceraphene = () => {
               '/images/ceraphene_lifecycle_result.png'
             ]}
             buttons={[
-              { text: 'Order Sample Kit', link: '/contact', variant: 'primary' },
-              { text: 'View Specs', link: '#specs', variant: 'secondary' }
+              { text: copy.hero.primaryButtonText, link: '/contact', variant: 'primary' },
+              { text: copy.hero.secondaryButtonText, link: '#specs', variant: 'secondary' }
             ]}
           />
 
@@ -515,8 +518,8 @@ const Ceraphene = () => {
     <div className="min-h-screen">
       <PageHeader
         category="Automotive"
-        title="Ceraphene"
-        subtitle="Graphene-enhanced ceramic coating delivering 9H+ hardness and extreme durability at a fraction of the cost of premium competitors."
+        title={copy.pageHeader.title}
+        subtitle={copy.pageHeader.subtitle}
       />
 
       <ProductTabs tabs={tabs} defaultTab={0} />

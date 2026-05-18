@@ -1,4 +1,5 @@
 import { Sun, Zap, Droplet, Shield, TrendingUp, Factory, Wind, Sparkles } from 'lucide-react';
+import { getCalculatorOverrides, mergeInputConfigs } from '../utils/runtimeOverrides';
 
 /**
  * Graffisol Product Infographic Data
@@ -11,7 +12,7 @@ export const roiCalculatorConfig = {
   productName: 'Graffisol',
 
   // Primary inputs — always visible
-  defaultInputs: {
+  defaultInputs: mergeInputConfigs({
     systemSize: {
       label: 'System Size',
       type: 'logslider',   // logarithmic 1–10,000 kW
@@ -50,10 +51,10 @@ export const roiCalculatorConfig = {
       default: 10,
       note: 'Field-validated range: 7–12%. Conservative default = 10%.'
     }
-  },
+  }, getCalculatorOverrides('Graffisol')?.defaultInputs),
 
   // Secondary inputs — lifecycle accordion
-  secondaryInputs: {
+  secondaryInputs: mergeInputConfigs({
     analysisPeriod: {
       label: 'Analysis Period',
       type: 'buttongroup',
@@ -74,9 +75,11 @@ export const roiCalculatorConfig = {
         { value: 'high',     label: 'High'     }
       ]
     }
-  },
+  }, getCalculatorOverrides('Graffisol')?.secondaryInputs),
 
   calculations: (inputs) => {
+    const constants = getCalculatorOverrides('Graffisol')?.constants || {};
+
     const {
       systemSize         = 100,
       electricityRate    = 7,
@@ -96,12 +99,16 @@ export const roiCalculatorConfig = {
      * - Baseline generation: 1,500 kWh/kW/yr (India average, typical RMC assumption)
      * - CO₂ factor: 0.82 kg/kWh (India grid, CEA 2023)
      */
-    const baselineGenPerKw  = 1500;                      // kWh/kW/yr
-    const soilingLossMap    = { low: 0.08, moderate: 0.15, high: 0.25 };
+    const baselineGenPerKw  = constants.baselineGenPerKw ?? 1500;                      // kWh/kW/yr
+    const soilingLossMap    = constants.soilingLossMap ?? { low: 0.08, moderate: 0.15, high: 0.25 };
     const soilingLoss       = soilingLossMap[soilingProfile] || 0.15;
-    const soilingRecovery   = 0.35;                      // 35% of soiling loss recovered
-    const maintenancePerKw  = 200;                       // ₹/kW/yr constant
-    const co2Factor         = 0.82;                      // kg CO₂/kWh
+    const soilingRecovery   = constants.soilingRecovery ?? 0.35;                      // 35% of soiling loss recovered
+    const maintenancePerKw  = constants.maintenancePerKw ?? 200;                       // ₹/kW/yr constant
+    const co2Factor         = constants.co2Factor ?? 0.82;                      // kg CO₂/kWh
+
+    const panelAreaM2PerKw          = constants.panelAreaM2PerKw ?? 5.3;
+    const applicationRateMlM2       = constants.applicationRateMlM2 ?? 65;
+    const graffisolProductPricePerLitre = constants.graffisolProductPricePerLitre ?? 2500;
 
     // ── Energy calculations ─────────────────────────────────────────────────
     const baselineAnnualKwh    = systemSize * baselineGenPerKw;
@@ -204,20 +211,20 @@ export const roiCalculatorConfig = {
       // ── Product volume requirement ────────────────────────────────────────
       // 1 kW ≈ 3.3 panels × 1.6 m²/panel ≈ 5.3 m² of panel area
       // Application rate: 50–80 ml/m² (TDS mid-point = 65 ml/m²)
-      panelAreaM2PerKw:   5.3,
-      applicationRateMlM2: 65,
+      panelAreaM2PerKw,
+      applicationRateMlM2,
       productLitresTotal: parseFloat(
-        ((5.3 * systemSize * 65) / 1000).toFixed(1)
+        ((panelAreaM2PerKw * systemSize * applicationRateMlM2) / 1000).toFixed(1)
       ),
 
       // ── Product cost split: additive (product-only) vs. installation service ─
       // graffisolProductPricePerLitre: estimated product-only price (₹/L)
       // 0.3445 L/kW = 5.3 m²/kW × 65 ml/m² / 1000
-      graffisolProductPricePerLitre: 2500,
-      additiveCostPerKw:  Math.round((5.3 * 65 / 1000) * 2500),           // ₹861/kW
-      additiveCostTotal:  Math.round((5.3 * systemSize * 65 / 1000) * 2500),
-      serviceCostPerKw:   Math.max(0, applicationCostPerKw - Math.round((5.3 * 65 / 1000) * 2500)),
-      serviceCostTotal:   Math.max(0, applicationCostTotal - Math.round((5.3 * systemSize * 65 / 1000) * 2500)),
+      graffisolProductPricePerLitre,
+      additiveCostPerKw:  Math.round((panelAreaM2PerKw * applicationRateMlM2 / 1000) * graffisolProductPricePerLitre),
+      additiveCostTotal:  Math.round((panelAreaM2PerKw * systemSize * applicationRateMlM2 / 1000) * graffisolProductPricePerLitre),
+      serviceCostPerKw:   Math.max(0, applicationCostPerKw - Math.round((panelAreaM2PerKw * applicationRateMlM2 / 1000) * graffisolProductPricePerLitre)),
+      serviceCostTotal:   Math.max(0, applicationCostTotal - Math.round((panelAreaM2PerKw * systemSize * applicationRateMlM2 / 1000) * graffisolProductPricePerLitre)),
 
       // ── Legacy aliases (other page components) ────────────────────────────
       additionalEnergy:    totalAdditionalKwh,

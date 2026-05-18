@@ -55,32 +55,61 @@ const ProcessCard = ({ icon: Icon, number, title, description, features, isLast 
     </>
 );
 
-const LabToScale = () => {
+const defaultCopy = {
+    badge: 'Our Process',
+    titleLine1: 'From Atomic Scale to',
+    titleLine2: 'Industrial Reality',
+    description:
+        "We don't just innovate in the lab—we ensure every breakthrough scales from prototype to mass manufacturing, bridging the critical gap between nanoscale research and real-world impact.",
+    processes: [
+        {
+            number: 1,
+            title: 'Research & Innovation',
+            description: 'World-class nanomaterials R&D with advanced characterization and testing capabilities',
+            features: [
+                'Graphene synthesis & functionalization',
+                'Surface chemistry modification',
+                'Advanced testing (SEM, TEM, Raman)',
+                'Pilot-scale dispersion technology',
+            ],
+        },
+        {
+            number: 2,
+            title: 'Application Development',
+            description: 'Real-world testing across multiple industrial sectors with rigorous validation protocols',
+            features: [
+                'Multi-sector application testing',
+                'Mechanical & durability analysis',
+                'Thermal & electrical characterization',
+                'Field-scale performance validation',
+            ],
+        },
+    ],
+    stats: [
+        { value: '2', label: 'State-of-the-Art Facilities' },
+        { value: '14+', label: 'Years R&D Experience' },
+        { value: 'Ton', label: 'Scale Production' },
+        { value: '100%', label: 'Quality Validated' },
+    ],
+};
+
+const LabToScale = ({ copy = defaultCopy }) => {
+
     const processes = [
         {
             icon: Microscope,
-            number: 1,
-            title: "Research & Innovation",
-            description: "World-class nanomaterials R&D with advanced characterization and testing capabilities",
-            features: [
-                "Graphene synthesis & functionalization",
-                "Surface chemistry modification",
-                "Advanced testing (SEM, TEM, Raman)",
-                "Pilot-scale dispersion technology"
-            ]
+            number: copy.processes?.[0]?.number ?? defaultCopy.processes[0].number,
+            title: copy.processes?.[0]?.title ?? defaultCopy.processes[0].title,
+            description: copy.processes?.[0]?.description ?? defaultCopy.processes[0].description,
+            features: copy.processes?.[0]?.features ?? defaultCopy.processes[0].features,
         },
         {
             icon: Beaker,
-            number: 2,
-            title: "Application Development",
-            description: "Real-world testing across multiple industrial sectors with rigorous validation protocols",
-            features: [
-                "Multi-sector application testing",
-                "Mechanical & durability analysis",
-                "Thermal & electrical characterization",
-                "Field-scale performance validation"
-            ]
-        }
+            number: copy.processes?.[1]?.number ?? defaultCopy.processes[1].number,
+            title: copy.processes?.[1]?.title ?? defaultCopy.processes[1].title,
+            description: copy.processes?.[1]?.description ?? defaultCopy.processes[1].description,
+            features: copy.processes?.[1]?.features ?? defaultCopy.processes[1].features,
+        },
     ];
 
     return (
@@ -91,21 +120,20 @@ const LabToScale = () => {
                 <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-white/10 bg-white/5 mb-6 backdrop-blur-sm">
                     <Sparkles className="w-4 h-4 text-brand-400" />
                     <span className="text-xs font-bold text-neutral-300 tracking-wide uppercase">
-                        Our Process
+                        {copy.badge ?? defaultCopy.badge}
                     </span>
                 </div>
 
                 <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold text-white mb-6 leading-tight drop-shadow-xl">
-                    From Atomic Scale to
+                    {copy.titleLine1 ?? defaultCopy.titleLine1}
                     <br />
                     <span className="text-brand-100 pb-2 inline-block drop-shadow-md">
-                        Industrial Reality
+                        {copy.titleLine2 ?? defaultCopy.titleLine2}
                     </span>
                 </h2>
 
                 <p className="text-xl text-neutral-400 max-w-3xl mx-auto leading-relaxed">
-                    We don't just innovate in the lab—we ensure every breakthrough scales from prototype to mass manufacturing,
-                    bridging the critical gap between nanoscale research and real-world impact.
+                    {copy.description ?? defaultCopy.description}
                 </p>
             </div>
 
@@ -126,20 +154,20 @@ const LabToScale = () => {
 
                 <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 text-center">
                     <div className="group">
-                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">2</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">State-of-the-Art Facilities</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{copy.stats?.[0]?.value ?? defaultCopy.stats[0].value}</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">{copy.stats?.[0]?.label ?? defaultCopy.stats[0].label}</div>
                     </div>
                     <div className="group">
-                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">14+</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Years R&D Experience</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{copy.stats?.[1]?.value ?? defaultCopy.stats[1].value}</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">{copy.stats?.[1]?.label ?? defaultCopy.stats[1].label}</div>
                     </div>
                     <div className="group">
-                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">Ton</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Scale Production</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{copy.stats?.[2]?.value ?? defaultCopy.stats[2].value}</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">{copy.stats?.[2]?.label ?? defaultCopy.stats[2].label}</div>
                     </div>
                     <div className="group">
-                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">100%</div>
-                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">Quality Validated</div>
+                        <div className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">{copy.stats?.[3]?.value ?? defaultCopy.stats[3].value}</div>
+                        <div className="text-sm text-neutral-500 uppercase tracking-wide group-hover:text-brand-400 transition-colors">{copy.stats?.[3]?.label ?? defaultCopy.stats[3].label}</div>
                     </div>
                 </div>
             </div>

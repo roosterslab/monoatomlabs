@@ -1,4 +1,5 @@
 import { Building2, TestTube, TrendingUp, Package, Shield, Truck, Sparkles, Factory } from 'lucide-react';
+import { getCalculatorOverrides, mergeInputConfigs } from '../utils/runtimeOverrides';
 
 /**
  * Graphacrete Product Infographic Data
@@ -11,7 +12,7 @@ export const roiCalculatorConfig = {
   productName: 'Graphacrete',
 
   // Primary inputs — always visible in calculator
-  defaultInputs: {
+  defaultInputs: mergeInputConfigs({
     projectVolume: {
       label: 'Concrete Volume',
       type: 'logslider',   // logarithmic 1–10,000 m³
@@ -74,10 +75,10 @@ export const roiCalculatorConfig = {
       default: 22,
       note: 'Critical for formwork striking time. Default = conservative field value.'
     }
-  },
+  }, getCalculatorOverrides('Graphacrete')?.defaultInputs),
 
   // Secondary inputs — open by default
-  secondaryInputs: {
+  secondaryInputs: mergeInputConfigs({
     waterproofingRate: {
       label: 'Waterproofing Cost',
       type: 'slider',
@@ -117,9 +118,11 @@ export const roiCalculatorConfig = {
         { value: 20, label: '20 yr' }
       ]
     }
-  },
+  }, getCalculatorOverrides('Graphacrete')?.secondaryInputs),
 
   calculations: (inputs) => {
+    const constants = getCalculatorOverrides('Graphacrete')?.constants || {};
+
     const {
       projectVolume      = 500,
       targetStrength     = 50,
@@ -141,8 +144,8 @@ export const roiCalculatorConfig = {
      * - Grade cost model: gradeCost(G, P) = fixed[G] + bags[G] × P
      *   (typical Indian RMC market assumptions, not IS 456 citation)
      */
-    const additiveVolumeLitresPerM3 = 2;           // 2 L/m³ (fixed dosage)
-    const additivePricePerLitre     = 235;          // ₹235/L
+    const additiveVolumeLitresPerM3 = constants.additiveVolumeLitresPerM3 ?? 2;           // 2 L/m³ (fixed dosage)
+    const additivePricePerLitre     = constants.additivePricePerLitre ?? 235;          // ₹235/L
     const additiveCostPerM3 = additiveVolumeLitresPerM3 * additivePricePerLitre; // ₹470/m³
 
     // Indian RMC market cost components 2025-26 (fixed at ₹320/bag baseline)
@@ -150,7 +153,7 @@ export const roiCalculatorConfig = {
     // M20: ₹4,500–5,200 → midpoint ₹4,850 | M30: ₹5,800–6,800 → midpoint ₹6,200
     // M40: ₹7,800–9,000 → midpoint ₹8,400 | M50: ₹10,000–12,000 → midpoint ₹10,500
     // M60: ~₹13,000 | M70: ~₹17,000 (ultra-HPC)
-    const gradeData = {
+    const gradeData = constants.gradeData ?? {
       20: { bags: 5.00, fixed: 3250  }, // 5.00×320+3250  = 4,850
       30: { bags: 6.25, fixed: 4200  }, // 6.25×320+4200  = 6,200
       40: { bags: 7.50, fixed: 6000  }, // 7.50×320+6000  = 8,400
@@ -160,7 +163,7 @@ export const roiCalculatorConfig = {
     };
 
     // NABL grade upgrade mapping: base grade used with Graphacrete to reach target
-    const baseGradeFor = {
+    const baseGradeFor = constants.baseGradeFor ?? {
       20: 20, // no upgrade; value = cement savings + enhanced durability
       30: 30, // no upgrade; value = cement savings + enhanced durability
       40: 30, // M30 + Graphacrete → M40 performance
@@ -208,8 +211,10 @@ export const roiCalculatorConfig = {
 
     // ── Cement & CO₂ display stats ────────────────────────────────────────────
     const totalCementBags = Math.round(cementSavedBagsPerM3 * projectVolume);
-    const totalCementKg   = totalCementBags * 50;           // 50 kg/bag
-    const co2AvoidedKg    = Math.round(totalCementKg * 0.9); // 0.9 kg CO₂/kg cement (IPCC)
+    const cementBagKg     = constants.cementBagKg ?? 50;
+    const co2KgPerKgCement = constants.co2KgPerKgCement ?? 0.9;
+    const totalCementKg   = totalCementBags * cementBagKg;
+    const co2AvoidedKg    = Math.round(totalCementKg * co2KgPerKgCement);
 
     // ── Lifecycle savings (optional, shown in accordion, labeled "Estimates") ──
 
