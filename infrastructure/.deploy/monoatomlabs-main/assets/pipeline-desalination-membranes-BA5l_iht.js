@@ -1,0 +1,1 @@
+import{j as e,P as a}from"./index-hGnCVk_p.js";import{P as t}from"./ProductDetailTemplate-BwOzEZhc.js";import{p as i}from"./pipelineProducts-BpVaIMVO.js";import"./ProcessFlow-DeZC0QtR.js";import"./droplet-BFNx7rZm.js";function p(){return e.jsx(a,{children:e.jsx(t,{data:i.desalinationMembranes})})}export{p as default};

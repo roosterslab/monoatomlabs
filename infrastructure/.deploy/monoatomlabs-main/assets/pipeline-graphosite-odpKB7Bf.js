@@ -1,0 +1,1 @@
+import{j as t,P as r}from"./index-hGnCVk_p.js";import{P as e}from"./ProductDetailTemplate-BwOzEZhc.js";import{p as i}from"./pipelineProducts-BpVaIMVO.js";import"./ProcessFlow-DeZC0QtR.js";import"./droplet-BFNx7rZm.js";function n(){return t.jsx(r,{children:t.jsx(e,{data:i.graphosite})})}export{n as default};

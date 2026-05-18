@@ -1,0 +1,1 @@
+import{j as e,P as t}from"./index-hGnCVk_p.js";import{P as r}from"./ProductDetailTemplate-BwOzEZhc.js";import{p as i}from"./pipelineProducts-BpVaIMVO.js";import"./ProcessFlow-DeZC0QtR.js";import"./droplet-BFNx7rZm.js";function n(){return e.jsx(t,{children:e.jsx(r,{data:i.rustene})})}export{n as default};

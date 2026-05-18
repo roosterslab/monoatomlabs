@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catalog Viewer</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #0f0f13;
+      color: #f0f0f0;
+      min-height: 100vh;
+      padding: 24px 16px 48px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #fff;
+    }
+    header p {
+      margin-top: 6px;
+      font-size: 0.85rem;
+      color: #888;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #1a1a22;
+      border: 1px solid #2a2a36;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.5);
+    }
+
+    /* Iframe preview container */
+    .preview {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      background: #111;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .preview iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1280px;
+      height: 800px;
+      border: none;
+      transform: scale(0.234375); /* 300/1280 */
+      transform-origin: top left;
+      pointer-events: none;
+    }
+    /* Tap overlay to open full site */
+    .preview-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 10;
+    }
+
+    .card-body {
+      padding: 14px 16px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .site-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      text-transform: capitalize;
+    }
+
+    .site-url {
+      font-size: 0.72rem;
+      color: #555;
+      word-break: break-all;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 9px 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: #fff;
+    }
+    .btn-secondary {
+      background: #2a2a36;
+      color: #ccc;
+    }
+
+    /* Full-screen modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: #000;
+      flex-direction: column;
+    }
+    .modal.open { display: flex; }
+
+    .modal-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      background: #1a1a22;
+      border-bottom: 1px solid #2a2a36;
+      flex-shrink: 0;
+    }
+    .modal-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .modal-close {
+      background: #2a2a36;
+      border: none;
+      color: #ccc;
+      font-size: 1.1rem;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover { background: #3a3a48; }
+
+    .modal iframe {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
+    /* Loader inside preview */
+    .preview-loader {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      z-index: 5;
+      font-size: 0.75rem;
+      color: #555;
+      transition: opacity 0.3s;
+    }
+    .preview-loader.hidden { opacity: 0; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Catalog Preview</h1>
+  <p>Tap a site to open full view</p>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<!-- Full-screen modal -->
+<div class="modal" id="modal">
+  <div class="modal-bar">
+    <span class="modal-title" id="modal-title"></span>
+    <a id="modal-ext" href="#" target="_blank" class="btn btn-secondary" style="flex:0;white-space:nowrap;padding:6px 12px;">Open tab</a>
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+  </div>
+  <iframe id="modal-frame" src="about:blank"></iframe>
+</div>
+
+<script>
+  const SITES = [
+    { name: "Ceraphene",   slug: "ceraphene",   url: "https://catalog-ceraphene-860359902560.us-central1.run.app" },
+    { name: "Graffisol",   slug: "graffisol",   url: "https://catalog-graffisol-860359902560.us-central1.run.app" },
+    { name: "Graphacrete", slug: "graphacrete", url: "https://catalog-graphacrete-860359902560.us-central1.run.app" },
+    { name: "HDGPE",       slug: "hdgpe",       url: "https://catalog-hdgpe-860359902560.us-central1.run.app" },
+  ];
+
+  const grid = document.getElementById('grid');
+
+  SITES.forEach(site => {
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    card.innerHTML = `
+      <div class="preview" id="preview-${site.slug}">
+        <div class="preview-loader" id="loader-${site.slug}">Loading preview...</div>
+        <iframe
+          src="${site.url}"
+          loading="lazy"
+          title="${site.name} preview"
+          onload="document.getElementById('loader-${site.slug}').classList.add('hidden')"
+          sandbox="allow-scripts allow-same-origin"
+        ></iframe>
+        <div class="preview-overlay" onclick="openModal('${site.name}', '${site.url}')"></div>
+      </div>
+      <div class="card-body">
+        <div class="site-name">${site.name}</div>
+        <div class="site-url">${site.url}</div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="openModal('${site.name}', '${site.url}')">Preview</button>
+          <a class="btn btn-secondary" href="${site.url}" target="_blank" rel="noopener">Open</a>
+        </div>
+      </div>
+    `;
+
+    grid.appendChild(card);
+  });
+
+  function openModal(name, url) {
+    document.getElementById('modal-title').textContent = name;
+    document.getElementById('modal-frame').src = url;
+    document.getElementById('modal-ext').href = url;
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.getElementById('modal-frame').src = 'about:blank';
+    document.body.style.overflow = '';
+  }
+
+  // Close on back button (mobile)
+  window.addEventListener('popstate', closeModal);
+</script>
+</body>
+</html>

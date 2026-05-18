@@ -1,0 +1,1 @@
+import{j as e,P as r}from"./index-hGnCVk_p.js";import{P as a}from"./ProductDetailTemplate-BwOzEZhc.js";import{p as s}from"./pipelineProducts-BpVaIMVO.js";import"./ProcessFlow-DeZC0QtR.js";import"./droplet-BFNx7rZm.js";function n(){return e.jsx(r,{children:e.jsx(a,{data:s.grapheneGlassFibres})})}export{n as default};

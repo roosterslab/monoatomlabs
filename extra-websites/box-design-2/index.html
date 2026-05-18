@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Graffisol — Product Brochure · Monoatom Labs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --blue:#2563eb;
+  --blue-l:#60a5fa;
+  --blue-pale:rgba(37,99,235,.08);
+  --blue-border:rgba(96,165,250,.25);
+  --n50:#f8fafc;--n100:#f1f5f9;--n200:#e2e8f0;
+  --n400:#94a3b8;--n500:#64748b;--n600:#475569;
+  --n700:#334155;--n800:#1e293b;--n900:#0f172a;
+  --fd:'Outfit',sans-serif;
+  --fs:'Inter',system-ui,sans-serif;
+  --fm:'Space Grotesk',monospace;
+}
+
+html,body{background:#222;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+@page{size:A4 landscape;margin:0}
+
+/* ── LAYOUT ─────────────────────────────────── */
+.page{
+  width:297mm;height:210mm;
+  position:relative;overflow:hidden;
+  display:grid;grid-template-columns:repeat(3,99mm);
+  background:#090e1a;
+}
+@media screen{
+  .page{box-shadow:0 12px 60px rgba(0,0,0,.6);margin:28px auto}
+  body{padding:20px 0 40px}
+}
+@media print{
+  body{background:white;padding:0}
+  .page{page-break-after:always;margin:0;box-shadow:none}
+  canvas{display:none!important}
+}
+
+/* Hex wave canvas shared across whole page */
+.hex-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.35}
+
+/* Column base */
+.col{
+  position:relative;z-index:10;
+  height:210mm;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+
+/* ── PANEL 1 — PRODUCT HERO ─────────────────── */
+.p1-wrap{
+  position:relative;z-index:10;
+  height:210mm;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+
+/* Logo bar */
+.logo-bar{
+  padding:6mm 6mm 4mm;
+  display:flex;align-items:center;gap:2.5mm;
+  flex-shrink:0;
+  background:linear-gradient(to bottom,rgba(0,0,0,.6),transparent);
+  position:relative;z-index:20;
+}
+.logo-hex{width:9mm;height:9mm;flex-shrink:0}
+.logo-txt-wrap{line-height:1}
+.logo-name{
+  font-family:var(--fd);font-size:9pt;font-weight:800;
+  color:#fff;letter-spacing:.15em;text-transform:uppercase;
+}
+.logo-tm{font-size:5.5pt;vertical-align:super;opacity:.6}
+.logo-sub{
+  font-family:var(--fm);font-size:5pt;color:var(--blue-l);
+  letter-spacing:.22em;text-transform:uppercase;margin-top:.8mm;
+}
+
+/* Product image fill */
+.prod-img-fill{
+  position:absolute;inset:0;z-index:1;
+  background:
+    radial-gradient(ellipse 80% 80% at 50% 40%,rgba(37,99,235,.18) 0%,transparent 70%),
+    linear-gradient(to bottom,rgba(0,0,0,.25) 0%,rgba(0,0,0,.0) 20%,rgba(0,0,0,.0) 55%,rgba(0,0,0,.85) 100%);
+}
+.prod-img-fill img{
+  width:100%;height:100%;object-fit:cover;object-position:center 20%;
+  opacity:.92;
+}
+
+/* Product caption at bottom of panel 1 */
+.prod-caption{
+  position:absolute;bottom:0;left:0;right:0;z-index:20;
+  padding:5mm 6mm 6mm;
+}
+.prod-caption p{
+  font-family:var(--fs);font-size:7pt;color:rgba(255,255,255,.78);
+  line-height:1.65;font-weight:400;
+}
+
+/* ── PANEL 2 — APPLICATIONS + WHY US ───────── */
+.p2{
+  padding:8mm 7mm;
+  border-left:1px solid rgba(255,255,255,.05);
+  border-right:1px solid rgba(255,255,255,.05);
+  display:flex;flex-direction:column;gap:0;
+}
+
+/* Section heading — matches screenshot bold caps */
+.sec-h{
+  font-family:var(--fd);font-size:18pt;font-weight:900;
+  color:#fff;line-height:1.05;letter-spacing:-.01em;
+  margin-bottom:3.5mm;text-transform:uppercase;
+}
+
+/* Bullet list */
+.bl{list-style:none;margin-bottom:5mm}
+.bl li{
+  display:flex;align-items:flex-start;gap:2.5mm;
+  font-family:var(--fs);font-size:7.5pt;
+  color:rgba(255,255,255,.72);
+  padding:1.4mm 0;line-height:1.55;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.bl li:last-child{border-bottom:none}
+.bl li::before{
+  content:'•';color:#fff;
+  flex-shrink:0;font-size:8pt;margin-top:-.2mm;
+}
+
+.sec-div{
+  border:none;border-top:1px solid rgba(255,255,255,.07);
+  margin:2mm 0 5mm;
+}
+
+/* ── PANEL 3 — HOW IT WORKS ─────────────────── */
+.p3{display:flex;flex-direction:column;border-left:1px solid rgba(255,255,255,.05)}
+
+/* Solar photo half */
+.solar-photo{
+  position:relative;flex-shrink:0;
+  height:85mm;overflow:hidden;
+}
+.solar-photo img{
+  width:100%;height:100%;
+  object-fit:cover;object-position:center 30%;
+  opacity:.75;
+}
+.solar-photo-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(9,14,26,.1) 0%,
+    rgba(9,14,26,.05) 40%,
+    rgba(9,14,26,.95) 100%
+  );
+}
+
+/* How it works content */
+.hiw-content{
+  flex:1;padding:5mm 6mm 6mm;
+  display:flex;flex-direction:column;
+}
+.hiw-h{
+  font-family:var(--fd);font-size:16pt;font-weight:900;
+  color:#fff;text-transform:uppercase;letter-spacing:-.01em;
+  margin-bottom:2.5mm;
+}
+.hiw-sub{
+  font-family:var(--fs);font-size:6.5pt;color:rgba(255,255,255,.55);
+  line-height:1.6;margin-bottom:3mm;
+}
+.hiw-bl{list-style:none;margin-bottom:4mm}
+.hiw-bl li{
+  display:flex;align-items:flex-start;gap:2mm;
+  font-family:var(--fs);font-size:6.5pt;
+  color:rgba(255,255,255,.7);padding:1.2mm 0;
+  line-height:1.55;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.hiw-bl li:last-child{border-bottom:none}
+.hiw-bl li::before{content:'•';color:#fff;flex-shrink:0;font-size:8pt;margin-top:-.2mm}
+
+/* Inline highlight */
+.hl{color:var(--blue-l);font-weight:600}
+
+/* Solar coating diagram */
+.diag{
+  margin-top:auto;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.02);
+  border-radius:1.5mm;overflow:hidden;
+}
+.diag-title{
+  font-family:var(--fm);font-size:5pt;color:rgba(255,255,255,.4);
+  letter-spacing:.14em;text-transform:uppercase;
+  text-align:center;padding:2mm 3mm 1.5mm;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.diag-layers{padding:2.5mm 3mm;display:flex;flex-direction:column;gap:1.5mm}
+.diag-sun{
+  text-align:center;font-size:9pt;margin-bottom:1.5mm;
+}
+.diag-rays{
+  display:flex;justify-content:center;gap:2mm;margin-bottom:1.5mm;
+}
+.diag-ray{
+  width:1px;height:5mm;
+  background:linear-gradient(to bottom,rgba(251,191,36,.7),transparent);
+}
+.d-layer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.5mm 2.5mm;font-family:var(--fm);font-size:5.5pt;
+  letter-spacing:.04em;text-transform:uppercase;font-weight:600;
+  border-radius:.8mm;
+}
+.dl-coat{
+  background:rgba(37,99,235,.2);border:1px solid rgba(96,165,250,.3);
+  color:var(--blue-l);
+}
+.dl-glass{
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);
+  color:rgba(255,255,255,.65);
+}
+.dl-cell{
+  background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.07);
+  color:rgba(255,255,255,.35);
+}
+.d-layer span{
+  font-size:5pt;font-weight:400;opacity:.6;text-transform:none;
+  letter-spacing:0;
+}
+.diag-props{
+  display:grid;grid-template-columns:1fr 1fr;gap:1.5mm 2mm;
+  padding:2mm 3mm;border-top:1px solid rgba(255,255,255,.06);
+}
+.d-prop{
+  font-size:5.5pt;color:rgba(255,255,255,.45);
+  display:flex;align-items:center;gap:1.5mm;font-family:var(--fs);
+}
+.d-prop::before{content:'↑';color:var(--blue-l);font-weight:700;flex-shrink:0}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- Shared hex-wave canvas -->
+  <canvas class="hex-canvas" id="hexc"></canvas>
+
+  <!-- ══ PANEL 1 — PRODUCT HERO ══ -->
+  <div class="p1-wrap">
+    <!-- Background product image -->
+    <div class="prod-img-fill">
+      <img src="../company-profile/public/images/graffisol-studio.png"
+           onerror="this.style.display='none'"
+           alt="Graffisol product">
+    </div>
+
+    <!-- Logo bar (sits on top of image) -->
+    <div class="logo-bar">
+      <svg class="logo-hex" viewBox="0 0 40 40" fill="none">
+        <path d="M20 3L35 11.5V28.5L20 37L5 28.5V11.5L20 3Z"
+              stroke="rgba(255,255,255,0.9)" stroke-width="2"
+              fill="rgba(37,99,235,0.12)"/>
+        <path d="M20 10L28 14.5V23.5L20 28L12 23.5V14.5L20 10Z"
+              stroke="rgba(255,255,255,0.5)" stroke-width="1.2" fill="none"/>
+        <circle cx="20" cy="19" r="3" fill="rgba(255,255,255,0.8)"/>
+        <circle cx="20" cy="10" r="1.2" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="28" cy="14.5" r="1.2" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="28" cy="23.5" r="1.2" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="20" cy="28" r="1.2" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="12" cy="23.5" r="1.2" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="12" cy="14.5" r="1.2" fill="rgba(255,255,255,0.5)"/>
+      </svg>
+      <div class="logo-txt-wrap">
+        <div class="logo-name">MONOATOM<span class="logo-tm">™</span></div>
+        <div class="logo-sub">LABS</div>
+      </div>
+    </div>
+
+    <!-- Caption at bottom -->
+    <div class="prod-caption">
+      <p>Graffisol is an advanced graphene-enhanced transparent coating engineered to improve solar panel efficiency, reduce thermal stress, and protect photovoltaic surfaces from environmental contamination.</p>
+    </div>
+  </div>
+
+  <!-- ══ PANEL 2 — APPLICATIONS + WHY CHOOSE US ══ -->
+  <div class="col p2">
+    <div class="sec-h">Applications</div>
+    <ul class="bl">
+      <li>Utility-Scale Solar Power Plants</li>
+      <li>Residential Rooftop Solar Systems</li>
+      <li>Commercial &amp; Industrial Rooftop Solar</li>
+      <li>Floating Solar Power Plants</li>
+      <li>Solar Farms in High-Dust &amp; High-Temperature Zones</li>
+      <li>Retrofitting &amp; Upgrading of Existing Solar Installations</li>
+    </ul>
+
+    <hr class="sec-div">
+
+    <div class="sec-h">Why Choose Us?</div>
+    <ul class="bl">
+      <li>Built on Proprietary Graphene Science</li>
+      <li>Validated Through Independent Lab &amp; Real-World Testing</li>
+      <li>Universally Compatible Across Solar Technologies</li>
+      <li>Fast, Non-Disruptive Application Process</li>
+      <li>Seamless Integration for New &amp; Existing Assets</li>
+    </ul>
+  </div>
+
+  <!-- ══ PANEL 3 — HOW IT WORKS ══ -->
+  <div class="col p3">
+    <!-- Solar panel photo -->
+    <div class="solar-photo">
+      <img src="../company-profile/public/images/graffisol-bg.png"
+           onerror="this.style.background='linear-gradient(160deg,#0c2461 0%,#1a1a2e 50%,#090e1a 100%)';this.style.display='block'"
+           alt="Solar panels">
+      <div class="solar-photo-overlay"></div>
+    </div>
+
+    <!-- Content -->
+    <div class="hiw-content">
+      <div class="hiw-h">How It Works?</div>
+      <p class="hiw-sub">A precisely engineered graphene-infused transparent layer modifies surface optical and thermal properties by:</p>
+
+      <ul class="hiw-bl">
+        <li><span class="hl">Optimizing light transmission</span> and reducing reflectance</li>
+        <li>Enhancing <span class="hl">lateral heat dispersion</span> across the panel surface</li>
+        <li>Creating a <span class="hl">low-surface-energy, self-cleaning</span> protective barrier</li>
+      </ul>
+
+      <!-- Solar coating diagram -->
+      <div class="diag">
+        <div class="diag-title">How Solar Coating Works</div>
+        <div class="diag-layers">
+          <div class="diag-sun">☀</div>
+          <div class="diag-rays">
+            <div class="diag-ray"></div><div class="diag-ray"></div><div class="diag-ray"></div>
+            <div class="diag-ray"></div><div class="diag-ray"></div><div class="diag-ray"></div>
+            <div class="diag-ray"></div>
+          </div>
+          <div class="d-layer dl-coat">
+            Hydrophobic Coating
+            <span>← Repels Water &amp; Dirt</span>
+          </div>
+          <div class="d-layer dl-glass">
+            Glass
+            <span>← +Photon Absorption</span>
+          </div>
+          <div class="d-layer dl-cell">
+            Solar Cells (PV)
+            <span>← Reduced Heat Loss</span>
+          </div>
+        </div>
+        <div class="diag-props">
+          <div class="d-prop">Anti-reflective</div>
+          <div class="d-prop">Thermal dissipation</div>
+          <div class="d-prop">Dust-repellent</div>
+          <div class="d-prop">Extended panel life</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- .page -->
+
+<script>
+(function(){
+  const c = document.getElementById('hexc');
+  if(!c) return;
+  const ctx = c.getContext('2d');
+  let W, H, pts = [], raf;
+
+  function init(){
+    W = c.width  = c.parentElement.offsetWidth  || 1123;
+    H = c.height = c.parentElement.offsetHeight || 793;
+    pts = [];
+    const R=22, xS=52, yS=45;
+    const rows = Math.ceil(H/yS)+2, cols = Math.ceil(W/xS)+2;
+    for(let y=-1;y<rows;y++){
+      for(let x=-1;x<cols;x++){
+        let px=x*xS, py=y*yS;
+        if(y%2!==0) px+=xS/2;
+        pts.push({x:px,y:py,ox:px,oy:py,r:R});
+      }
+    }
+  }
+
+  function hexPath(cx,cy,r){
+    ctx.beginPath();
+    for(let i=0;i<6;i++){
+      const a=(Math.PI/3)*i+Math.PI/6;
+      i===0?ctx.moveTo(cx+r*Math.cos(a),cy+r*Math.sin(a))
+           :ctx.lineTo(cx+r*Math.cos(a),cy+r*Math.sin(a));
+    }
+    ctx.closePath(); ctx.stroke(); ctx.fill();
+  }
+
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    const ts = t*0.0006;
+    for(const p of pts){
+      const wx = Math.sin(p.oy*0.007+p.ox*0.004+ts)*14;
+      const wy = Math.cos(p.ox*0.004+p.oy*0.007+ts)*14;
+      const d  = Math.sin(p.ox*0.009+ts*1.2);
+      const op = 0.04+(d+1)*0.14;
+      p.x = p.ox+wx; p.y = p.oy+wy;
+      ctx.strokeStyle = `rgba(96,165,250,${op})`;
+      ctx.fillStyle   = `rgba(37,99,235,${op*0.07})`;
+      ctx.lineWidth = 0.8;
+      hexPath(p.x,p.y,p.r);
+    }
+    raf = requestAnimationFrame(draw);
+  }
+
+  function start(){
+    init();
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('load', start);
+  window.addEventListener('resize', start);
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd \"/c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/extra-websites/flex\" && npm create vite@latest . -- --template react --yes 2>&1 | tail -20)",
+      "Bash(cd \"/c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/extra-websites/flex\" && echo \"y\" | npm create vite@latest . -- --template react 2>&1 | tail -20)",
+      "Bash(cd \"/c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/extra-websites/flex\" && npm install 2>&1 | tail -10)",
+      "Bash(cd \"/c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/extra-websites/flex\" && npm run build 2>&1)",
+      "Bash(cd \"/c/Users/globql-ws/Documents/projects-2/monoatomlabs/monoatomlabs_dev_root/extra-websites/flex\" && npm run build 2>&1 | tail -12)"
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+(function () {
+  var store = (window.__MONOATOM_PAGE_CONTENT__ = window.__MONOATOM_PAGE_CONTENT__ || {});
+
+  store['industries-advanced-materials'] = {
+    hero: {
+      title: 'Advanced Materials',
+      subtitle: 'Breakthrough materials for aerospace, defense, and specialized applications'
+    },
+    sections: {
+      solutions: {
+        heading: 'Industry Solutions',
+        body:
+          'Push the boundaries of material performance with graphene-enhanced solutions for the most demanding applications in aerospace, defense, and advanced manufacturing.'
+      },
+      applications: {
+        heading: 'Applications',
+        items: [
+          'Aerospace Structures',
+          'Defense & Military',
+          'Advanced Composites',
+          'Protective Armor',
+          'Lightweight Components',
+          'High-Performance Equipment'
+        ]
+      },
+      pipelineProducts: {
+        heading: 'Pipeline Products',
+        graphosite: {
+          name: 'Graphosite',
+          statusLabel: 'Pipeline',
+          body: 'Lightweight, high-strength graphene-reinforced fibres for advanced structural composites.',
+          linkLabel: 'Learn More →'
+        },
+        armophene: {
+          name: 'Armophene',
+          statusLabel: 'Pipeline',
+          body: "Graphene-infused bulletproof protection that's lighter and more flexible than Kevlar.",
+          linkLabel: 'Learn More →'
+        }
+      },
+      related: {
+        heading: 'Related Pages',
+        pipelineLinkLabel: '→ Innovation Pipeline',
+        contactLinkLabel: '→ Contact Us'
+      }
+    }
+  };
+})();
