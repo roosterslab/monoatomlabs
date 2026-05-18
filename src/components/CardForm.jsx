@@ -130,10 +130,10 @@ const CardForm = ({ data, onChange }) => {
             <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">Spacing</p>
             <div className="space-y-3">
               {[
-                { label: 'Front — Top / Bottom', key: 'padFrontV', min: 0.2, max: 2.5, def: 0.875 },
-                { label: 'Front — Left / Right',  key: 'padFrontH', min: 0.2, max: 3,   def: 1.5   },
-                { label: 'Back — Top / Bottom',  key: 'padBackV',  min: 0.2, max: 2.5, def: 0.875 },
-                { label: 'Back — Left / Right',  key: 'padBackH',  min: 0.2, max: 3,   def: 1.5   },
+                { label: 'Front — Top / Bottom', key: 'padFrontV', min: 0.2, max: 2.5, def: 2.5  },
+                { label: 'Front — Left / Right',  key: 'padFrontH', min: 0.2, max: 3,   def: 2.4  },
+                { label: 'Back — Top / Bottom',  key: 'padBackV',  min: 0.2, max: 2.5, def: 1.8  },
+                { label: 'Back — Left / Right',  key: 'padBackH',  min: 0.2, max: 3,   def: 1.6  },
               ].map(({ label, key, min, max, def }) => (
                 <div key={key}>
                   <div className="flex justify-between items-center mb-1">
