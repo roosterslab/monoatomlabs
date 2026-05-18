@@ -550,15 +550,27 @@ const Graphacrete = () => {
               </div>
             </section>
 
-            {/* Downloads */}
-            <section>
-              <SectionHeading number="03" title="Downloads" theme="light" className="mb-6" />
-              <ProductDataSheet
-                productName={dataSheetData.productName}
-                specifications={dataSheetData.specifications}
-                documents={dataSheetData.documents}
-                theme="light"
-              />
+            {/* Certifications & Downloads */}
+            <section className="space-y-24">
+              <div>
+                <SectionHeading number="03" title="Quality & Standards" theme="light" className="mb-6" />
+                <CertificationsQuality
+                  productName={certificationsData.productName}
+                  certifications={certificationsData.certifications}
+                  testingStandards={certificationsData.testingStandards}
+                  qualityMetrics={certificationsData.qualityMetrics}
+                  theme="light"
+                />
+              </div>
+              <div>
+                <SectionHeading number="04" title="Downloads" theme="light" className="mb-6" />
+                <ProductDataSheet
+                  productName={dataSheetData.productName}
+                  specifications={dataSheetData.specifications}
+                  documents={dataSheetData.documents}
+                  theme="light"
+                />
+              </div>
             </section>
 
             {/* Competitive Advantage Matrix */}

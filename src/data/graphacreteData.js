@@ -153,7 +153,7 @@ export const roiCalculatorConfig = {
     // M20: ₹4,500–5,200 → midpoint ₹4,850 | M30: ₹5,800–6,800 → midpoint ₹6,200
     // M40: ₹7,800–9,000 → midpoint ₹8,400 | M50: ₹10,000–12,000 → midpoint ₹10,500
     // M60: ~₹13,000 | M70: ~₹17,000 (ultra-HPC)
-    const gradeData = constants.gradeData ?? {
+  const gradeData = constants.gradeData ?? {
       20: { bags: 5.00, fixed: 3250  }, // 5.00×320+3250  = 4,850
       30: { bags: 6.25, fixed: 4200  }, // 6.25×320+4200  = 6,200
       40: { bags: 7.50, fixed: 6000  }, // 7.50×320+6000  = 8,400
