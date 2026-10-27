@@ -40,6 +40,7 @@ const Navbar = () => {
 
     const directLinks = [
         { name: 'About', path: '/about' },
+        { name: 'Team', path: '/team' },
     ];
 
     const isActiveLink = (path) => {

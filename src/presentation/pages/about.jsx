@@ -6,7 +6,7 @@ import {
   AboutKeyMetricsStrip,
   AboutVisionMissionNorthStar,
   AboutDifferentiators,
-  AboutLeadership,
+  TeamTeaser,
   TrustValidation,
   HallOfFame,
   AboutCTAHub,
@@ -25,7 +25,7 @@ export default function AboutPage() {
       <AboutKeyMetricsStrip copy={copy.keyMetricsStrip} />
       <AboutVisionMissionNorthStar copy={copy.visionMissionNorthStar} />
       <AboutDifferentiators copy={copy.differentiators} />
-      <AboutLeadership copy={copy.leadership} />
+      <TeamTeaser />
       <TrustValidation copy={copy.trustValidation} />
       <TechnologyCapabilities copy={copy.technologyCapabilities} />
       <PartnershipModels copy={copy.partnershipModels} />

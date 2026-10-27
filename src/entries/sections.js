@@ -34,6 +34,8 @@ export { default as AboutKeyMetricsStrip } from '../components/about/sections/Ke
 export { default as AboutVisionMissionNorthStar } from '../components/about/sections/VisionMissionNorthStar';
 export { default as AboutDifferentiators } from '../components/about/sections/Differentiators';
 export { default as AboutLeadership } from '../components/about/sections/Leadership';
+export { default as TeamLeadership } from '../components/about/sections/TeamLeadership';
+export { default as TeamTeaser } from '../components/about/sections/TeamTeaser';
 export { default as AboutFacilities } from '../components/about/sections/Facilities';
 export { default as HallOfFame } from '../components/about/HallOfFame';
 export { default as ProblemSolution } from '../components/about/ProblemSolution';

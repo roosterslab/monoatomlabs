@@ -18,6 +18,7 @@ import Contact from './presentation/pages/contact';
 const Company = lazy(() => import('./presentation/pages/about-company'));
 const Facilities = lazy(() => import('./presentation/pages/about-facilities'));
 const Founders = lazy(() => import('./presentation/pages/about-founders'));
+const Team = lazy(() => import('./presentation/pages/team'));
 
 // Industries
 const IndustriesOverview = lazy(() => import('./presentation/pages/industries-overview'))
@@ -70,6 +71,9 @@ function App() {
                     <Route path="about/facilities" element={<Facilities />} />
                     <Route path="about/founders" element={<Founders />} />
                     <Route path="about/founders-team" element={<Founders />} />
+
+                    {/* Team Route */}
+                    <Route path="team" element={<Team />} />
 
                     {/* Industries Routes */}
                     <Route path="industries" element={<IndustriesOverview />} />
